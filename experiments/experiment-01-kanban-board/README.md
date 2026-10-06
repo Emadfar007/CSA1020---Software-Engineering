@@ -2,39 +2,31 @@
 
 ## Aim
 
-Create a Kanban board to visualize tasks using **To Do**, **In-Progress**, and **Done** columns; add at least five tasks and move cards to simulate a workflow.
+To create a Kanban board with **To Do**, **In-Progress**, and **Done** columns, add at least five sample tasks, and simulate the movement of tasks through the workflow.
 
-## Tool and board
+## Tools Required
 
-Trello board: [Website Project - Kanban Board](https://trello.com/b/TZ9X6tdQ/website-project-kanban-board). Access depends on the board's existing Trello permissions.
+- Trello account.
+- Web browser.
+- Internet connection.
 
-## Procedure
+## Algorithm
 
-1. Create a board called **Website Project - Kanban Board**.
-2. Add the lists **To Do**, **In-Progress**, and **Done**.
-3. Add the five website project tasks listed below to **To Do**.
-4. Simulate work by moving the requirements and wireframe cards through **In-Progress** to **Done**.
-5. Move the home page card to **In-Progress**; leave the contact form and testing tasks in **To Do**.
-6. Capture the resulting board.
+1. Open Trello and create a board named **Website Project - Kanban Board**.
+2. Create three lists: **To Do**, **In-Progress**, and **Done**.
+3. Add five tasks to **To Do**: define website requirements, create page wireframes, build the home page, add a contact form, and test the website.
+4. Move **Define website requirements** from **To Do** to **In-Progress**, then to **Done**.
+5. Move **Create page wireframes** from **To Do** to **In-Progress**, then to **Done**.
+6. Move **Build the home page** from **To Do** to **In-Progress**.
+7. Keep **Add a contact form** and **Test the website** in **To Do**.
+8. Capture the final board showing the task distribution.
 
-## Sample tasks and recorded final state
+## Output Screenshots
 
-| Task | Final column |
-| --- | --- |
-| Define website requirements | Done |
-| Create page wireframes | Done |
-| Build the home page | In-Progress |
-| Add a contact form | To Do |
-| Test the website | To Do |
+![Trello Kanban board with five tasks across three columns](screenshots/kanban-board.png)
 
-The saved screenshot records **2 tasks in To Do, 1 in In-Progress, and 2 in Done**. It is a snapshot from the original experiment, not a live export of Trello's activity history.
-
-## Screenshot
-
-![Completed Kanban workflow simulation in Trello](screenshots/kanban-board.png)
+[Open the Trello board](https://trello.com/b/TZ9X6tdQ/website-project-kanban-board).
 
 ## Result
 
-The board presents five sample tasks across three workflow stages. The final arrangement illustrates planned, ongoing, and completed work.
-
-The task table is also provided as [tasks.csv](tasks.csv).
+A Kanban board was created with five sample tasks. The saved output shows **2 tasks in To Do**, **1 task in In-Progress**, and **2 tasks in Done**, illustrating the workflow stages.
