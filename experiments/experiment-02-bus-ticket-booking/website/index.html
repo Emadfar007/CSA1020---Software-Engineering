@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="A local prototype for searching buses, choosing seats and confirming a booking." />
+  <title>SwiftBus – Bus Ticket Booking</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%234f46e5'/%3E%3Cpath d='M18 17h28a6 6 0 016 6v21a5 5 0 01-5 5h-2v4h-6v-4H25v4h-6v-4h-2a5 5 0 01-5-5V23a6 6 0 016-6zm1 7v12h26V24H19zm3 17a3 3 0 100 6 3 3 0 000-6zm20 0a3 3 0 100 6 3 3 0 000-6z' fill='white'/%3E%3C/svg%3E" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" aria-label="Primary navigation">
+      <a class="brand" href="#search" data-nav="search" aria-label="SwiftBus home">
+        <span class="brand-mark">S</span><span>SwiftBus</span>
+      </a>
+      <p class="nav-heading">BOOKING</p>
+      <nav>
+        <button class="nav-item active" type="button" data-nav="search"><span aria-hidden="true">⌕</span>Search trips</button>
+        <button class="nav-item" type="button" data-nav="bookings"><span aria-hidden="true">▣</span>My bookings</button>
+        <button class="nav-item" type="button" data-toast="No saved routes yet."><span aria-hidden="true">☆</span>Saved routes</button>
+        <button class="nav-item" type="button" data-toast="Support is available at support@swiftbus.test"><span aria-hidden="true">?</span>Support</button>
+      </nav>
+      <div class="profile">
+        <span class="avatar">EF</span>
+        <span><strong>Emad Farooqui</strong><small>Traveller account</small></span>
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <button class="menu-button" type="button" aria-label="Toggle navigation" aria-expanded="false">☰</button>
+        <div><h1 id="page-title">Find your next bus</h1><p id="page-kicker">Bus booking prototype</p></div>
+        <span class="step-count" id="step-count">Step 1 of 4</span>
+      </header>
+
+      <div class="content">
+        <ol class="stepper" aria-label="Booking progress">
+          <li class="active"><span>1</span><b>Search</b></li>
+          <li><span>2</span><b>Choose bus</b></li>
+          <li><span>3</span><b>Seats</b></li>
+          <li><span>4</span><b>Confirmed</b></li>
+        </ol>
+
+        <section class="view active" id="view-search" aria-labelledby="search-title">
+          <div class="intro">
+            <h2 id="search-title">Where would you like to go?</h2>
+            <p>Compare trusted operators, choose your seat and book in a few simple steps.</p>
+          </div>
+          <form class="search-panel card" id="search-form">
+            <label>From<select id="from-city"><option>Bengaluru</option><option>Chennai</option><option>Hyderabad</option></select></label>
+            <label>To<select id="to-city"><option>Mysuru</option><option>Chennai</option><option>Hyderabad</option></select></label>
+            <label>Travel date<input id="travel-date" type="date" value="2026-10-18" min="2026-10-01" /></label>
+            <label>Passengers<select id="passengers"><option value="1">1 adult</option><option value="2">2 adults</option><option value="3">3 adults</option><option value="4">4 adults</option></select></label>
+            <button class="button primary search-button" type="submit">Search buses</button>
+          </form>
+
+          <div class="home-grid">
+            <div>
+              <h3>Popular routes</h3>
+              <div class="route-cards">
+                <button class="route-card" type="button" data-route="Bengaluru|Chennai"><strong>Bengaluru <em>→</em> Chennai</strong><span>6h 10m</span><b>From ₹650</b></button>
+                <button class="route-card" type="button" data-route="Bengaluru|Mysuru"><strong>Bengaluru <em>→</em> Mysuru</strong><span>3h 20m</span><b>From ₹390</b></button>
+                <button class="route-card" type="button" data-route="Bengaluru|Hyderabad"><strong>Bengaluru <em>→</em> Hyderabad</strong><span>8h 30m</span><b>From ₹890</b></button>
+              </div>
+            </div>
+            <aside class="recent-card">
+              <small>RECENT SEARCH</small><strong>Bengaluru → Mysuru</strong><span>18 Oct · 1 adult</span>
+              <button class="button light" type="button" id="search-again">Search again</button>
+            </aside>
+          </div>
+        </section>
+
+        <section class="view" id="view-results" aria-labelledby="results-title">
+          <div class="route-summary card">
+            <div><strong class="route-from">Bengaluru</strong><small>BLR</small></div><b>→</b><div><strong class="route-to">Mysuru</strong><small>MYQ</small></div>
+            <p class="route-date">Sun, 18 Oct 2026 · 1 passenger</p>
+            <button class="text-button" type="button" data-back="0">Modify search</button>
+          </div>
+          <div class="results-layout">
+            <aside class="filters card">
+              <div class="section-heading"><h2>Filters</h2><button type="button" id="clear-filters">Clear all</button></div>
+              <fieldset><legend>Departure time</legend><label><input type="checkbox" name="time" value="early" />Before 8 AM</label><label><input type="checkbox" name="time" value="morning" />8 AM – 12 PM</label><label><input type="checkbox" name="time" value="late" />After 12 PM</label></fieldset>
+              <fieldset><legend>Bus type</legend><label><input type="checkbox" name="type" value="ac" checked />AC</label><label><input type="checkbox" name="type" value="sleeper" checked />Sleeper</label><label><input type="checkbox" name="type" value="seater" />Seater</label></fieldset>
+            </aside>
+            <div class="results">
+              <div class="section-heading"><h2 id="results-title"><span id="result-count">3</span> buses available</h2><label>Sort by <select id="sort-buses"><option value="recommended">Recommended</option><option value="price">Lowest price</option><option value="rating">Highest rated</option></select></label></div>
+              <div id="bus-list" class="bus-list"></div>
+              <div class="empty-state" id="empty-results" hidden><strong>No buses match these filters.</strong><button type="button" id="reset-empty">Reset filters</button></div>
+            </div>
+          </div>
+        </section>
+
+        <section class="view" id="view-seats" aria-labelledby="seats-title">
+          <div class="route-summary card compact">
+            <div><strong class="route-from">Bengaluru</strong><small>BLR</small></div><b>→</b><div><strong class="route-to">Mysuru</strong><small>MYQ</small></div>
+            <p id="selected-bus-meta">Rajdhani Express · AC Sleeper · 07:30</p>
+            <button class="text-button" type="button" data-back="1">Change bus</button>
+          </div>
+          <div class="seat-layout">
+            <div class="seat-card card">
+              <div class="section-heading"><div><h2 id="seats-title">Upper deck</h2><p>Choose one or more available seats.</p></div><div class="legend"><span><i></i>Available</span><span><i class="selected"></i>Selected</span><span><i class="booked"></i>Booked</span></div></div>
+              <div class="driver">Driver</div>
+              <div class="seat-grid" id="seat-grid" aria-label="Bus seat map"></div>
+              <p class="front-label">Front of bus</p>
+            </div>
+            <aside class="booking-summary card">
+              <h2>Booking summary</h2>
+              <div class="summary-operator"><strong id="summary-operator">Rajdhani Express</strong><span id="summary-type">AC Sleeper</span></div>
+              <dl><div><dt>Route</dt><dd><span class="route-from">Bengaluru</span> → <span class="route-to">Mysuru</span></dd></div><div><dt>Date & time</dt><dd id="summary-date">18 Oct 2026 · 07:30</dd></div><div><dt>Selected seats</dt><dd id="selected-seat-pills" class="seat-pills"></dd></div></dl>
+              <div class="fare-lines"><p><span>Seat fare × <b id="seat-count">2</b></span><strong id="seat-fare">₹1,700</strong></p><p><span>Booking fee</span><strong>₹0</strong></p></div>
+              <div class="total"><span>Total</span><strong id="total-fare">₹1,700</strong></div>
+              <button class="button primary full" type="button" id="continue-payment">Continue to payment</button>
+            </aside>
+          </div>
+        </section>
+
+        <section class="view" id="view-confirmed" aria-labelledby="confirmed-title">
+          <div class="confirmation card">
+            <div class="success-heading"><span>✓</span><div><h2 id="confirmed-title">Your trip is booked!</h2><p>Your test booking is complete. Keep the PNR handy for boarding.</p></div></div>
+            <div class="confirmation-grid">
+              <article class="ticket">
+                <header><strong>SwiftBus e-ticket</strong><span>CONFIRMED</span></header>
+                <div class="ticket-route"><div><small>FROM</small><strong class="route-from">Bengaluru</strong></div><b>→</b><div><small>TO</small><strong class="route-to">Mysuru</strong></div></div>
+                <dl><div><dt>DATE</dt><dd id="ticket-date">18 Oct 2026</dd></div><div><dt>DEPARTURE</dt><dd id="ticket-time">07:30</dd></div><div><dt>SEATS</dt><dd id="ticket-seats">2A, 2B</dd></div><div><dt>BUS</dt><dd id="ticket-bus">Rajdhani Express</dd></div><div><dt>BOARDING</dt><dd>Majestic Terminal</dd></div><div><dt>AMOUNT</dt><dd id="ticket-total">₹1,700</dd></div></dl>
+                <div class="pnr"><span>PNR</span><strong id="pnr-code">SB8K29Q</strong></div>
+              </article>
+              <aside class="next-actions"><h3>What’s next?</h3><ol><li>Download your e-ticket</li><li>Arrive 20 minutes early</li><li>Show your PNR at boarding</li></ol><button class="button primary full" type="button" id="download-ticket">Download ticket</button><button class="button outline full" type="button" id="book-another">Book another trip</button></aside>
+            </div>
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+  <div class="toast" role="status" aria-live="polite" aria-atomic="true"></div>
+  <script src="app.js"></script>
+</body>
+</html>
