@@ -6,8 +6,9 @@ Software engineering experiments by **Emadfar007**.
 | --- | --- | --- |
 | 01 | Trello Kanban board with five sample tasks and workflow simulation | [Kanban Board](experiments/experiment-01-kanban-board/README.md) |
 | 02 | Desktop bus ticket booking prototype in Figma, with a local test website | [Bus Ticket Booking](experiments/experiment-02-bus-ticket-booking/README.md) |
+| 03 | E-commerce mobile prototype in Figma, with a local shopping app and stakeholder review workflow | [E-commerce Stakeholder Prototype](experiments/experiment-03-ecommerce-mobile-app/README.md) |
 
-Each experiment includes its aim, procedure, result, and saved screenshots from the work completed on 1 October 2026.
+Each experiment includes only Aim, Tools Required, Algorithm, Output Screenshots, and Result.
 
 ## Experiment previews
 
@@ -19,8 +20,12 @@ Each experiment includes its aim, procedure, result, and saved screenshots from 
 
 ![Desktop trip search screen designed in Figma](experiments/experiment-02-bus-ticket-booking/screenshots/01-search-figma.png)
 
+### E-commerce mobile prototype
+
+![Editable Figma shopping flow and stakeholder comparison](experiments/experiment-03-ecommerce-mobile-app/screenshots/01-figma-flow.png)
+
 ## Local testing
 
-The bus booking website uses HTML, CSS, and JavaScript. Its source is included in Experiment 02. See that experiment's README for instructions.
+The bus booking website and FORME e-commerce app use HTML, CSS, and JavaScript. Their source is included in Experiments 02 and 03. See each experiment's README for local testing instructions. FORME uses Node.js to run its loopback-only testing server.
 
-The website is a testing prototype with sample buses and simulated bookings. It has not been deployed; no real ticket reservations, payments, or email delivery are connected.
+Both apps are testing prototypes with sample data and simulated bookings or orders. They have not been deployed; no real reservations, payments, or email delivery are connected. Experiment 03 includes two interface directions and a local feedback and approval log; real stakeholder approval remains pending.
