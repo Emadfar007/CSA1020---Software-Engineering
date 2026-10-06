@@ -2,83 +2,57 @@
 
 ## Aim
 
-Sketch a simple bus ticket booking system in Figma and create a desktop prototype covering the booking workflow.
+To design a simple desktop prototype of a bus ticket booking system using Figma and demonstrate its booking workflow through a local testing website.
 
-## Tools
+## Tools Required
 
-- Figma for editable desktop screens and prototype navigation.
-- HTML, CSS, and JavaScript for a local interactive implementation.
+- Figma account.
+- Web browser.
+- Internet connection for Figma.
+- HTML, CSS, and JavaScript for the local website.
+- Python, optionally, to run a local testing server.
 
-## Figma design
+## Algorithm
 
-[Open the editable Figma prototype](https://www.figma.com/design/1Y71bhdPTjVX7d3ubsW6LV/Bus-Ticket-Booking-System---Prototype?node-id=11-177&p=f).
+1. Create a Figma design file and add four desktop frames of **1440 × 960 pixels**.
+2. Design a search screen with departure city, destination, travel date, passenger count, and a **Search buses** button.
+3. Design a bus selection screen with operator details, travel times, fares, ratings, filters, and seat availability.
+4. Design a seat selection screen with available, selected, and booked seats, plus a booking summary and total fare.
+5. Design a confirmation screen displaying the route, date, operator, selected seats, amount, and sample PNR.
+6. Connect the primary buttons to simulate **Search → Choose bus → Select seats → Confirmation**.
+7. Implement the same flow using HTML, CSS, and JavaScript in the [website folder](website/).
+8. Open `website/index.html` in a browser, or run the following command from this experiment's folder and open **http://127.0.0.1:4817/**:
 
-The final Figma file contains four **1440 × 960 desktop screens**. The previous mobile reference screens were removed. Figma access depends on the file's existing permissions.
+   ```powershell
+   python -m http.server 4817 --bind 127.0.0.1 --directory website
+   ```
 
-## Procedure
+9. Test bus search, filters, seat selection, fare calculation, and simulated booking confirmation.
 
-1. Sketch a trip search form with departure city, destination, travel date, and passenger count.
-2. Design bus results showing operators, departure and arrival times, ratings, fares, and seat availability.
-3. Design a seat map distinguishing available, selected, and booked seats, alongside a fare summary.
-4. Design a booking confirmation with the route, date, bus, selected seats, total, and sample PNR.
-5. Link the primary buttons to simulate **Search → Choose bus → Seats → Confirmed**.
-6. Implement a local testing website with the same flow.
+## Output Screenshots
 
-## Desktop screenshots from Figma
-
-### 1. Search trip
+**Trip Search — Figma**
 
 ![Desktop trip search screen](screenshots/01-search-figma.png)
 
-### 2. Choose a bus
+**Bus Selection — Figma**
 
 ![Desktop bus results and filters](screenshots/02-results-figma.png)
 
-### 3. Select seats
+**Seat Selection — Figma**
 
 ![Desktop seat map and booking summary](screenshots/03-seats-figma.png)
 
-### 4. Booking confirmation
+**Booking Confirmation — Figma**
 
 ![Desktop booking confirmation and ticket details](screenshots/04-confirmed-figma.png)
 
-## Local testing website
-
-Source is in [website/](website/). It has no build step and requires no package installation.
-
-Open `website/index.html` in a modern browser, or run a local server from this experiment's folder:
-
-```powershell
-python -m http.server 4817 --bind 127.0.0.1 --directory website
-```
-
-Then open **http://127.0.0.1:4817/**. Stop the server with **Ctrl+C**.
-
-### Local browser screenshot
+**Local Testing Website**
 
 ![Local SwiftBus website search screen](screenshots/05-local-website.png)
 
-### Implemented interactions
-
-- Route, date, and passenger selection; validation for matching departure and destination cities.
-- Three sample buses with departure-time and bus-type filters and sorting.
-- Available-seat selection and removal, with booked seats disabled.
-- Fare recalculation based on selected seats and the chosen bus.
-- Simulated confirmation showing ticket details and a sample PNR.
-- Text-file ticket download and return to search.
-
-### Testing record
-
-The original local browser check reached the confirmation screen after searching, choosing a bus, and selecting seats **2A, 2B, and 3A**, with a total of **₹2,550**. The browser console contained no errors in that check. The ticket download control displayed its success toast; automatic browser download-event confirmation timed out, so that event was not independently verified.
-
-These saved screenshots document the original experiment rather than a new browser test on every commit.
-
-## Scope
-
-This is a **testing prototype**. Bus data and bookings are simulated in the browser. It does not reserve real seats, charge payments, send email, authenticate users, or persist bookings. The “Continue to payment” button advances directly to simulated confirmation. The passenger selector is displayed, while the fare is determined by the seats selected.
-
-The website remains undeployed. This repository stores source, documentation, and screenshots for review and local testing.
+[Open the Figma prototype](https://www.figma.com/design/1Y71bhdPTjVX7d3ubsW6LV/Bus-Ticket-Booking-System---Prototype?node-id=11-177&p=f).
 
 ## Result
 
-An editable four-screen desktop Figma prototype and a local interactive website demonstrate the bus booking workflow.
+A four-screen desktop Figma prototype and a local interactive website were created to demonstrate the bus ticket booking workflow. Bookings use sample data and simulated confirmation. The website remains for local testing, with no live reservation or payment service connected.
