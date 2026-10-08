@@ -8,6 +8,7 @@ Software engineering experiments by **Emadfar007**.
 | 02 | Desktop Figma prototype and local bus booking website with accounts, editable tickets, and personal reviews | [Bus Ticket Booking](experiments/experiment-02-bus-ticket-booking/README.md) |
 | 03 | E-commerce mobile prototype in Figma, with a local shopping app and stakeholder review workflow | [E-commerce Stakeholder Prototype](experiments/experiment-03-ecommerce-mobile-app/README.md) |
 | 04 | Jira Scrum project with eight prioritized stories, a one-week sprint, workflow simulation, and dated Timeline categories | [Jira Scrum](experiments/experiment-04-jira-scrum/README.md) |
+| 05 | Library Management System requirements categorized and justified using MoSCoW in an Excel workbook | [Library MoSCoW Prioritization](experiments/experiment-05-library-moscow/README.md) |
 
 Each experiment includes only Aim, Tools Required, Algorithm, Output Screenshots, and Result.
 
@@ -30,6 +31,12 @@ Each experiment includes only Aim, Tools Required, Algorithm, Output Screenshots
 ![Active sample sprint with To Do, In Progress, and Done work](experiments/experiment-04-jira-scrum/screenshots/07-sample-progress-board.jpg)
 
 The sample Jira project includes a dated Timeline and detailed ownership, acceptance criteria, and dependencies. Its current simulated progress snapshot shows four stories To Do, three In Progress, and one Done. Original sprint-start and sprint-end screenshots are included in Experiment 04.
+
+### Library Management System priorities
+
+![MoSCoW summary and justified Library Management System requirements](experiments/experiment-05-library-moscow/screenshots/01-requirements-and-summary.png)
+
+Experiment 05 includes a downloadable Excel workbook with all ten requirements, impact, feasibility, and priority justification. The workbook can also be imported into Google Sheets.
 
 ## Local testing
 
