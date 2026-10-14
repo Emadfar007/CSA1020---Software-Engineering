@@ -25,11 +25,14 @@ function validateAttendees(attendees) {
 export function allocateSeats(attendees, capacity) {
   const limit = validateCapacity(capacity);
   validateAttendees(attendees);
-  const confirmed = attendees.slice(0, limit);
+  const ordered = [...attendees].sort(
+    (a, b) => Number(b.priority === 'vip') - Number(a.priority === 'vip')
+  );
+  const confirmed = ordered.slice(0, limit);
   return {
     capacity: limit,
     confirmed,
-    waitlist: [],
+    waitlist: ordered.slice(limit),
     seatsRemaining: limit - confirmed.length,
     totalRequests: attendees.length
   };
