@@ -71,7 +71,7 @@ Experiment 09 includes ten screenshots documenting a fork of octocat/Spoon-Knife
 
 ![FairSeat workshop planner after preserving both branches' requirements](experiments/experiment-10-merge-conflicts/screenshots/04-fairseat-dashboard.jpg)
 
-Experiment 10 demonstrates genuine conflicts in the seat allocator and release policy, generated through two local clones using Emadfar007. The manual resolution preserves VIP-first ordering, overflow waiting lists, capacity validation, and valid attendee records. The branch includes captured Git output, eight screenshots, a local evidence journal, 20 passing tests, and ten planner browser checks. [Pull request #1](https://github.com/Emadfar007/CSA1020---Software-Engineering/pull/1) remains open for review after integrating main into the feature branch.
+Experiment 10 demonstrates genuine conflicts in the seat allocator and release policy, generated through two local clones using Emadfar007. The manual resolution preserves VIP-first ordering, overflow waiting lists, capacity validation, and valid attendee records. The experiment includes captured Git output, nine screenshots, a local evidence journal, 20 passing tests, and ten planner browser checks. [Pull request #1](https://github.com/Emadfar007/CSA1020---Software-Engineering/pull/1) is merged into main, preserving the actual two-parent conflict-resolution commit and publishing the completed report and app.
 
 ## Local testing
 

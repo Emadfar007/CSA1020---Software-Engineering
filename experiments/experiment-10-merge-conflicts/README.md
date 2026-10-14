@@ -4,7 +4,7 @@
 
 Demonstrate a real Git branch-and-merge conflict in the shared [CSA1020 Software Engineering repository](https://github.com/Emadfar007/CSA1020---Software-Engineering), manually combine both branches' requirements, verify the result, and open a pull request.
 
-**Collaboration scope:** two fresh local clones represent contributor and maintainer roles, both using **Emadfar007**. The roles are simulated; Git actually generated the conflicts after intentionally overlapping concurrent edits. The completed integration merges **main into the feature branch**. The final pull request remains **open**.
+**Collaboration scope:** two fresh local clones represent contributor and maintainer roles, both using **Emadfar007**. The roles are simulated; Git actually generated the conflicts after intentionally overlapping concurrent edits. The conflict-resolution step merges **main into the feature branch**. The completed pull request was subsequently **merged into main** to publish this experiment.
 
 ## Tools Required
 
@@ -65,7 +65,7 @@ git push origin feature/fairseat-priority-waitlist
 ```
 
 The integration commit is [0615572](https://github.com/Emadfar007/CSA1020---Software-Engineering/commit/0615572a2088091b444ddd55e156689f30d67669), with exactly two parents: feature commit `5ac8134198992a60fccea42ef5838d5cf8ea0c4f` and concurrent main commit `c5bb037ce7319989a42625034157a7b647738bcc`.
-12. Open [pull request #1](https://github.com/Emadfar007/CSA1020---Software-Engineering/pull/1) from `feature/fairseat-priority-waitlist` into the shared repository's main. Leave it **open** for review; creating the PR is the requested endpoint. Verify the successful [GitHub Actions run 38592879387](https://github.com/Emadfar007/CSA1020---Software-Engineering/actions/runs/38592879387), [job 115952031317](https://github.com/Emadfar007/CSA1020---Software-Engineering/actions/runs/38592879387/job/115952031317), at the captured resolved-code checkpoint `0615572a2088091b444ddd55e156689f30d67669`. This recorded check applies to that code checkpoint, rather than a later documentation or evidence commit.
+12. Open [pull request #1](https://github.com/Emadfar007/CSA1020---Software-Engineering/pull/1) from `feature/fairseat-priority-waitlist` into the shared repository's main and capture its open review checkpoint. Verify the successful [GitHub Actions run 38592879387](https://github.com/Emadfar007/CSA1020---Software-Engineering/actions/runs/38592879387), [job 115952031317](https://github.com/Emadfar007/CSA1020---Software-Engineering/actions/runs/38592879387/job/115952031317), at the captured resolved-code checkpoint `0615572a2088091b444ddd55e156689f30d67669`. The final feature head `9bf7c2b` also passes [run 38594673443](https://github.com/Emadfar007/CSA1020---Software-Engineering/actions/runs/38594673443). To publish the completed experiment, merge the PR using a merge commit, preserving the branch history. GitHub confirms publication merge [cf66b5b](https://github.com/Emadfar007/CSA1020---Software-Engineering/commit/cf66b5b9cef4ef4ab8472f16da5de1ebff400c27) on main. Capture the merged PR and add the final publication screenshot to this report.
 
 **Captured evidence:** [actual command log](evidence/commands.jsonl), [conflicted function snapshot](evidence/conflicted-seat-planner.js.txt), [conflicted policy snapshot](evidence/conflicted-POLICY.md.txt), [resolved function snapshot](evidence/resolved-seat-planner.js.txt), [20-test output](evidence/test-results.txt), and [browser checkpoints](evidence/browser-verification.json). The static journal has three linked views: [conflict](evidence/conflict.html), [resolution](evidence/resolution.html), and [validation](evidence/validation.html). Journal navigation and returning to the planner were also verified.
 
@@ -93,7 +93,7 @@ The integration commit is [0615572](https://github.com/Emadfar007/CSA1020---Soft
 
 ![Captured validation evidence](screenshots/05-validation-evidence.jpg)
 
-6. **Open pull request:** native GitHub shows the resolved feature proposed into main; the PR remains open.
+6. **Open pull request checkpoint:** native GitHub shows the resolved feature proposed into main before publication. This historical capture precedes the merged state in screenshot 9.
 
 ![Open FairSeat pull request](screenshots/06-open-pull-request.jpg)
 
@@ -105,8 +105,12 @@ The integration commit is [0615572](https://github.com/Emadfar007/CSA1020---Soft
 
 ![Two-parent integration commit](screenshots/08-merge-commit.jpg)
 
+9. **Published to main:** native GitHub confirms that pull request #1 was merged, publishing the completed experiment while preserving the demonstrated conflict-resolution history.
+
+![Merged Experiment 10 pull request](screenshots/09-merged-pull-request.jpg)
+
 ## Result
 
 Created a genuine merge conflict from concurrent changes in two working clones of the same shared repository. Manually resolved **two conflicted files and three conflict hunks** while preserving both validation and VIP/waitlist behavior. The resolved app passed **20 automated tests** and **10 browser checkpoints**, and the verified two-parent merge commit was pushed to the feature branch.
 
-[PR #1](https://github.com/Emadfar007/CSA1020---Software-Engineering/pull/1) is **open**. Main has been merged into the feature branch; the feature pull request has not been merged into main. GitHub Actions passed at the captured resolved-code checkpoint `0615572`, and the runnable app, nine evidence files, and eight screenshots document the workflow. Both local roles use Emadfar007, and the sample attendee names are fictional.
+[PR #1](https://github.com/Emadfar007/CSA1020---Software-Engineering/pull/1) is **merged into main** at publication commit `cf66b5b9cef4ef4ab8472f16da5de1ebff400c27`. GitHub Actions passed for both the captured resolved-code checkpoint `0615572` and final feature head `9bf7c2b`. The runnable app, nine evidence files, and **nine screenshots** document the conflict, manual resolution, validation, open review checkpoint, and completed publication. Experiments 1–9 are unchanged. Both local roles use Emadfar007, and the sample attendee names are fictional.
