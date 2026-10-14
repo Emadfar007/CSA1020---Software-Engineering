@@ -11,6 +11,7 @@ Software engineering experiments by **Emadfar007**.
 | 05 | Library Management System requirements categorized and justified using MoSCoW in an Excel workbook | [Library MoSCoW Prioritization](experiments/experiment-05-library-moscow/README.md) |
 | 06 | Jira and Confluence integration for Library Management System task tracking and sprint progress monitoring | [Jira and Confluence Integration](experiments/experiment-06-jira-confluence/README.md) |
 | 07 | Task Management System requirements prioritized using MoSCoW and Kano in Jira, with a sample sprint and progress reporting | [Task Management Prioritization](experiments/experiment-07-task-management-prioritization/README.md) |
+| 08 | Online Learning Platform requirements prioritized using MoSCoW and Kano in Jira, with a sample sprint, timeline, and progress reporting | [Online Learning Prioritization](experiments/experiment-08-online-learning-prioritization/README.md) |
 
 Each experiment includes only Aim, Tools Required, Algorithm, Output Screenshots, and Result.
 
@@ -51,6 +52,12 @@ Experiment 06 links seven Jira stories to a Confluence project overview. Its sim
 ![Native Jira MoSCoW and Kano classifications for the Task Management System](experiments/experiment-07-task-management-prioritization/screenshots/01-requirement-comparison.jpg)
 
 Experiment 07 includes twelve requirements across four feature epics, independent MoSCoW and Kano fields, detailed rationale, eight tested filters, 26 prerequisite links, and nine screenshots. Its one-week sample sprint demonstrates To Do, In Progress, In Review, and Done work. Kano classifications remain unvalidated hypotheses, and workflow statuses represent simulated progress.
+
+### Online Learning Platform prioritization
+
+![Native Jira MoSCoW and Kano classifications for the Online Learning Platform](experiments/experiment-08-online-learning-prioritization/screenshots/06-priority-matrix.jpg)
+
+Experiment 08 includes all six requested features within nine detailed requirements, three epics, 16 prerequisite links, seven tested model filters, and ten screenshots. The one-week sample sprint demonstrates progress across four workflow stages. Kano classifications are unvalidated hypotheses, and workflow progress is simulated.
 
 ## Local testing
 
