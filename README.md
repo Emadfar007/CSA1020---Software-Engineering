@@ -12,6 +12,7 @@ Software engineering experiments by **Emadfar007**.
 | 06 | Jira and Confluence integration for Library Management System task tracking and sprint progress monitoring | [Jira and Confluence Integration](experiments/experiment-06-jira-confluence/README.md) |
 | 07 | Task Management System requirements prioritized using MoSCoW and Kano in Jira, with a sample sprint and progress reporting | [Task Management Prioritization](experiments/experiment-07-task-management-prioritization/README.md) |
 | 08 | Online Learning Platform requirements prioritized using MoSCoW and Kano in Jira, with a sample sprint, timeline, and progress reporting | [Online Learning Prioritization](experiments/experiment-08-online-learning-prioritization/README.md) |
+| 09 | Git/GitHub fork, clone, feature branch, pull request, disclosed self-review, follow-up fixes, and merge | [GitHub Collaboration](experiments/experiment-09-github-collaboration/README.md) |
 
 Each experiment includes only Aim, Tools Required, Algorithm, Output Screenshots, and Result.
 
@@ -58,6 +59,12 @@ Experiment 07 includes twelve requirements across four feature epics, independen
 ![Native Jira MoSCoW and Kano classifications for the Online Learning Platform](experiments/experiment-08-online-learning-prioritization/screenshots/06-priority-matrix.jpg)
 
 Experiment 08 includes all six requested features within nine detailed requirements, three epics, 16 prerequisite links, seven tested model filters, and ten screenshots. The one-week sample sprint demonstrates progress across four workflow stages. Kano classifications are unvalidated hypotheses, and workflow progress is simulated.
+
+### Git and GitHub collaboration
+
+![Merged LearnLoop pull request with the feature and follow-up commits](experiments/experiment-09-github-collaboration/screenshots/08-merged-pull-request.jpg)
+
+Experiment 09 includes eight screenshots documenting a fork of octocat/Spoon-Knife, a working LearnLoop dashboard, two feature commits, review feedback, passing checks, and [merged pull request #1](https://github.com/Emadfar007/learnloop-collaboration-demo/pull/1). All 13 tests passed. Only Emadfar007 was used, so the review is explicitly a self-review informed by assistant code inspection, without independent human approval. The merge targets the user's fork's main branch.
 
 ## Local testing
 
