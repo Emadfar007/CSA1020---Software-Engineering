@@ -21,7 +21,11 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                checkout scm
+                script {
+                    def checkedOut = checkout scm
+                    env.SOURCE_BRANCH = checkedOut.GIT_BRANCH ?: ''
+                    echo "Source branch: ${env.SOURCE_BRANCH}"
+                }
                 dir("${APP_DIR}/reports") { deleteDir() }
                 script {
                     env.SOURCE_SHA = sh(script: 'git rev-parse HEAD', returnStdout: true).trim()
@@ -65,7 +69,7 @@ pipeline {
             steps { dir("${APP_DIR}") { sh 'python3 ci/smoke.py' } }
         }
         stage('Publish image') {
-            when { expression { params.PUBLISH_IMAGE && env.GIT_BRANCH == 'origin/main' } }
+            when { expression { params.PUBLISH_IMAGE && env.SOURCE_BRANCH == 'origin/main' } }
             steps {
                 dir("${APP_DIR}") {
                     withCredentials([usernamePassword(credentialsId: 'dockerhub', usernameVariable: 'REGISTRY_USER', passwordVariable: 'REGISTRY_TOKEN')]) {
@@ -75,7 +79,7 @@ pipeline {
             }
         }
         stage('Deploy to Render') {
-            when { expression { params.PUBLISH_IMAGE && params.DEPLOY_CLOUD && env.GIT_BRANCH == 'origin/main' } }
+            when { expression { params.PUBLISH_IMAGE && params.DEPLOY_CLOUD && env.SOURCE_BRANCH == 'origin/main' } }
             steps {
                 dir("${APP_DIR}") {
                     withCredentials([string(credentialsId: 'render-deploy-hook', variable: 'RENDER_DEPLOY_HOOK')]) {
