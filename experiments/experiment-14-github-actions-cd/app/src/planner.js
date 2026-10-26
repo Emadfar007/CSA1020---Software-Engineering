@@ -67,7 +67,7 @@ export function validatePlan(payload) {
 export function createPlan(payload) {
   const input=validatePlan(payload);
   const ordered=input.subjects.map((subject,index)=>({...subject,index,remaining:subject.minutes,planned:0})).sort((a,b)=>PRIORITY[a.priority]-PRIORITY[b.priority] || a.index-b.index);
-  const days=Array.from({length:input.horizonDays},(_,index)=>({date:addDays(input.startDate,index),dayNumber:index+1,capacityMinutes:input.dailyMinutes,plannedMinutes:0,sessions:[]}));
+  const days=Array.from({length:input.horizonDays},(_,index)=>({date:addDays(input.startDate,index),dayNumber:index+1,capacityMinutes:input.dailyMinutes,plannedMinutes:0,freeMinutes:input.dailyMinutes,sessions:[]}));
   let active=0;
   for(const day of days) {
     let room=input.dailyMinutes;
@@ -78,6 +78,7 @@ export function createPlan(payload) {
       day.plannedMinutes+=minutes;subject.remaining-=minutes;subject.planned+=minutes;room-=minutes;
       if(subject.remaining===0) active++;
     }
+    day.freeMinutes=room;
   }
   const subjects=ordered.sort((a,b)=>a.index-b.index).map(subject=>({id:subject.id,name:subject.name,priority:subject.priority,targetMinutes:subject.minutes,plannedMinutes:subject.planned,remainingMinutes:subject.remaining}));
   const totalTargetMinutes=input.subjects.reduce((sum,subject)=>sum+subject.minutes,0);

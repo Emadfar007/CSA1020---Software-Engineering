@@ -49,6 +49,20 @@ describe('FocusLane application',()=>{
     assert.deepEqual(result.days.map(d=>d.plannedMinutes),[15,0,0]);assert.equal(result.utilizationPercent,6);
     assert.deepEqual(result.days[1].sessions,[]);
   });
+  test('server free time represents partial and empty days and conserves daily capacity',()=>{
+    const partial=createPlan(sample());
+    assert.deepEqual(partial.days.map(day=>day.freeMinutes),[0,0,15]);
+    const input=sample();input.subjects=[{id:'read',name:'Reading',minutes:15,priority:'low'}];
+    const sparse=createPlan(input);
+    assert.deepEqual(sparse.days.map(day=>day.freeMinutes),[75,90,90]);
+    for(const plan of [partial,sparse]){
+      for(const day of plan.days){
+        assert.equal(day.plannedMinutes+day.freeMinutes,day.capacityMinutes);
+        assert.equal(day.sessions.reduce((total,session)=>total+session.minutes,0)+day.freeMinutes,day.capacityMinutes);
+      }
+      assert.equal(plan.days.reduce((total,day)=>total+day.freeMinutes,0)+plan.plannedMinutes,plan.totalCapacityMinutes);
+    }
+  });
   test('the algorithm preserves inputs and agrees across repeated calculations',()=>{
     const input=sample(),original=structuredClone(input);
     const first=createPlan(input);assert.deepEqual(input,original);assert.deepEqual(first,createPlan(input));
@@ -91,7 +105,7 @@ describe('FocusLane application',()=>{
     const bad=sample();bad.subjects[0].name='a\nb';reject(bad);
   });
   test('metadata is limited to public build identity',()=>{
-    assert.deepEqual(buildMetadata({GIT_SHA:'abc',BUILD_NUMBER:'2',APP_MODE:'cloud',SECRET:'private'}),{version:'1.0.0',gitSha:'abc',buildNumber:'2',mode:'cloud'});
+    assert.deepEqual(buildMetadata({GIT_SHA:'abc',BUILD_NUMBER:'2',APP_MODE:'cloud',SECRET:'private'}),{version:'1.1.0',gitSha:'abc',buildNumber:'2',mode:'cloud'});
     assert.equal(buildMetadata({}).gitSha,'development');
   });
   test('health and version expose the expected running build identity',async()=>{
@@ -102,7 +116,7 @@ describe('FocusLane application',()=>{
   });
   test('HTTP planning completes the browser-to-API data flow',async()=>{
     const response=await post(sample());assert.equal(response.status,200);
-    const result=await response.json();assert.equal(result.data.plannedMinutes,255);assert.equal(result.data.days.length,3);assert.equal(result.meta.mode,'test');
+    const result=await response.json();assert.equal(result.data.plannedMinutes,255);assert.equal(result.data.days.length,3);assert.equal(result.data.days[2].freeMinutes,15);assert.equal(result.meta.mode,'test');
   });
   test('tracing, cache and browser protection headers accompany API responses',async()=>{
     const response=await post(sample());assert.match(response.headers.get('X-Request-ID'),/^[a-f0-9-]{36}$/);
