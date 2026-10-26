@@ -11,6 +11,11 @@ $labIdentity = [Security.Principal.WindowsIdentity]::GetCurrent().User.Value
 if ($LASTEXITCODE -ne 0) { throw 'Could not restrict the secret-directory permissions' }
 $labAdminFile = Join-Path $labSecretPath 'jenkins_admin_password'
 if (-not (Test-Path -LiteralPath $labAdminFile)) {
+    $labExistingHome = docker volume ls --filter 'name=^releaseharbor-exp13_jenkins-home$' --format '{{.Name}}'
+    if ($LASTEXITCODE -ne 0) { throw 'Docker must be running before this lab can start' }
+    if ($labExistingHome) {
+        throw 'Existing Jenkins data was found. Run this script with -SecretsDirectory pointing to the private directory originally used for this lab.'
+    }
     $labRandom = New-Object byte[] 30
     $labRng = [Security.Cryptography.RandomNumberGenerator]::Create()
     try { $labRng.GetBytes($labRandom) } finally { $labRng.Dispose() }
