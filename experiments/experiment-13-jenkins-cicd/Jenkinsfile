@@ -10,7 +10,7 @@ pipeline {
     triggers { pollSCM('* * * * *') }
     parameters {
         booleanParam(name: 'PUBLISH_IMAGE', defaultValue: true, description: 'Publish the tested image to Docker Hub on main.')
-        booleanParam(name: 'DEPLOY_CLOUD', defaultValue: false, description: 'Enable after the free cloud service and Jenkins deploy secret are configured.')
+        booleanParam(name: 'DEPLOY_CLOUD', defaultValue: true, description: 'Deploy the tested image digest to the configured free Render service.')
         booleanParam(name: 'DEMONSTRATE_TEST_GATE', defaultValue: false, description: 'Deliberately fail a gate test to prove publish/deploy are skipped.')
     }
     environment {

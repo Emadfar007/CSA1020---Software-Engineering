@@ -75,7 +75,7 @@ hookConfiguration.save()
 // Credentials are imported only when their IDs do not already exist. They are
 // encrypted by Jenkins in its persistent home. The optional source file must
 // remain outside version control and must not be printed or archived.
-def seedFile = new File('/run/secrets/seed_credentials.json')
+def seedFile = new File('/run/secrets/seed_credentials')
 if (seedFile.isFile()) {
     def seed = new JsonSlurper().parse(seedFile, 'UTF-8')
     def provider = SystemCredentialsProvider.getInstance()
