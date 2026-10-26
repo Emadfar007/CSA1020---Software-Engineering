@@ -22,6 +22,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 checkout scm
+                dir("${APP_DIR}/reports") { deleteDir() }
                 script {
                     env.SOURCE_SHA = sh(script: 'git rev-parse HEAD', returnStdout: true).trim()
                     env.IMAGE_TAG = "build-${env.BUILD_NUMBER}-${env.SOURCE_SHA.take(12)}"
@@ -94,6 +95,5 @@ pipeline {
         }
         success { echo 'All selected stages passed. See archived verification reports for the stages executed.' }
         failure { echo 'Pipeline failed. Inspect the failing stage; subsequent stages are skipped.' }
-        cleanup { deleteDir() }
     }
 }
