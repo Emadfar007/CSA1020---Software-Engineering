@@ -17,6 +17,7 @@ Software engineering experiments by **Emadfar007**.
 | 11 | Original static website packaged in a Docker image and served locally by Nginx, with a healthy container and verified browser workflow | [Docker Static Website](experiments/experiment-11-docker-static-website/README.md) |
 | 12 | Flask delivery-estimate API built and pushed with Docker, then deployed to Kubernetes through NodePort, with scaling and pod-recovery verification | [Flask, Docker and Kubernetes](experiments/experiment-12-flask-docker-kubernetes/README.md) |
 | 13 | Local Jenkins CI/CD pipeline with Docker builds, automated tests, commit polling, image publication and verified deployment to Render Free | [Jenkins CI/CD with Docker](experiments/experiment-13-jenkins-cicd/README.md) |
+| 14 | GitHub Actions continuous deployment with tested Docker images, immutable Docker Hub publication, PR validation and automatic Render Free deployment | [GitHub Actions Continuous Deployment](experiments/experiment-14-github-actions-cd/README.md) |
 
 Each experiment includes only Aim, Tools Required, Algorithm, Output Screenshots, and Result.
 
@@ -94,7 +95,15 @@ Experiment 12 includes the ParcelPilot Flask API, interactive quote studio and J
 
 Experiment 13 includes the ReleaseHarbor app, a multi-stage Dockerfile, Jenkinsfile, local Jenkins setup, deployment helpers, nine screenshots and actual build evidence. A Git commit triggered Jenkins build #7, which passed 21 tests, verified the runtime container, published a build-specific Docker Hub image and deployed its exact digest to [Render](https://releaseharbor-exp13.onrender.com/). The running app's source SHA and build number matched Jenkins. An intentional failed gate also blocked publication and deployment. Jenkins runs locally; the cloud app uses Render Free with idle sleep and monthly limits, without a fixed trial-expiry date.
 
+### GitHub Actions continuous deployment
+
+![FocusLane study planner automatically deployed through GitHub Actions](experiments/experiment-14-github-actions-cd/screenshots/02-cloud-app.jpg)
+
+Experiment 14 includes FocusLane, an editable study-sprint planner, a multi-stage Dockerfile, a hosted GitHub Actions workflow, ten screenshots and actual delivery receipts. Merging [pull request #2](https://github.com/Emadfar007/CSA1020---Software-Engineering/pull/2) automatically triggered [run #3](https://github.com/Emadfar007/CSA1020---Software-Engineering/actions/runs/40353497794), which passed 23 application tests and four CI guard checks, pushed the tested image to Docker Hub, and deployed its exact digest to [Render](https://focuslane-exp14.onrender.com). The cloud app's version 1.1.0, source commit and run 3.1 matched the pipeline. Pull requests validate without publishing or deploying. The hosted pipeline works while the local computer is off; Render Free has idle sleep and shared monthly limits.
+
 ## Local testing
+
+For Experiment 14, open [FocusLane in the cloud](https://focuslane-exp14.onrender.com) or follow its [Docker commands and report](experiments/experiment-14-github-actions-cd/README.md) for local testing. Application changes pushed to `main` trigger the hosted pipeline. A sleeping Free cloud instance may take time to start.
 
 For Experiment 13, follow the [Jenkins CI/CD report](experiments/experiment-13-jenkins-cicd/README.md). On a fresh machine, run `./scripts/start-lab.ps1` from that experiment directory. When restarting an existing lab, supply its original private secret directory as documented. Open the local Jenkins job at `http://127.0.0.1:8090/job/ReleaseHarbor-CICD/`; commit polling operates while this computer, Docker and Jenkins are running.
 
