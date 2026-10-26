@@ -16,7 +16,7 @@ const ASSETS=new Map([
 ]);
 
 export function buildMetadata(env=process.env) {
-  return Object.freeze({version:'1.0.0',gitSha:env.GIT_SHA||'development',buildNumber:env.BUILD_NUMBER||'local',mode:env.APP_MODE||'local'});
+  return Object.freeze({version:'1.1.0',gitSha:env.GIT_SHA||'development',buildNumber:env.BUILD_NUMBER||'local',mode:env.APP_MODE||'local'});
 }
 
 function readJson(req) {
