@@ -20,8 +20,8 @@ def main():
         const health=await fetch(base+'/healthz');
         assert.equal(health.status,200);
         const version=(await (await fetch(base+'/api/version')).json()).data;
-        assert.equal(version.gitSha,process.env.GIT_SHA);
-        assert.equal(version.buildNumber,process.env.BUILD_NUMBER);
+        assert.equal(version.gitSha,process.env.EXPECTED_SOURCE_SHA);
+        assert.equal(version.buildNumber,process.env.EXPECTED_BUILD_NUMBER);
         const checks=Object.fromEntries(['tests','codeReview','build','dependencies','secrets','access','backup','monitoring','rollback','runbook','notes','support'].map(id=>[id,true]));
         const body={releaseName:'Harbor launch',version:'1.0.0',owner:'Demo team',releaseDate:'2026-11-02',checks};
         const post=payload=>fetch(base+'/api/assess',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
@@ -39,7 +39,9 @@ def main():
                '--security-opt', 'no-new-privileges:true', '--memory', '128m', image)
         last = None
         for attempt in range(20):
-            result = docker('exec', name, 'node', '-e', script, check=False)
+            result = docker('exec', '-e', 'EXPECTED_SOURCE_SHA=' + os.environ['SOURCE_SHA'],
+                            '-e', 'EXPECTED_BUILD_NUMBER=' + os.environ['BUILD_NUMBER'],
+                            name, 'node', '-e', script, check=False)
             if result.returncode == 0:
                 report = json.loads(result.stdout)
                 Path('reports/container-smoke.json').write_text(json.dumps(report, indent=2) + '\n')

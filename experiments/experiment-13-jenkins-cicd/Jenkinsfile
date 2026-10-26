@@ -48,6 +48,7 @@ pipeline {
                           --cap-drop ALL --security-opt no-new-privileges:true "$TEST_IMAGE" \
                           node --test --test-reporter=junit \
                           > reports/junit.xml
+                        python3 ci/validate_tests.py
                     '''
                     script {
                         if (params.DEMONSTRATE_TEST_GATE) {
