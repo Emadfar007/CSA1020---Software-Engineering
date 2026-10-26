@@ -5,6 +5,8 @@ import com.cloudbees.plugins.credentials.impl.UsernamePasswordCredentialsImpl
 import groovy.json.JsonSlurper
 import hudson.model.Item
 import hudson.model.Node
+import hudson.model.BooleanParameterDefinition
+import hudson.model.ParametersDefinitionProperty
 import hudson.plugins.git.BranchSpec
 import hudson.plugins.git.GitSCM
 import hudson.plugins.git.UserRemoteConfig
@@ -120,3 +122,16 @@ if (controller.getItem(jobName) == null) {
     job.save()
 }
 controller.save()
+
+// Parameter definitions are needed before the first SCM-loaded build can be
+// requested with buildWithParameters. Start with cloud deployment unchecked so
+// the tested image can seed a new image-backed service before its hook exists.
+def configuredJob = controller.getItem(jobName)
+if (configuredJob.getProperty(ParametersDefinitionProperty) == null) {
+    configuredJob.addProperty(new ParametersDefinitionProperty([
+        new BooleanParameterDefinition('PUBLISH_IMAGE', true, 'Publish the tested image to Docker Hub.'),
+        new BooleanParameterDefinition('DEPLOY_CLOUD', false, 'Deploy after the free cloud service and secret are configured.'),
+        new BooleanParameterDefinition('DEMONSTRATE_TEST_GATE', false, 'Deliberately fail a test gate.')
+    ]))
+    configuredJob.save()
+}
