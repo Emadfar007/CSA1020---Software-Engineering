@@ -18,6 +18,7 @@ Software engineering experiments by **Emadfar007**.
 | 12 | Flask delivery-estimate API built and pushed with Docker, then deployed to Kubernetes through NodePort, with scaling and pod-recovery verification | [Flask, Docker and Kubernetes](experiments/experiment-12-flask-docker-kubernetes/README.md) |
 | 13 | Local Jenkins CI/CD pipeline with Docker builds, automated tests, commit polling, image publication and verified deployment to Render Free | [Jenkins CI/CD with Docker](experiments/experiment-13-jenkins-cicd/README.md) |
 | 14 | GitHub Actions continuous deployment with tested Docker images, immutable Docker Hub publication, PR validation and automatic Render Free deployment | [GitHub Actions Continuous Deployment](experiments/experiment-14-github-actions-cd/README.md) |
+| 15 | Team project with module branches, reviewed pull requests, follow-up commits, genuine conflict resolution and a verified KitCrew application | [Team Version Control](experiments/experiment-15-team-version-control/README.md) |
 
 Each experiment includes only Aim, Tools Required, Algorithm, Output Screenshots, and Result.
 
@@ -101,7 +102,15 @@ Experiment 13 includes the ReleaseHarbor app, a multi-stage Dockerfile, Jenkinsf
 
 Experiment 14 includes FocusLane, an editable study-sprint planner, a multi-stage Dockerfile, a hosted GitHub Actions workflow, ten screenshots and actual delivery receipts. Merging [pull request #2](https://github.com/Emadfar007/CSA1020---Software-Engineering/pull/2) automatically triggered [run #3](https://github.com/Emadfar007/CSA1020---Software-Engineering/actions/runs/40353497794), which passed 23 application tests and four CI guard checks, pushed the tested image to Docker Hub, and deployed its exact digest to [Render](https://focuslane-exp14.onrender.com). The cloud app's version 1.1.0, source commit and run 3.1 matched the pipeline. Pull requests validate without publishing or deploying. The hosted pipeline works while the local computer is off; Render Free has idle sleep and shared monthly limits.
 
+### Team project version control
+
+![KitCrew equipment-sharing workspace](experiments/experiment-15-team-version-control/screenshots/01-kitcrew-catalog.jpg)
+
+Experiment 15 archives KitCrew's team version-control workflow, application source, ten screenshots and recorded evidence. Three module branches were merged after documented COMMENT reviews, including a follow-up regression test and a genuine manually resolved policy conflict. All 26 module tests and 17 browser checks passed. The original workflow repository remains private; the report and captured evidence are available in this public experiment archive.
+
 ## Local testing
+
+For Experiment 15, run `npm start --prefix experiments/experiment-15-team-version-control/app` from the repository root and open `http://127.0.0.1:4845/`. Its [report](experiments/experiment-15-team-version-control/README.md) includes test commands and the branch/review/conflict workflow.
 
 For Experiment 14, open [FocusLane in the cloud](https://focuslane-exp14.onrender.com) or follow its [Docker commands and report](experiments/experiment-14-github-actions-cd/README.md) for local testing. Application changes pushed to `main` trigger the hosted pipeline. A sleeping Free cloud instance may take time to start.
 
