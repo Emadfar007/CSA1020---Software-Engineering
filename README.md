@@ -15,6 +15,7 @@ Software engineering experiments by **Emadfar007**.
 | 09 | Git/GitHub fork, clone, feature branch, pull request, disclosed self-review, follow-up fixes, and merge | [GitHub Collaboration](experiments/experiment-09-github-collaboration/README.md) |
 | 10 | Real Git branch divergence, two-file merge conflict, manual combined resolution, and a FairSeat feature pull request | [Branching and Merge Conflicts](experiments/experiment-10-merge-conflicts/README.md) |
 | 11 | Original static website packaged in a Docker image and served locally by Nginx, with a healthy container and verified browser workflow | [Docker Static Website](experiments/experiment-11-docker-static-website/README.md) |
+| 12 | Flask delivery-estimate API built and pushed with Docker, then deployed to Kubernetes through NodePort, with scaling and pod-recovery verification | [Flask, Docker and Kubernetes](experiments/experiment-12-flask-docker-kubernetes/README.md) |
 
 Each experiment includes only Aim, Tools Required, Algorithm, Output Screenshots, and Result.
 
@@ -80,7 +81,15 @@ Experiment 10 demonstrates genuine conflicts in the seat allocator and release p
 
 Experiment 11 includes the Orbital Fieldnotes website, Dockerfile, Nginx configuration, a restricted build context, six screenshots, and recorded build/runtime evidence. The image was built successfully, the container became healthy, and all eleven browser checks passed. The website runs locally at port 8087, with no host directory mounts or public deployment.
 
+### Flask API with Docker and Kubernetes
+
+![ParcelPilot quote studio running through Kubernetes NodePort](experiments/experiment-12-flask-docker-kubernetes/screenshots/02-delivery-estimate.jpg)
+
+Experiment 12 includes the ParcelPilot Flask API, interactive quote studio and JSON explorer, Dockerfile, Kubernetes manifests, deployment scripts, nine screenshots, and recorded verification evidence. The image was pushed to [Docker Hub](https://hub.docker.com/r/coastrider7/csa1020-exp12-parcelpilot-api/tags) and deployed by a local kind cluster with two Ready replicas through NodePort 30088. All 17 API tests passed; replica routing, scaling to three replicas and automatic replacement of a removed test pod were verified. The final replica count is two. Rates are illustrative and quotes are stateless.
+
 ## Local testing
+
+For Experiment 12, follow its [report and commands](experiments/experiment-12-flask-docker-kubernetes/README.md). With Docker running, create the supplied kind cluster once, then run `./scripts/deploy.ps1` from the experiment directory. Access the application at `http://127.0.0.1:30088/` on the computer running the cluster. The API runs locally for testing; its container image is published to Docker Hub.
 
 For Experiment 11, open a terminal in `experiments/experiment-11-docker-static-website/` with Docker running, then run:
 
