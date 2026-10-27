@@ -1,0 +1,274 @@
+#!/usr/bin/env bash
+# Browser-only lab runner. Run with: bash browser-lab/bin/lab status
+set -Eeuo pipefail
+umask 077
+SCRIPT_DIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)
+REPO_DIR=${LAB_REPO_DIR:-$(git -C "$SCRIPT_DIR" rev-parse --show-toplevel 2>/dev/null || (cd "$SCRIPT_DIR/../.." && pwd))}
+DATA_ROOT=${LAB_DATA_DIR:-/workspaces/.lab-data}
+PRIVATE_DIR="$DATA_ROOT/private"
+REGISTRY=coastrider7
+DIN_IMAGE=docker@sha256:9e79b879b177fbd72c34376a3dd3d91747da5db49e1f560f76aea59561471977
+ATLAS_IMAGE=coastrider7/csa1020-exp17-meridian-atlas@sha256:b594c04908b603a2ffecc602434826d5b1797a3ae7614ca652fc9f9c710c44ab
+MORROW_IMAGE=coastrider7/csa1020-exp16-morrow@sha256:8ea76f00fc6add13f0e283da863a5d9d8187d4afd97653787bee2d8975090671
+PARCEL_IMAGE=coastrider7/csa1020-exp12-parcelpilot-api@sha256:b8446abac9502577a9cb146729ce8df7c90866a1b3fd3cdccde7d80b48126a81
+
+die() { printf 'Error: %s\n' "$*" >&2; exit 1; }
+usage() {
+  cat <<'HELP'
+CSA1020 Browser Docker Lab
+  lab status                    Show managed cloud containers
+  lab start 11|12|13|16|17       Start one experiment and stop other lab profiles
+  lab start 12 --kubernetes     Also create/resume the real kind NodePort cluster
+  lab start 14                  Show the existing hosted Actions and Render links
+  lab stop all|11|12|13|16|17    Stop containers without deleting images or data
+  lab urls                      Print private browser addresses
+  lab resume-ci                 Explicitly enable Jenkins builds after migration review
+  lab pause-ci                  Pause Jenkins builds and preserve the pause on restart
+
+Run as: bash browser-lab/bin/lab <command>
+No experiment starts automatically. Data is private under /workspaces/.lab-data.
+HELP
+}
+require_cloud() {
+  [[ ${CODESPACES:-false} == true && -n ${CODESPACE_NAME:-} ]] ||
+    [[ ${LAB_ALLOW_LOCAL:-0} == 1 ]] || die 'Run this in the Codespaces browser lab. Local Docker is protected.'
+  command -v docker >/dev/null || die 'Docker is not installed in this dev container.'
+  docker info >/dev/null 2>&1 || die 'The browser Docker daemon is not ready. Retry after Codespaces finishes starting.'
+  [[ $(uname -m) == x86_64 ]] || die 'These recorded experiment images require the Linux AMD64 codespace.'
+  mkdir -p "$DATA_ROOT" "$PRIVATE_DIR"; chmod 700 "$PRIVATE_DIR"
+}
+exp_dir() {
+  local folder
+  case "$1" in
+    11) folder=experiment-11-docker-static-website;;
+    12) folder=experiment-12-flask-docker-kubernetes;;
+    13) folder=experiment-13-jenkins-cicd;;
+    16) folder=experiment-16-flask-todo-docker;;
+    17) folder=experiment-17-dockerhub-push-pull;;
+    *) die 'Unknown experiment.';;
+  esac
+  if [[ -d "$REPO_DIR/experiments/$folder" ]]; then printf '%s\n' "$REPO_DIR/experiments/$folder"
+  elif [[ -d "$REPO_DIR/outputs/$folder" ]]; then printf '%s\n' "$REPO_DIR/outputs/$folder"
+  else die "Missing source directory: $folder"; fi
+}
+url() {
+  if [[ -n ${CODESPACE_NAME:-} ]]; then
+    printf 'https://%s-%s.%s/\n' "$CODESPACE_NAME" "$1" "${GITHUB_CODESPACES_PORT_FORWARDING_DOMAIN:-app.github.dev}"
+  else printf 'http://127.0.0.1:%s/\n' "$1"; fi
+}
+urls() {
+  local p label
+  for p in 8087 8088 30088 8090 8096 8097 8098; do
+    case "$p" in 8087) label='11 website';;8088)label='12 Docker API';;30088)label='12 Kubernetes';;8090)label='13 Jenkins';;8096)label='16 Morrow';;8097)label='17 builder';;8098)label='17 receiver';;esac
+    printf '%-18s %s\n' "$label" "$(url "$p")"
+  done
+  printf '\n14 Actions: https://github.com/Emadfar007/CSA1020---Software-Engineering/actions/workflows/experiment-14-cd.yml\n14 app: https://focuslane-exp14.onrender.com/\n'
+  printf '\nForwarded ports must remain Private in the Codespaces Ports tab. URLs respond only while their profile runs.\n'
+}
+exists() { docker container inspect "$1" >/dev/null 2>&1; }
+stop_one() { if exists "$1"; then docker stop --time 25 "$1" >/dev/null; printf 'Stopped %s\n' "$1"; fi; }
+stop_exp() {
+  case "$1" in
+    11) stop_one orbital-fieldnotes-exp11;;
+    12) stop_one parcelpilot-api-exp12; stop_one parcelpilot-lab-control-plane;;
+    13) stop_one releaseharbor-exp13-jenkins-1; stop_one releaseharbor-exp13-docker-1;;
+    16) stop_one morrow-tasks-exp16;;
+    17) stop_one meridian-atlas-exp17-a; stop_one meridian-receiver-exp17-b;;
+    *) die 'Choose all, 11, 12, 13, 16 or 17.';;
+  esac
+}
+stop_others() { local n; for n in 11 12 13 16 17; do [[ "$n" == "$1" ]] || stop_exp "$n"; done; }
+ensure_image() {
+  local image=$1 context=${2:-}
+  if docker image inspect "$image" >/dev/null 2>&1; then return; fi
+  if [[ "$image" == */* || "$image" == *@sha256:* || -z "$context" ]] && docker pull "$image"; then return; fi
+  [[ -n "$context" ]] || die "Could not pull image $image. No rebuild source was requested."
+  docker build -t "$image" "$context"
+}
+start_or_create() {
+  local name=$1 image=$2; shift 2
+  if exists "$name"; then
+    local current wanted
+    current=$(docker inspect --format '{{.Image}}' "$name"); wanted=$(docker image inspect --format '{{.Id}}' "$image")
+    [[ "$current" == "$wanted" ]] || die "$name already uses a different image. It was preserved; review it before replacement."
+    docker update --restart no "$name" >/dev/null; docker start "$name" >/dev/null
+  else docker run -d --name "$name" --restart no "$@" "$image" >/dev/null; fi
+}
+wait_http() {
+  local port=$1 path=${2:-/healthz} attempts=${3:-90} i
+  for ((i=0;i<attempts;i++)); do if curl --fail --silent --max-time 5 "http://127.0.0.1:$port$path" >/dev/null; then return; fi; sleep 2; done
+  die "Port $port did not become ready. Inspect lab status and docker logs."
+}
+data_dir() {
+  local name=$1 uid=$2 gid=$3 path="$DATA_ROOT/$1"
+  mkdir -p "$path"
+  if [[ $(stat -c %u "$path") != "$uid" ]]; then sudo chown "$uid:$gid" "$path"; fi
+  chmod 750 "$path" 2>/dev/null || true
+  printf '%s\n' "$path"
+}
+start_11() {
+  local image=${LAB_EXP11_IMAGE:-orbital-fieldnotes:1.0}
+  ensure_image "$image" "$(exp_dir 11)"
+  start_or_create orbital-fieldnotes-exp11 "$image" --memory 64m --cpus .5 -p 127.0.0.1:8087:80
+  wait_http 8087; printf 'Experiment 11: %s\n' "$(url 8087)"
+}
+start_12() {
+  ensure_image "$PARCEL_IMAGE"
+  start_or_create parcelpilot-api-exp12 "$PARCEL_IMAGE" --read-only --tmpfs /tmp:rw,noexec,nosuid,size=16m --cap-drop ALL --security-opt no-new-privileges:true --memory 256m --cpus 1 --health-interval 30s --health-timeout 15s --health-start-period 30s --health-retries 3 --health-cmd 'python -c "import urllib.request; urllib.request.urlopen('\''http://127.0.0.1:8000/healthz'\'', timeout=5)"' -p 127.0.0.1:8088:8000
+  wait_http 8088; printf 'Experiment 12 Docker: %s\n' "$(url 8088)"
+  if [[ ${1:-} == --kubernetes ]]; then start_kubernetes; else printf 'For Kubernetes too: bash browser-lab/bin/lab start 12 --kubernetes\n'; fi
+}
+install_kubernetes_tools() {
+  local tools="$DATA_ROOT/tools" tmp
+  mkdir -p "$tools"
+  if [[ ! -x "$tools/kind" ]]; then
+    tmp=$(mktemp -d)
+    curl --fail --location --retry 3 --output "$tmp/kind" https://github.com/kubernetes-sigs/kind/releases/download/v0.33.0/kind-linux-amd64
+    printf '%s  %s\n' aee6151561422756b764a4ae28e7f44cda5af5a9eead3cc9985112b1de8d8e0d "$tmp/kind" | sha256sum --check
+    install -m 755 "$tmp/kind" "$tools/kind"; rm -- "$tmp/kind"; rmdir -- "$tmp"
+  fi
+  if [[ ! -x "$tools/kubectl" ]]; then
+    tmp=$(mktemp -d)
+    curl --fail --location --retry 3 --output "$tmp/kubectl" https://dl.k8s.io/release/v1.36.4/bin/linux/amd64/kubectl
+    curl --fail --location --retry 3 --output "$tmp/checksum" https://dl.k8s.io/release/v1.36.4/bin/linux/amd64/kubectl.sha256
+    printf '%s  %s\n' "$(cat "$tmp/checksum")" "$tmp/kubectl" | sha256sum --check
+    install -m 755 "$tmp/kubectl" "$tools/kubectl"; rm -- "$tmp/kubectl" "$tmp/checksum"; rmdir -- "$tmp"
+  fi
+}
+start_kubernetes() {
+  install_kubernetes_tools
+  export KUBECONFIG="$PRIVATE_DIR/parcelpilot-kubeconfig"
+  local tools="$DATA_ROOT/tools" source
+  source=$(exp_dir 12)
+  if exists parcelpilot-lab-control-plane; then docker start parcelpilot-lab-control-plane >/dev/null
+  else "$tools/kind" create cluster --name parcelpilot-lab --config "$source/cluster/kind-config.yaml" --wait 180s; fi
+  docker update --restart no parcelpilot-lab-control-plane >/dev/null
+  "$tools/kind" export kubeconfig --name parcelpilot-lab --kubeconfig "$KUBECONFIG"
+  "$tools/kubectl" --context kind-parcelpilot-lab apply -f "$source/k8s/namespace.yaml"
+  "$tools/kubectl" --context kind-parcelpilot-lab apply -f "$source/k8s/configmap.yaml" -f "$source/k8s/deployment.yaml" -f "$source/k8s/service.yaml"
+  "$tools/kubectl" --context kind-parcelpilot-lab -n parcelpilot-lab rollout status deployment/parcelpilot-api --timeout=240s
+  wait_http 30088; printf 'Experiment 12 Kubernetes: %s\n' "$(url 30088)"
+}
+write_ci_pause() {
+  local home="$DATA_ROOT/jenkins-home"
+  mkdir -p "$home/init.groovy.d"
+  cat > "$home/init.groovy.d/00-browser-lab-pause.groovy" <<'GROOVY'
+// Cloud migration guard. No job or credential changes.
+import jenkins.model.Jenkins
+Jenkins.get().doQuietDown(false, 0, 'Browser migration review: run lab resume-ci to enable builds.', false)
+GROOVY
+}
+start_13() {
+  local source secrets="$PRIVATE_DIR/jenkins-secrets" image=${LAB_EXP13_IMAGE:-releaseharbor-jenkins:1.0}
+  source=$(exp_dir 13)
+  [[ -s "$secrets/jenkins_admin_password" && -f "$secrets/seed_credentials.json" ]] || die "Restore the private Jenkins secrets to $secrets first. No credentials are generated or copied automatically."
+  data_dir jenkins-home 1000 1000 >/dev/null; mkdir -p "$DATA_ROOT/jenkins-docker" "$DATA_ROOT/jenkins-certificates"
+  mkdir -p "$DATA_ROOT/jenkins-home/init.groovy.d"
+  cat > "$DATA_ROOT/jenkins-home/init.groovy.d/00-browser-lab-location.groovy" <<'GROOVY'
+// Update only the cloud copy's navigation base after restoring a local home.
+import jenkins.model.JenkinsLocationConfiguration
+def cloudUrl = System.getenv('JENKINS_URL')
+if (cloudUrl && cloudUrl.startsWith('https://') && cloudUrl.contains('.app.github.dev')) {
+    def location = JenkinsLocationConfiguration.get()
+    location.setUrl(cloudUrl)
+    location.save()
+}
+GROOVY
+  [[ -f "$PRIVATE_DIR/ci-enabled" ]] || write_ci_pause
+  export JENKINS_SECRETS_DIR="$secrets" LAB_DATA_DIR="$DATA_ROOT" LAB_JENKINS_IMAGE="$image" LAB_JENKINS_URL
+  LAB_JENKINS_URL=$(url 8090)
+  cat > "$PRIVATE_DIR/jenkins-cloud-override.yaml" <<'YAML'
+services:
+  docker:
+    restart: "no"
+    volumes:
+      - type: bind
+        source: ${LAB_DATA_DIR}/jenkins-docker
+        target: /var/lib/docker
+      - type: bind
+        source: ${LAB_DATA_DIR}/jenkins-certificates
+        target: /certs/client
+  jenkins:
+    image: ${LAB_JENKINS_IMAGE}
+    restart: "no"
+    environment:
+      JENKINS_URL: ${LAB_JENKINS_URL}
+    volumes:
+      - type: bind
+        source: ${LAB_DATA_DIR}/jenkins-home
+        target: /var/jenkins_home
+      - type: bind
+        source: ${LAB_DATA_DIR}/jenkins-certificates
+        target: /certs/client
+        read_only: true
+YAML
+  ensure_image "$image" "$source/ci/jenkins"
+  docker compose --project-directory "$source" -f "$source/compose.yaml" -f "$PRIVATE_DIR/jenkins-cloud-override.yaml" up -d --no-build
+  wait_http 8090 /login 180
+  printf 'Experiment 13 Jenkins: %s\n' "$(url 8090)"
+  [[ -f "$PRIVATE_DIR/ci-enabled" ]] || printf 'Builds are paused for migration review. Existing jobs/results remain readable. Use lab resume-ci only when ready to publish/deploy.\n'
+}
+ci_control() {
+  local action=$1
+  LAB_DATA_DIR="$DATA_ROOT" LAB_CI_ACTION="$action" python3 - <<'PY'
+import os,pathlib,urllib.request,urllib.error,http.cookiejar,json,base64
+root=pathlib.Path(os.environ['LAB_DATA_DIR']);action=os.environ['LAB_CI_ACTION'];password=(root/'private/jenkins-secrets/jenkins_admin_password').read_text().strip()
+auth='Basic '+base64.b64encode(('emad:'+password).encode()).decode();opener=urllib.request.build_opener(urllib.request.HTTPCookieProcessor(http.cookiejar.CookieJar()))
+base='http://127.0.0.1:8090';headers={'Authorization':auth}
+try:
+    with opener.open(urllib.request.Request(base+'/crumbIssuer/api/json',headers=headers),timeout=20) as response:crumb=json.load(response)
+    headers[crumb['crumbRequestField']]=crumb['crumb']
+    endpoint='/cancelQuietDown' if action=='resume' else '/quietDown'
+    with opener.open(urllib.request.Request(base+endpoint,data=b'',headers=headers),timeout=20) as response:pass
+except urllib.error.HTTPError as error:raise SystemExit('Jenkins control failed with HTTP '+str(error.code)+'. Check the restored administrator credential without sharing it.')
+marker=root/'private/ci-enabled';pause=root/'jenkins-home/init.groovy.d/00-browser-lab-pause.groovy'
+if action=='resume':
+    marker.write_text('Explicitly enabled by lab resume-ci.\n')
+    if pause.exists():pause.unlink()
+elif marker.exists():marker.unlink()
+print('Jenkins builds '+('enabled.' if action=='resume' else 'paused.'))
+PY
+  [[ "$action" == resume ]] || write_ci_pause
+}
+start_16() {
+  local data; data=$(data_dir morrow 10001 10001)
+  ensure_image "$MORROW_IMAGE"
+  start_or_create morrow-tasks-exp16 "$MORROW_IMAGE" --read-only --tmpfs /tmp:rw,noexec,nosuid,size=32m --cap-drop ALL --security-opt no-new-privileges:true --memory 256m --cpus 1 -e DATA_DIR=/data -e TZ=Asia/Kolkata --mount "type=bind,source=$data,target=/data" -p 127.0.0.1:8096:8000
+  wait_http 8096 /readyz; printf 'Experiment 16: %s\n' "$(url 8096)"
+}
+start_17() {
+  ensure_image "$ATLAS_IMAGE"; ensure_image "$DIN_IMAGE"
+  start_or_create meridian-atlas-exp17-a "$ATLAS_IMAGE" --read-only --tmpfs /tmp:rw,noexec,nosuid,size=16m --cap-drop ALL --security-opt no-new-privileges:true --memory 64m --cpus .5 -p 127.0.0.1:8097:8080
+  mkdir -p "$DATA_ROOT/meridian-receiver"
+  if exists meridian-receiver-exp17-b; then docker update --restart no meridian-receiver-exp17-b >/dev/null; docker start meridian-receiver-exp17-b >/dev/null
+  else docker run -d --name meridian-receiver-exp17-b --hostname meridian-receiver-b --privileged --restart no --memory 384m --cpus 1 -e DOCKER_TLS_CERTDIR= --mount "type=bind,source=$DATA_ROOT/meridian-receiver,target=/var/lib/docker" -p 127.0.0.1:8098:8080 "$DIN_IMAGE" dockerd --host=unix:///var/run/docker.sock --storage-driver=overlay2 >/dev/null; fi
+  local i ready=0
+  for ((i=0;i<60;i++)); do if docker exec meridian-receiver-exp17-b docker info >/dev/null 2>&1; then ready=1;break;fi;sleep 2;done
+  [[ $ready == 1 ]] || die 'The isolated receiver engine did not start.'
+  docker exec meridian-receiver-exp17-b docker pull "$ATLAS_IMAGE"
+  if docker exec meridian-receiver-exp17-b docker inspect meridian-atlas-exp17-b >/dev/null 2>&1; then
+    local current wanted
+    current=$(docker exec meridian-receiver-exp17-b docker inspect --format '{{.Image}}' meridian-atlas-exp17-b)
+    wanted=$(docker exec meridian-receiver-exp17-b docker image inspect --format '{{.Id}}' "$ATLAS_IMAGE")
+    [[ "$current" == "$wanted" ]] || die 'The receiver website uses another image; it was preserved.'
+    docker exec meridian-receiver-exp17-b docker update --restart no meridian-atlas-exp17-b >/dev/null
+    docker exec meridian-receiver-exp17-b docker start meridian-atlas-exp17-b >/dev/null
+  else docker exec meridian-receiver-exp17-b docker run -d --name meridian-atlas-exp17-b --restart no --read-only --tmpfs /tmp:rw,noexec,nosuid,size=16m --cap-drop ALL --security-opt no-new-privileges:true --memory 64m --cpus .5 -p 8080:8080 "$ATLAS_IMAGE" >/dev/null;fi
+  wait_http 8097;wait_http 8098
+  printf 'Experiment 17 builder: %s\nExperiment 17 receiver: %s\n' "$(url 8097)" "$(url 8098)"
+}
+case "${1:-help}" in
+  help|-h|--help) usage;;
+  urls) urls;;
+  status) require_cloud; docker ps -a --format 'table {{.Names}}\t{{.Status}}\t{{.Image}}' | awk 'NR==1 || /orbital-fieldnotes-exp11|parcelpilot-api-exp12|parcelpilot-lab-control-plane|releaseharbor-exp13-|morrow-tasks-exp16|meridian-/';;
+  start)
+    [[ $# -ge 2 ]] || die 'Choose an experiment number.'
+    if [[ $2 == 14 ]]; then urls;exit;fi
+    case "$2" in 11|12|13|16|17);;*)die 'Choose 11, 12, 13, 14, 16 or 17.';;esac
+    [[ $# -le 2 || ($2 == 12 && $3 == --kubernetes && $# == 3) ]] || die 'Only start 12 accepts --kubernetes.'
+    require_cloud;stop_others "$2";"start_$2" "${3:-}";;
+  stop) require_cloud; if [[ ${2:-all} == all ]];then for n in 11 12 13 16 17;do stop_exp "$n";done;else stop_exp "$2";fi;;
+  resume-ci) require_cloud;ci_control resume;;
+  pause-ci) require_cloud;ci_control pause;;
+  *) usage;exit 1;;
+esac

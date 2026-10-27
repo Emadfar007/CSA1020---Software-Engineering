@@ -63,20 +63,21 @@ spec:
             httpGet:
               path: /healthz
               port: http
-            periodSeconds: 2
+            periodSeconds: 5
+            timeoutSeconds: 5
             failureThreshold: 30
           readinessProbe:
             httpGet:
               path: /readyz
               port: http
-            periodSeconds: 3
-            timeoutSeconds: 2
+            periodSeconds: 5
+            timeoutSeconds: 5
           livenessProbe:
             httpGet:
               path: /healthz
               port: http
             periodSeconds: 10
-            timeoutSeconds: 2
+            timeoutSeconds: 5
             failureThreshold: 3
           securityContext:
             allowPrivilegeEscalation: false

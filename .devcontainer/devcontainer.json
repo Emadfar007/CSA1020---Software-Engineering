@@ -1,0 +1,26 @@
+{
+  "name": "CSA1020 Browser Docker Lab",
+  "image": "mcr.microsoft.com/devcontainers/universal:2",
+  "remoteUser": "codespace",
+  "features": {
+    "ghcr.io/devcontainers/features/docker-in-docker:4": {
+      "version": "latest",
+      "moby": false,
+      "dockerDashComposeVersion": "v2"
+    }
+  },
+  "hostRequirements": { "cpus": 2, "memory": "8gb", "storage": "32gb" },
+  "forwardPorts": [8087, 8088, 30088, 8090, 8096, 8097, 8098],
+  "portsAttributes": {
+    "8087": { "label": "Experiment 11 Orbital Fieldnotes", "onAutoForward": "silent" },
+    "8088": { "label": "Experiment 12 ParcelPilot Docker", "onAutoForward": "silent" },
+    "30088": { "label": "Experiment 12 Kubernetes NodePort", "onAutoForward": "silent" },
+    "8090": { "label": "Experiment 13 Jenkins", "onAutoForward": "silent" },
+    "8096": { "label": "Experiment 16 Morrow", "onAutoForward": "silent" },
+    "8097": { "label": "Experiment 17 Builder A", "onAutoForward": "silent" },
+    "8098": { "label": "Experiment 17 Receiver B", "onAutoForward": "silent" }
+  },
+  "customizations": {
+    "vscode": { "extensions": ["ms-azuretools.vscode-containers"] }
+  }
+}

@@ -6,6 +6,8 @@ Create **Orbital Fieldnotes**, a distinctive static night-sky journal, package i
 
 ## Tools Required
 
+**Browser Docker lab:** [Open your Codespaces](https://github.com/codespaces) · [Setup and start commands](https://github.com/Emadfar007/CSA1020---Software-Engineering/tree/main/browser-lab). Run `bash browser-lab/bin/lab start 11` in the Codespaces terminal, then use `bash browser-lab/bin/lab urls` for its private browser address. The original local commands and screenshots below remain the experiment record.
+
 - Docker Desktop **4.96.3**, Docker Engine/CLI **29.9.2**, and Linux containers through WSL 2.
 - The official [Nginx Docker image](https://hub.docker.com/_/nginx), resolving to **Nginx 1.30.6** in this run.
 - HTML5 and CSS3; a text editor and a browser.

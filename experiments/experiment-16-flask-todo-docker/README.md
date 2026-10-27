@@ -10,6 +10,8 @@ The website runs only on the local computer through a loopback port. The Docker 
 
 ## Tools Required
 
+**Browser Docker lab:** [Open your Codespaces](https://github.com/codespaces) · [Setup and start commands](https://github.com/Emadfar007/CSA1020---Software-Engineering/tree/main/browser-lab). Run `bash browser-lab/bin/lab start 16` in the Codespaces terminal, then use `bash browser-lab/bin/lab urls` for its private browser address. The original local commands and screenshots below remain the experiment record.
+
 | Tool | Use |
 |---|---|
 | Python 3.13 | Application runtime inside the image |

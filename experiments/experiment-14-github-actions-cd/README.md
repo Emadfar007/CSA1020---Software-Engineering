@@ -6,6 +6,8 @@ To demonstrate continuous deployment of **FocusLane**, a Dockerized study-sprint
 
 ## Tools Required
 
+**Browser Docker lab:** [Open your Codespaces](https://github.com/codespaces) · [Setup and start commands](https://github.com/Emadfar007/CSA1020---Software-Engineering/tree/main/browser-lab). Its Docker build, test, registry publication and deployment already run on GitHub Actions and Render, independently of Docker Desktop. `bash browser-lab/bin/lab start 14` opens the recorded platform links. The original local commands and screenshots below remain the experiment record.
+
 | Tool | Purpose |
 |---|---|
 | Git and GitHub | Source control, feature branch, pull request and merge history |

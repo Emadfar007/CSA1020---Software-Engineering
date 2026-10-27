@@ -8,6 +8,8 @@ The user approved an **isolated Docker engine on the same laptop** as the sample
 
 ## Tools Required
 
+**Browser Docker lab:** [Open your Codespaces](https://github.com/codespaces) · [Setup and start commands](https://github.com/Emadfar007/CSA1020---Software-Engineering/tree/main/browser-lab). Run `bash browser-lab/bin/lab start 17` in the Codespaces terminal, then use `bash browser-lab/bin/lab urls` for its private browser address. The original local commands and screenshots below remain the experiment record.
+
 | Tool | Purpose |
 |---|---|
 | Docker Desktop and Docker CLI 29.9.2 | Build, tag, push, pull, inspect and run images |

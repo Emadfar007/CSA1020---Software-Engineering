@@ -2,6 +2,14 @@
 
 Software engineering experiments by **Emadfar007**.
 
+## Browser Docker lab
+
+Docker Experiments **11, 12, 13, 16 and 17** can run on the private GitHub Codespaces machine using the [browser lab guide](browser-lab/README.md), without using the laptop's Docker Desktop engine. Experiment **14** already builds and deploys through hosted GitHub Actions and Render.
+
+[Open your Codespaces](https://github.com/codespaces) and run `bash browser-lab/bin/lab start 16` to open Morrow, or select another experiment number. `bash browser-lab/bin/lab urls` prints all private browser links. Profiles run on demand; starting one stops the others while retaining their data. Use `bash browser-lab/bin/lab stop all` and stop the Codespace when finished.
+
+Keep Codespaces within the verified free quota and zero-spending budget. It has monthly compute/storage limits and inactive-retention rules. Existing localhost links below document the original laptop demonstrations; use the browser lab for cloud execution. Private Jenkins credentials and task databases must stay outside this public repository.
+
 | Experiment | Description | Files |
 | --- | --- | --- |
 | 01 | Trello Kanban board with five sample tasks and workflow simulation | [Kanban Board](experiments/experiment-01-kanban-board/README.md) |
