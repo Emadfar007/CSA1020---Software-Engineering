@@ -21,6 +21,22 @@ To demonstrate continuous deployment of **FocusLane**, a Dockerized study-sprint
 
 The service uses Render's **Free** plan without a database, persistent disk or paid add-on. The current Free web-service offering has no fixed trial-expiry date, but sleeps after 15 minutes without inbound traffic and uses the workspace's shared allowance of 750 instance hours each month. Usage limits and service policies apply; unlimited permanent hosting is not guaranteed. A sleeping service can take time to respond on its next visit. See [Render Free services](https://render.com/docs/free).
 
+### Quick access links
+
+| What to open | Link |
+| --- | --- |
+| Open the deployed application | [FocusLane - cloud app](https://focuslane-exp14.onrender.com/) |
+| Check the deployed build | [Version and source JSON](https://focuslane-exp14.onrender.com/api/version) · [Health check](https://focuslane-exp14.onrender.com/healthz) |
+| Follow the automatic pipeline | [GitHub Actions workflow](https://github.com/Emadfar007/CSA1020---Software-Engineering/actions/workflows/experiment-14-cd.yml) · [Recorded successful deployment run #3](https://github.com/Emadfar007/CSA1020---Software-Engineering/actions/runs/40353497794) |
+| Review the code change that triggered deployment | [Merged feature pull request #2](https://github.com/Emadfar007/CSA1020---Software-Engineering/pull/2) |
+| Find the published images | [Docker Hub image and tags](https://hub.docker.com/r/coastrider7/csa1020-exp14-focuslane/tags) |
+| Manage the deployed service | [Render dashboard - sign-in required](https://dashboard.render.com/web/srv-dbfnbggm7kps739nrok0) |
+| Source and pipeline configuration | [Experiment folder](https://github.com/Emadfar007/CSA1020---Software-Engineering/tree/main/experiments/experiment-14-github-actions-cd) · [Dockerfile](https://github.com/Emadfar007/CSA1020---Software-Engineering/blob/main/experiments/experiment-14-github-actions-cd/Dockerfile) · [Active workflow YAML](https://github.com/Emadfar007/CSA1020---Software-Engineering/blob/main/.github/workflows/experiment-14-cd.yml) |
+| View the output | [All ten screenshots](https://github.com/Emadfar007/CSA1020---Software-Engineering/tree/main/experiments/experiment-14-github-actions-cd/screenshots) · [Automatic deployment evidence](https://github.com/Emadfar007/CSA1020---Software-Engineering/tree/main/experiments/experiment-14-github-actions-cd/evidence/automatic-deployment) |
+| Open the experiment collection | [All experiments](https://github.com/Emadfar007/CSA1020---Software-Engineering) |
+
+The cloud app opens from any device, and GitHub Actions runs on hosted runners. Render management requires sign-in. A sleeping Render Free app can take time to wake. The run #3 link preserves the successful experiment demonstration; the workflow link shows newer runs when present.
+
 ## Algorithm
 
 1. **Create FocusLane.** Provide editable plan names, start dates, daily time budgets, plan lengths and one to six subjects. Each subject has a name, target duration and priority. The API schedules higher-priority work first without exceeding daily capacity. Display schedules, remaining work and capacity warnings; support saving drafts, resetting and exporting JSON.

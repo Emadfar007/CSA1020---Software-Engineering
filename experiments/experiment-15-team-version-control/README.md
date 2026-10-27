@@ -25,6 +25,22 @@ The original branches, issues and pull requests were created in KitCrew. Their l
 
 Only **Emadfar007** was used. Module roles represent a small team's responsibilities; they do not represent additional people or accounts. Reviews are explicitly identified as **COMMENT self-reviews**, supported by code inspection and automated checks. Independent human approval and enforced branch protection are not claimed.
 
+### Quick access links
+
+| What to open | Link |
+| --- | --- |
+| Open the application | [KitCrew - local workspace](http://127.0.0.1:4845/) · [Local health check](http://127.0.0.1:4845/healthz) |
+| Open the public experiment submission | [Report and source archive](https://github.com/Emadfar007/CSA1020---Software-Engineering/tree/main/experiments/experiment-15-team-version-control) · [All ten screenshots](https://github.com/Emadfar007/CSA1020---Software-Engineering/tree/main/experiments/experiment-15-team-version-control/screenshots) |
+| Open the original team repository | [KitCrew - private repository](https://github.com/Emadfar007/kitcrew-team-project) |
+| Browse the team workflow | [Module branches](https://github.com/Emadfar007/kitcrew-team-project/branches) · [Tracked issues, including completed work](https://github.com/Emadfar007/kitcrew-team-project/issues?q=is%3Aissue) · [Release milestone](https://github.com/Emadfar007/kitcrew-team-project/milestone/1?closed=1) |
+| Review the module pull requests | [Catalog and review feedback #4](https://github.com/Emadfar007/kitcrew-team-project/pull/4) · [Loans and conflict resolution #5](https://github.com/Emadfar007/kitcrew-team-project/pull/5) · [Insights and integration #6](https://github.com/Emadfar007/kitcrew-team-project/pull/6) |
+| Review the completed documentation | [Workflow evidence pull request #7](https://github.com/Emadfar007/kitcrew-team-project/pull/7) |
+| Open automated validation | [Module checks workflow](https://github.com/Emadfar007/kitcrew-team-project/actions/workflows/module-checks.yml) · [Recorded final passing run #9](https://github.com/Emadfar007/kitcrew-team-project/actions/runs/40360742707) |
+| Inspect the conflict evidence | [Captured conflict and workflow evidence](https://github.com/Emadfar007/CSA1020---Software-Engineering/tree/main/experiments/experiment-15-team-version-control/evidence) · [Manual resolution record](https://github.com/Emadfar007/CSA1020---Software-Engineering/blob/main/experiments/experiment-15-team-version-control/evidence/conflict-resolution.json) |
+| Open the experiment collection | [All experiments](https://github.com/Emadfar007/CSA1020---Software-Engineering) |
+
+The app links are local testing links. To start KitCrew, open a terminal in this experiment directory and run `npm start --prefix app`; no dependency installation is required. The original repository, issues, reviews and checks require a GitHub account with access, such as Emadfar007. The public submission remains accessible separately.
+
 ## Algorithm
 
 1. **Create the private team repository.** Create `kitcrew-team-project` under Emadfar007, add the project structure and push `main`. The shared baseline is commit `a0798c67bb45602680f4b2128e8052e87f893157`. Preserve the original private repository and archive the completed experiment here.

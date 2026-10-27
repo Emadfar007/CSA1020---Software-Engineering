@@ -20,6 +20,24 @@ The sample application, **ReleaseHarbor**, helps a team prepare a release throug
 
 Application: [ReleaseHarbor](https://releaseharbor-exp13.onrender.com/). Local job: [ReleaseHarbor-CICD](http://127.0.0.1:8090/job/ReleaseHarbor-CICD/). Images: [Docker Hub](https://hub.docker.com/r/coastrider7/csa1020-exp13-releaseharbor/tags). Source: [CSA1020 Software Engineering](https://github.com/Emadfar007/CSA1020---Software-Engineering).
 
+### Quick access links
+
+| What to open | Link |
+| --- | --- |
+| Open the deployed application | [ReleaseHarbor - cloud app](https://releaseharbor-exp13.onrender.com/) |
+| Use the application sections | [Release workspace](https://releaseharbor-exp13.onrender.com/#workspace) · [Release timeline](https://releaseharbor-exp13.onrender.com/#timeline) · [Build details](https://releaseharbor-exp13.onrender.com/#build) |
+| Check the deployed build | [Version and source JSON](https://releaseharbor-exp13.onrender.com/api/version) · [Health check](https://releaseharbor-exp13.onrender.com/healthz) |
+| Open local Jenkins | [Jenkins dashboard](http://127.0.0.1:8090/) · [ReleaseHarbor CI/CD job](http://127.0.0.1:8090/job/ReleaseHarbor-CICD/) |
+| Follow the latest passing pipeline | [Latest successful build](http://127.0.0.1:8090/job/ReleaseHarbor-CICD/lastSuccessfulBuild/) · [Test results](http://127.0.0.1:8090/job/ReleaseHarbor-CICD/lastSuccessfulBuild/testReport/) · [Console log](http://127.0.0.1:8090/job/ReleaseHarbor-CICD/lastSuccessfulBuild/console) |
+| Open the recorded experiment build | [Successful build #7](http://127.0.0.1:8090/job/ReleaseHarbor-CICD/7/) |
+| Manage the deployed service | [Render dashboard - sign-in required](https://dashboard.render.com/web/srv-dbflq8vb9u1s73de444g) |
+| Find the published images | [Docker Hub image and tags](https://hub.docker.com/r/coastrider7/csa1020-exp13-releaseharbor/tags) |
+| Source and pipeline configuration | [Experiment folder](https://github.com/Emadfar007/CSA1020---Software-Engineering/tree/main/experiments/experiment-13-jenkins-cicd) · [Jenkinsfile](https://github.com/Emadfar007/CSA1020---Software-Engineering/blob/main/experiments/experiment-13-jenkins-cicd/Jenkinsfile) · [Local Jenkins Compose setup](https://github.com/Emadfar007/CSA1020---Software-Engineering/blob/main/experiments/experiment-13-jenkins-cicd/compose.yaml) |
+| View the output | [All nine screenshots](https://github.com/Emadfar007/CSA1020---Software-Engineering/tree/main/experiments/experiment-13-jenkins-cicd/screenshots) · [Build and deployment evidence](https://github.com/Emadfar007/CSA1020---Software-Engineering/tree/main/experiments/experiment-13-jenkins-cicd/evidence) |
+| Open the experiment collection | [All experiments](https://github.com/Emadfar007/CSA1020---Software-Engineering) |
+
+The cloud app opens from any device. The Jenkins links require this laptop, Docker Desktop and both Jenkins lab containers. Viewing the recorded results is available without login; managing Jenkins or triggering builds uses the existing Jenkins login. If stopped, run `docker start releaseharbor-exp13-docker-1 releaseharbor-exp13-jenkins-1`. Render management requires sign-in. A sleeping Render Free app can take time to wake.
+
 ## Algorithm
 
 1. **Create the sample application.** Implement `GET /healthz`, `GET /api/version` and `POST /api/assess`. Validate release fields, semantic versions, dates and checkbox values. Calculate completion and missing critical checks. Serve the interface with bounded JSON requests and browser protection headers. Save drafts in the browser, without a database.

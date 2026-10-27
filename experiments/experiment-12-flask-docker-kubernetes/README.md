@@ -19,6 +19,21 @@ Docker Hub image: [coastrider7/csa1020-exp12-parcelpilot-api:1.0.0](https://hub.
 
 Local Kubernetes app: [http://127.0.0.1:30088/](http://127.0.0.1:30088/). Standalone Docker preview: [http://127.0.0.1:8088/](http://127.0.0.1:8088/). These addresses work on the computer running the lab while Docker and the cluster are running.
 
+### Quick access links
+
+| What to open | Link |
+| --- | --- |
+| Open the Kubernetes application | [ParcelPilot - NodePort app](http://127.0.0.1:30088/) |
+| Use the application sections | [Quote workbench](http://127.0.0.1:30088/#workbench) · [API explorer](http://127.0.0.1:30088/#explorer) · [Runtime details](http://127.0.0.1:30088/#runtime) |
+| Open the standalone Docker application | [ParcelPilot - Docker preview](http://127.0.0.1:8088/) |
+| Inspect the API | [OpenAPI specification](http://127.0.0.1:30088/openapi.json) · [Runtime status JSON](http://127.0.0.1:30088/api/v1/status) · [Health check](http://127.0.0.1:30088/healthz) |
+| Find the published image | [Docker Hub image and tags](https://hub.docker.com/r/coastrider7/csa1020-exp12-parcelpilot-api/tags) |
+| Source and deployment files | [Experiment folder](https://github.com/Emadfar007/CSA1020---Software-Engineering/tree/main/experiments/experiment-12-flask-docker-kubernetes) · [Dockerfile](https://github.com/Emadfar007/CSA1020---Software-Engineering/blob/main/experiments/experiment-12-flask-docker-kubernetes/Dockerfile) · [Kubernetes manifests](https://github.com/Emadfar007/CSA1020---Software-Engineering/tree/main/experiments/experiment-12-flask-docker-kubernetes/k8s) |
+| View the output | [All nine screenshots](https://github.com/Emadfar007/CSA1020---Software-Engineering/tree/main/experiments/experiment-12-flask-docker-kubernetes/screenshots) · [Verification evidence](https://github.com/Emadfar007/CSA1020---Software-Engineering/tree/main/experiments/experiment-12-flask-docker-kubernetes/evidence) |
+| Open the experiment collection | [All experiments](https://github.com/Emadfar007/CSA1020---Software-Engineering) |
+
+The application links are local to the computer running Docker Desktop. Start the existing demos with `docker start parcelpilot-lab-control-plane parcelpilot-api-exp12` if needed. Port 30088 opens the Kubernetes deployment; port 8088 opens the standalone Docker container.
+
 ## Algorithm
 
 1. Create [app.py](app.py) with a Flask application factory, JSON envelopes, validation, request IDs and runtime metadata. Design the browser quote studio, API explorer and runtime panel using local assets. Use illustrative parcel delivery rates; perform no real bookings or payments.

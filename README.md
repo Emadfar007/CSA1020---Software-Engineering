@@ -22,6 +22,18 @@ Software engineering experiments by **Emadfar007**.
 
 Each experiment includes only Aim, Tools Required, Algorithm, Output Screenshots, and Result.
 
+## Quick access - experiments completed on 26 October 2026
+
+| Experiment | Open the application | Open tools and progress | Full report and screenshots |
+| --- | --- | --- | --- |
+| 11 - Orbital Fieldnotes | [Local website](http://127.0.0.1:8087/) | [Health check](http://127.0.0.1:8087/healthz) | [Experiment 11](https://github.com/Emadfar007/CSA1020---Software-Engineering/tree/main/experiments/experiment-11-docker-static-website#quick-access-links) |
+| 12 - ParcelPilot | [Kubernetes app](http://127.0.0.1:30088/) · [Docker app](http://127.0.0.1:8088/) | [API specification](http://127.0.0.1:30088/openapi.json) · [Docker Hub](https://hub.docker.com/r/coastrider7/csa1020-exp12-parcelpilot-api/tags) | [Experiment 12](https://github.com/Emadfar007/CSA1020---Software-Engineering/tree/main/experiments/experiment-12-flask-docker-kubernetes#quick-access-links) |
+| 13 - ReleaseHarbor | [Cloud application](https://releaseharbor-exp13.onrender.com/) | [Jenkins job](http://127.0.0.1:8090/job/ReleaseHarbor-CICD/) · [Latest successful build](http://127.0.0.1:8090/job/ReleaseHarbor-CICD/lastSuccessfulBuild/) · [Render](https://dashboard.render.com/web/srv-dbflq8vb9u1s73de444g) | [Experiment 13](https://github.com/Emadfar007/CSA1020---Software-Engineering/tree/main/experiments/experiment-13-jenkins-cicd#quick-access-links) |
+| 14 - FocusLane | [Cloud application](https://focuslane-exp14.onrender.com/) | [GitHub Actions](https://github.com/Emadfar007/CSA1020---Software-Engineering/actions/workflows/experiment-14-cd.yml) · [Docker Hub](https://hub.docker.com/r/coastrider7/csa1020-exp14-focuslane/tags) · [Render](https://dashboard.render.com/web/srv-dbfnbggm7kps739nrok0) | [Experiment 14](https://github.com/Emadfar007/CSA1020---Software-Engineering/tree/main/experiments/experiment-14-github-actions-cd#quick-access-links) |
+| 15 - KitCrew | [Local application](http://127.0.0.1:4845/) | [Private team repository](https://github.com/Emadfar007/kitcrew-team-project) · [Module reviews](https://github.com/Emadfar007/kitcrew-team-project/pulls?q=is%3Apr) · [Passing checks](https://github.com/Emadfar007/kitcrew-team-project/actions/runs/40360742707) | [Experiment 15](https://github.com/Emadfar007/CSA1020---Software-Engineering/tree/main/experiments/experiment-15-team-version-control#quick-access-links) |
+
+Each report's **Tools Required → Quick access links** table contains its app, source, screenshots, checks, and relevant platform links. Addresses beginning with `127.0.0.1` open on the computer running the corresponding demo; they are not public hosting links. Start Docker Desktop for Experiments 11-13. For KitCrew, run `npm start --prefix experiments/experiment-15-team-version-control/app` from this repository's root. Jenkins and private GitHub/Render management pages may require your existing login. Render Free apps may take time to wake after inactivity.
+
 ## Experiment previews
 
 ### Kanban board

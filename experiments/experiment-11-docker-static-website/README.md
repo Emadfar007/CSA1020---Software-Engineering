@@ -11,6 +11,18 @@ Create **Orbital Fieldnotes**, a distinctive static night-sky journal, package i
 - HTML5 and CSS3; a text editor and a browser.
 - PowerShell or another terminal for the Docker commands.
 
+### Quick access links
+
+| What to open | Link |
+| --- | --- |
+| Open the website | [Orbital Fieldnotes - local app](http://127.0.0.1:8087/) |
+| Check the container response | [Local health check](http://127.0.0.1:8087/healthz) |
+| Source and container configuration | [Experiment folder](https://github.com/Emadfar007/CSA1020---Software-Engineering/tree/main/experiments/experiment-11-docker-static-website) · [Dockerfile](https://github.com/Emadfar007/CSA1020---Software-Engineering/blob/main/experiments/experiment-11-docker-static-website/Dockerfile) · [Nginx configuration](https://github.com/Emadfar007/CSA1020---Software-Engineering/blob/main/experiments/experiment-11-docker-static-website/nginx.conf) |
+| View the output | [All six screenshots](https://github.com/Emadfar007/CSA1020---Software-Engineering/tree/main/experiments/experiment-11-docker-static-website/screenshots) · [Build and verification evidence](https://github.com/Emadfar007/CSA1020---Software-Engineering/tree/main/experiments/experiment-11-docker-static-website/evidence) |
+| Open the experiment collection | [All experiments](https://github.com/Emadfar007/CSA1020---Software-Engineering) |
+
+The website and health links work on the computer running Docker Desktop. If its existing container is stopped, run `docker start orbital-fieldnotes-exp11`. This experiment was kept local; its image was not uploaded to a registry.
+
 ## Algorithm
 
 1. Create `site/index.html` with semantic HTML, an original inline SVG illustration, three expandable fieldnotes, and an observation checklist. Add `site/styles.css` for the responsive navy, cream, and orange interface. The website uses no external assets, JavaScript, packages, or build system.
