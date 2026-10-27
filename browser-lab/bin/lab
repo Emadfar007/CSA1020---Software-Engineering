@@ -66,7 +66,14 @@ urls() {
   printf '\nForwarded ports must remain Private in the Codespaces Ports tab. URLs respond only while their profile runs.\n'
 }
 exists() { docker container inspect "$1" >/dev/null 2>&1; }
-stop_one() { if exists "$1"; then docker stop --time 25 "$1" >/dev/null; printf 'Stopped %s\n' "$1"; fi; }
+stop_one() {
+  if exists "$1"; then
+    local grace=25
+    [[ "$1" != parcelpilot-lab-control-plane ]] || grace=60
+    docker stop --timeout "$grace" "$1" >/dev/null
+    printf 'Stopped %s\n' "$1"
+  fi
+}
 stop_exp() {
   case "$1" in
     11) stop_one orbital-fieldnotes-exp11;;
@@ -144,6 +151,12 @@ start_kubernetes() {
   else "$tools/kind" create cluster --name parcelpilot-lab --config "$source/cluster/kind-config.yaml" --wait 180s; fi
   docker update --restart no parcelpilot-lab-control-plane >/dev/null
   "$tools/kind" export kubeconfig --name parcelpilot-lab --kubeconfig "$KUBECONFIG"
+  local ready=0 attempt
+  for ((attempt=0;attempt<90;attempt++)); do
+    if "$tools/kubectl" --context kind-parcelpilot-lab --request-timeout=5s get --raw=/readyz >/dev/null 2>&1; then ready=1;break;fi
+    sleep 2
+  done
+  [[ $ready == 1 ]] || die 'The Kubernetes control plane did not become ready after startup.'
   "$tools/kubectl" --context kind-parcelpilot-lab apply -f "$source/k8s/namespace.yaml"
   "$tools/kubectl" --context kind-parcelpilot-lab apply -f "$source/k8s/configmap.yaml" -f "$source/k8s/deployment.yaml" -f "$source/k8s/service.yaml"
   "$tools/kubectl" --context kind-parcelpilot-lab -n parcelpilot-lab rollout status deployment/parcelpilot-api --timeout=240s
