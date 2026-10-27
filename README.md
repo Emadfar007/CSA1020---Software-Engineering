@@ -19,6 +19,7 @@ Software engineering experiments by **Emadfar007**.
 | 13 | Local Jenkins CI/CD pipeline with Docker builds, automated tests, commit polling, image publication and verified deployment to Render Free | [Jenkins CI/CD with Docker](experiments/experiment-13-jenkins-cicd/README.md) |
 | 14 | GitHub Actions continuous deployment with tested Docker images, immutable Docker Hub publication, PR validation and automatic Render Free deployment | [GitHub Actions Continuous Deployment](experiments/experiment-14-github-actions-cd/README.md) |
 | 15 | Team project with module branches, reviewed pull requests, follow-up commits, genuine conflict resolution and a verified KitCrew application | [Team Version Control](experiments/experiment-15-team-version-control/README.md) |
+| 16 | Persistent Flask to-do app containerized with Docker, verified task workflows and restart recovery, and published Docker Hub image | [Morrow Flask To Do App](experiments/experiment-16-flask-todo-docker/README.md) |
 
 Each experiment includes only Aim, Tools Required, Algorithm, Output Screenshots, and Result.
 
@@ -33,6 +34,14 @@ Each experiment includes only Aim, Tools Required, Algorithm, Output Screenshots
 | 15 - KitCrew | [Local application](http://127.0.0.1:4845/) | [Private team repository](https://github.com/Emadfar007/kitcrew-team-project) · [Module reviews](https://github.com/Emadfar007/kitcrew-team-project/pulls?q=is%3Apr) · [Passing checks](https://github.com/Emadfar007/kitcrew-team-project/actions/runs/40360742707) | [Experiment 15](https://github.com/Emadfar007/CSA1020---Software-Engineering/tree/main/experiments/experiment-15-team-version-control#quick-access-links) |
 
 Each report's **Tools Required → Quick access links** table contains its app, source, screenshots, checks, and relevant platform links. Addresses beginning with `127.0.0.1` open on the computer running the corresponding demo; they are not public hosting links. Start Docker Desktop for Experiments 11-13. For KitCrew, run `npm start --prefix experiments/experiment-15-team-version-control/app` from this repository's root. Jenkins and private GitHub/Render management pages may require your existing login. Render Free apps may take time to wake after inactivity.
+
+## Experiment 16 quick access
+
+| Open the app | Container image | Source and configuration | Report and screenshots |
+| --- | --- | --- | --- |
+| [Morrow local workspace](http://127.0.0.1:8096/) · [Readiness](http://127.0.0.1:8096/readyz) | [Docker Hub](https://hub.docker.com/r/coastrider7/csa1020-exp16-morrow/tags) | [Dockerfile](https://github.com/Emadfar007/CSA1020---Software-Engineering/blob/main/experiments/experiment-16-flask-todo-docker/Dockerfile) · [Compose](https://github.com/Emadfar007/CSA1020---Software-Engineering/blob/main/experiments/experiment-16-flask-todo-docker/compose.yaml) | [Report and quick links](https://github.com/Emadfar007/CSA1020---Software-Engineering/tree/main/experiments/experiment-16-flask-todo-docker#quick-access-links) · [Ten screenshots](https://github.com/Emadfar007/CSA1020---Software-Engineering/tree/main/experiments/experiment-16-flask-todo-docker/screenshots) |
+
+Morrow runs locally at port 8096 while Docker Desktop is running. From `experiments/experiment-16-flask-todo-docker`, run `./scripts/start.ps1` to start it, or `docker compose up -d --no-build` after pulling or building the image. Saved tasks remain in the named Docker volume when the container is stopped.
 
 ## Experiment previews
 
@@ -119,6 +128,12 @@ Experiment 14 includes FocusLane, an editable study-sprint planner, a multi-stag
 ![KitCrew equipment-sharing workspace](experiments/experiment-15-team-version-control/screenshots/01-kitcrew-catalog.jpg)
 
 Experiment 15 archives KitCrew's team version-control workflow, application source, ten screenshots and recorded evidence. Three module branches were merged after documented COMMENT reviews, including a follow-up regression test and a genuine manually resolved policy conflict. All 26 module tests and 17 browser checks passed. The original workflow repository remains private; the report and captured evidence are available in this public experiment archive.
+
+### Flask to do application with Docker
+
+![Morrow Task Studio with a persistent task board](experiments/experiment-16-flask-todo-docker/screenshots/01-task-board.jpg)
+
+Experiment 16 includes task creation and editing, priorities, deadlines, custom categories, search and filters, drag and drop, activity history, JSON import and export, and a persistent SQLite database. Its image passed 21 container tests, 37 live API checks and 18 browser checks; a real container restart preserved a saved task. Ten screenshots and the verified Docker Hub publication digest are included in its five-section report.
 
 ## Local testing
 
