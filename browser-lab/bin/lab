@@ -106,7 +106,7 @@ wait_http() {
   for ((i=0;i<attempts;i++)); do
     if curl --fail --silent --max-time 5 "http://127.0.0.1:$port$path" >/dev/null; then
       successes=$((successes+1))
-      [[ $successes -lt $required ]] || return
+      [[ $successes -lt $required ]] || return 0
     else successes=0; fi
     sleep 2
   done
