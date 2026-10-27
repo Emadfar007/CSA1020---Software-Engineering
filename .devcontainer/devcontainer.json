@@ -1,7 +1,7 @@
 {
   "name": "CSA1020 Browser Docker Lab",
-  "image": "mcr.microsoft.com/devcontainers/universal:2",
-  "remoteUser": "codespace",
+  "build": { "dockerfile": "Dockerfile" },
+  "remoteUser": "vscode",
   "features": {
     "ghcr.io/devcontainers/features/docker-in-docker:4": {
       "version": "latest",
