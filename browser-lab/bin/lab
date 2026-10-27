@@ -102,8 +102,14 @@ start_or_create() {
   else docker run -d --name "$name" --restart no "$@" "$image" >/dev/null; fi
 }
 wait_http() {
-  local port=$1 path=${2:-/healthz} attempts=${3:-90} i
-  for ((i=0;i<attempts;i++)); do if curl --fail --silent --max-time 5 "http://127.0.0.1:$port$path" >/dev/null; then return; fi; sleep 2; done
+  local port=$1 path=${2:-/healthz} attempts=${3:-90} required=${4:-3} i successes=0
+  for ((i=0;i<attempts;i++)); do
+    if curl --fail --silent --max-time 5 "http://127.0.0.1:$port$path" >/dev/null; then
+      successes=$((successes+1))
+      [[ $successes -lt $required ]] || return
+    else successes=0; fi
+    sleep 2
+  done
   die "Port $port did not become ready. Inspect lab status and docker logs."
 }
 data_dir() {
@@ -160,7 +166,7 @@ start_kubernetes() {
   "$tools/kubectl" --context kind-parcelpilot-lab apply -f "$source/k8s/namespace.yaml"
   "$tools/kubectl" --context kind-parcelpilot-lab apply -f "$source/k8s/configmap.yaml" -f "$source/k8s/deployment.yaml" -f "$source/k8s/service.yaml"
   "$tools/kubectl" --context kind-parcelpilot-lab -n parcelpilot-lab rollout status deployment/parcelpilot-api --timeout=240s
-  wait_http 30088; printf 'Experiment 12 Kubernetes: %s\n' "$(url 30088)"
+  wait_http 30088 /readyz 90 5; printf 'Experiment 12 Kubernetes: %s\n' "$(url 30088)"
 }
 write_ci_pause() {
   local home="$DATA_ROOT/jenkins-home"
