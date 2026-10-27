@@ -129,7 +129,10 @@ start_12() {
   ensure_image "$PARCEL_IMAGE"
   start_or_create parcelpilot-api-exp12 "$PARCEL_IMAGE" --read-only --tmpfs /tmp:rw,noexec,nosuid,size=16m --cap-drop ALL --security-opt no-new-privileges:true --memory 256m --cpus 1 --health-interval 30s --health-timeout 15s --health-start-period 30s --health-retries 3 --health-cmd 'python -c "import urllib.request; urllib.request.urlopen('\''http://127.0.0.1:8000/healthz'\'', timeout=5)"' -p 127.0.0.1:8088:8000
   wait_http 8088; printf 'Experiment 12 Docker: %s\n' "$(url 8088)"
-  if [[ ${1:-} == --kubernetes ]]; then start_kubernetes; else printf 'For Kubernetes too: bash browser-lab/bin/lab start 12 --kubernetes\n'; fi
+  if [[ ${1:-} == --kubernetes ]]; then
+    start_kubernetes
+    wait_http 8088 /readyz
+  else printf 'For Kubernetes too: bash browser-lab/bin/lab start 12 --kubernetes\n'; fi
 }
 install_kubernetes_tools() {
   local tools="$DATA_ROOT/tools" tmp
