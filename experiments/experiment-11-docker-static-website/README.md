@@ -6,7 +6,7 @@ Create **Orbital Fieldnotes**, a distinctive static night-sky journal, package i
 
 ## Tools Required
 
-**Browser Docker lab:** [Open your Codespaces](https://github.com/codespaces) · [Setup and start commands](https://github.com/Emadfar007/CSA1020---Software-Engineering/tree/main/browser-lab). Run `bash browser-lab/bin/lab start 11` in the Codespaces terminal, then use `bash browser-lab/bin/lab urls` for its private browser address. The original local commands and screenshots below remain the experiment record.
+**Browser Docker lab:** [Open the Codespaces IDE](https://miserable-cobweb-4j9pjv79r7w7fjrqw.github.dev/) · [Manage or restart the lab](https://github.com/codespaces) · [Browser lab guide](https://github.com/Emadfar007/CSA1020---Software-Engineering/tree/main/browser-lab). Sign in as **Emadfar007**, resume the Codespace if stopped, and run `bash browser-lab/bin/lab start 11` from the repository root before opening this experiment's private app links. Starting a profile stops the other lab profiles while preserving their data. The original local commands, screenshots and test evidence below remain the historical experiment record.
 
 - Docker Desktop **4.96.3**, Docker Engine/CLI **29.9.2**, and Linux containers through WSL 2.
 - The official [Nginx Docker image](https://hub.docker.com/_/nginx), resolving to **Nginx 1.30.6** in this run.
@@ -17,13 +17,17 @@ Create **Orbital Fieldnotes**, a distinctive static night-sky journal, package i
 
 | What to open | Link |
 | --- | --- |
-| Open the website | [Orbital Fieldnotes - local app](http://127.0.0.1:8087/) |
-| Check the container response | [Local health check](http://127.0.0.1:8087/healthz) |
+| Open or manage the browser lab | [Codespaces IDE](https://miserable-cobweb-4j9pjv79r7w7fjrqw.github.dev/) · [Start or stop Codespaces](https://github.com/codespaces) · [Lab guide](https://github.com/Emadfar007/CSA1020---Software-Engineering/tree/main/browser-lab) |
+| Open the website | [Orbital Fieldnotes - private browser app](https://miserable-cobweb-4j9pjv79r7w7fjrqw-8087.app.github.dev/) |
+| Check the container response | [Browser health check](https://miserable-cobweb-4j9pjv79r7w7fjrqw-8087.app.github.dev/healthz) |
 | Source and container configuration | [Experiment folder](https://github.com/Emadfar007/CSA1020---Software-Engineering/tree/main/experiments/experiment-11-docker-static-website) · [Dockerfile](https://github.com/Emadfar007/CSA1020---Software-Engineering/blob/main/experiments/experiment-11-docker-static-website/Dockerfile) · [Nginx configuration](https://github.com/Emadfar007/CSA1020---Software-Engineering/blob/main/experiments/experiment-11-docker-static-website/nginx.conf) |
 | View the output | [All six screenshots](https://github.com/Emadfar007/CSA1020---Software-Engineering/tree/main/experiments/experiment-11-docker-static-website/screenshots) · [Build and verification evidence](https://github.com/Emadfar007/CSA1020---Software-Engineering/tree/main/experiments/experiment-11-docker-static-website/evidence) |
 | Open the experiment collection | [All experiments](https://github.com/Emadfar007/CSA1020---Software-Engineering) |
 
-The website and health links work on the computer running Docker Desktop. If its existing container is stopped, run `docker start orbital-fieldnotes-exp11`. This experiment was kept local; its image was not uploaded to a registry.
+The website and health links above use the private Codespaces runtime and require the Experiment 11 profile to be running. Docker Desktop is not required for this browser workflow. The original image-building procedure below is preserved for reproducibility.
+
+
+Private app links require both a running profile and GitHub sign-in as Emadfar007. This Codespace uses a 30-minute idle timeout and 30-day inactive retention; free usage remains subject to its monthly quota, with paid usage blocked.
 
 ## Algorithm
 

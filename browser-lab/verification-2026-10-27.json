@@ -1,0 +1,70 @@
+{
+  "verifiedAt": "2026-10-27T16:08:28.315913+00:00",
+  "cloudCommit": "bb3ce6e28049409217fb2add3714fb91eefb1fa3",
+  "dockerVersion": "29.9.2",
+  "cloudFilesystemUsedGiB": 7.408,
+  "cloudFilesystemFreeGiB": 22.303,
+  "morrow": {
+    "savedTasks": 7,
+    "originalActivityRowsPreserved": 45,
+    "currentActivityRows": 54,
+    "originalRowsUnchanged": true,
+    "sqliteIntegrity": "ok",
+    "dockerHealth": "healthy"
+  },
+  "codespace": "miserable-cobweb-4j9pjv79r7w7fjrqw",
+  "repository": "Emadfar007/CSA1020---Software-Engineering",
+  "privatePortCount": 7,
+  "experiments": {
+    "11": {
+      "websiteHealthPassed": true,
+      "browserOpened": true
+    },
+    "12": {
+      "standaloneAndKubernetesQuotesPassed": true,
+      "validQuoteStatus": 201,
+      "quoteTotal": 760,
+      "invalidQuoteStatus": 400,
+      "readyReplicas": 2,
+      "stopAndResumePassed": true,
+      "browserOpened": true
+    },
+    "13": {
+      "administratorLoginPassed": true,
+      "restoredCredentialsDecryptable": true,
+      "applicationTestsPassed": 21,
+      "jenkinsBuildsPaused": true,
+      "newPublishOrDeployTriggered": false,
+      "browserLoginOpened": true
+    },
+    "14": {
+      "hostedHealthStatus": 200,
+      "version": "1.1.0",
+      "newDeployTriggered": false
+    },
+    "16": {
+      "apiChecksPassed": 37,
+      "restartPersistencePassed": true,
+      "browserEditorOpenAndCancelPassed": true
+    },
+    "17": {
+      "independentDockerEngineIdsVerified": true,
+      "receiverPulledPublishedDigest": true,
+      "htmlMatchesSource": true,
+      "browserInteractionPassed": true
+    }
+  },
+  "privateBackupsRestoredAndHashesVerified": true,
+  "privateCredentialsCommitted": false,
+  "paidUsageBudgetUSD": 0,
+  "paidUsageBlockedVerifiedInGitHubUI": true,
+  "machineCores": 2,
+  "idleTimeoutMinutes": 30,
+  "inactiveRetentionDays": 30,
+  "notes": [
+    "Historical experiment screenshots and test evidence are preserved.",
+    "App ports require GitHub sign-in and a running experiment profile.",
+    "Codespaces compute and storage have monthly free allowances.",
+    "Cloud runtime data is outside Git; retain private backups before deleting the Codespace."
+  ]
+}

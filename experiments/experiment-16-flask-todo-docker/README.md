@@ -4,13 +4,13 @@
 
 To create a Python Flask to-do application, containerize it with Docker, test its real functionality inside the container, and publish the tested image to Docker Hub. **Morrow Task Studio** combines a calm task board with a persistent SQLite database, so this experiment demonstrates both container execution and durable application data.
 
-**Open locally:** [Morrow Task Studio](http://127.0.0.1:8096/) · [Readiness](http://127.0.0.1:8096/readyz) · [Docker Hub image](https://hub.docker.com/r/coastrider7/csa1020-exp16-morrow/tags)
+**Open in the browser:** [Morrow Task Studio](https://miserable-cobweb-4j9pjv79r7w7fjrqw-8096.app.github.dev/) · [Readiness](https://miserable-cobweb-4j9pjv79r7w7fjrqw-8096.app.github.dev/readyz) · [Docker Hub image](https://hub.docker.com/r/coastrider7/csa1020-exp16-morrow/tags)
 
-The website runs only on the local computer through a loopback port. The Docker image is published to Docker Hub; no cloud website or paid resource is required. This is a personal sample workspace without user authentication.
+The original demonstration used a local loopback port. Its current browser runtime uses a private Codespaces port protected by GitHub sign-in. The application remains a personal sample workspace without its own separate user authentication; the Docker image is published to Docker Hub.
 
 ## Tools Required
 
-**Browser Docker lab:** [Open your Codespaces](https://github.com/codespaces) · [Setup and start commands](https://github.com/Emadfar007/CSA1020---Software-Engineering/tree/main/browser-lab). Run `bash browser-lab/bin/lab start 16` in the Codespaces terminal, then use `bash browser-lab/bin/lab urls` for its private browser address. The original local commands and screenshots below remain the experiment record.
+**Browser Docker lab:** [Open the Codespaces IDE](https://miserable-cobweb-4j9pjv79r7w7fjrqw.github.dev/) · [Manage or restart the lab](https://github.com/codespaces) · [Browser lab guide](https://github.com/Emadfar007/CSA1020---Software-Engineering/tree/main/browser-lab). Sign in as **Emadfar007**, resume the Codespace if stopped, and run `bash browser-lab/bin/lab start 16` from the repository root before opening this experiment's private app links. Starting a profile stops the other lab profiles while preserving their data. The original local commands, screenshots and test evidence below remain the historical experiment record.
 
 | Tool | Use |
 |---|---|
@@ -27,8 +27,9 @@ The website runs only on the local computer through a loopback port. The Docker 
 
 | What to open | Link |
 | --- | --- |
-| Open the running application | [Morrow Task Studio](http://127.0.0.1:8096/) |
-| Check the local app and saved work | [Readiness](http://127.0.0.1:8096/readyz) · [Tasks JSON](http://127.0.0.1:8096/api/tasks) · [Progress statistics](http://127.0.0.1:8096/api/stats) |
+| Open or manage the browser lab | [Codespaces IDE](https://miserable-cobweb-4j9pjv79r7w7fjrqw.github.dev/) · [Start or stop Codespaces](https://github.com/codespaces) · [Lab guide](https://github.com/Emadfar007/CSA1020---Software-Engineering/tree/main/browser-lab) |
+| Open the running application | [Morrow Task Studio](https://miserable-cobweb-4j9pjv79r7w7fjrqw-8096.app.github.dev/) |
+| Check the browser app and saved work | [Readiness](https://miserable-cobweb-4j9pjv79r7w7fjrqw-8096.app.github.dev/readyz) · [Tasks JSON](https://miserable-cobweb-4j9pjv79r7w7fjrqw-8096.app.github.dev/api/tasks) · [Progress statistics](https://miserable-cobweb-4j9pjv79r7w7fjrqw-8096.app.github.dev/api/stats) |
 | Download the published image | [Docker Hub image and tags](https://hub.docker.com/r/coastrider7/csa1020-exp16-morrow/tags) |
 | Read or download the container configuration | [Dockerfile](https://github.com/Emadfar007/CSA1020---Software-Engineering/blob/main/experiments/experiment-16-flask-todo-docker/Dockerfile) · [Docker Compose](https://github.com/Emadfar007/CSA1020---Software-Engineering/blob/main/experiments/experiment-16-flask-todo-docker/compose.yaml) |
 | Browse the application source | [Flask app](https://github.com/Emadfar007/CSA1020---Software-Engineering/blob/main/experiments/experiment-16-flask-todo-docker/app.py) · [Interface files](https://github.com/Emadfar007/CSA1020---Software-Engineering/tree/main/experiments/experiment-16-flask-todo-docker/static) · [Complete experiment](https://github.com/Emadfar007/CSA1020---Software-Engineering/tree/main/experiments/experiment-16-flask-todo-docker) |
@@ -38,7 +39,10 @@ The website runs only on the local computer through a loopback port. The Docker 
 | Start or stop the experiment | [Start script](https://github.com/Emadfar007/CSA1020---Software-Engineering/blob/main/experiments/experiment-16-flask-todo-docker/scripts/start.ps1) · [Stop script](https://github.com/Emadfar007/CSA1020---Software-Engineering/blob/main/experiments/experiment-16-flask-todo-docker/scripts/stop.ps1) · [Live API verifier](https://github.com/Emadfar007/CSA1020---Software-Engineering/blob/main/experiments/experiment-16-flask-todo-docker/scripts/verify-live.py) |
 | Return to the experiment collection | [CSA1020 Software Engineering](https://github.com/Emadfar007/CSA1020---Software-Engineering) |
 
-The application and API links beginning with `127.0.0.1` work on the computer running this Docker container; they are local testing addresses. Start Docker Desktop, then run `./scripts/start.ps1` from this experiment folder. Use `-Build` if the image must be rebuilt. Docker Hub, source, screenshots and recorded results can be opened online.
+The app and API links above use private Codespaces ports. Run `bash browser-lab/bin/lab start 16` from the repository root first. Saved task data is kept privately at `/workspaces/.lab-data/morrow`; it is not published with the source or image. Docker Hub, source, screenshots and recorded results remain available online when the profile is stopped.
+
+
+Private app links require both a running profile and GitHub sign-in as Emadfar007. This Codespace uses a 30-minute idle timeout and 30-day inactive retention; free usage remains subject to its monthly quota, with paid usage blocked.
 
 ## Algorithm
 

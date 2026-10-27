@@ -8,7 +8,7 @@ The sample application, **ReleaseHarbor**, helps a team prepare a release throug
 
 ## Tools Required
 
-**Browser Docker lab:** [Open your Codespaces](https://github.com/codespaces) · [Setup and start commands](https://github.com/Emadfar007/CSA1020---Software-Engineering/tree/main/browser-lab). Run `bash browser-lab/bin/lab start 13` in the Codespaces terminal, then use `bash browser-lab/bin/lab urls` for its private browser address. Restore the private Jenkins backup first; builds start paused for migration review. The original local commands and screenshots below remain the experiment record.
+**Browser Docker lab:** [Open the Codespaces IDE](https://miserable-cobweb-4j9pjv79r7w7fjrqw.github.dev/) · [Manage or restart the lab](https://github.com/codespaces) · [Browser lab guide](https://github.com/Emadfar007/CSA1020---Software-Engineering/tree/main/browser-lab). Sign in as **Emadfar007**, resume the Codespace if stopped, and run `bash browser-lab/bin/lab start 13` from the repository root before opening this experiment's private app links. Starting a profile stops the other lab profiles while preserving their data. The original local commands, screenshots and test evidence below remain the historical experiment record.
 
 | Tool | Use in this experiment |
 |---|---|
@@ -20,25 +20,29 @@ The sample application, **ReleaseHarbor**, helps a team prepare a release throug
 | Render Free web service | Run the tested container in the cloud |
 | PowerShell and Chrome | Start the local lab and verify the interface |
 
-Application: [ReleaseHarbor](https://releaseharbor-exp13.onrender.com/). Local job: [ReleaseHarbor-CICD](http://127.0.0.1:8090/job/ReleaseHarbor-CICD/). Images: [Docker Hub](https://hub.docker.com/r/coastrider7/csa1020-exp13-releaseharbor/tags). Source: [CSA1020 Software Engineering](https://github.com/Emadfar007/CSA1020---Software-Engineering).
+Application: [ReleaseHarbor](https://releaseharbor-exp13.onrender.com/). Browser Jenkins job: [ReleaseHarbor-CICD](https://miserable-cobweb-4j9pjv79r7w7fjrqw-8090.app.github.dev/job/ReleaseHarbor-CICD/). Images: [Docker Hub](https://hub.docker.com/r/coastrider7/csa1020-exp13-releaseharbor/tags). Source: [CSA1020 Software Engineering](https://github.com/Emadfar007/CSA1020---Software-Engineering).
 
 ### Quick access links
 
 | What to open | Link |
 | --- | --- |
+| Open or manage the browser lab | [Codespaces IDE](https://miserable-cobweb-4j9pjv79r7w7fjrqw.github.dev/) · [Start or stop Codespaces](https://github.com/codespaces) · [Lab guide](https://github.com/Emadfar007/CSA1020---Software-Engineering/tree/main/browser-lab) |
 | Open the deployed application | [ReleaseHarbor - cloud app](https://releaseharbor-exp13.onrender.com/) |
 | Use the application sections | [Release workspace](https://releaseharbor-exp13.onrender.com/#workspace) · [Release timeline](https://releaseharbor-exp13.onrender.com/#timeline) · [Build details](https://releaseharbor-exp13.onrender.com/#build) |
 | Check the deployed build | [Version and source JSON](https://releaseharbor-exp13.onrender.com/api/version) · [Health check](https://releaseharbor-exp13.onrender.com/healthz) |
-| Open local Jenkins | [Jenkins dashboard](http://127.0.0.1:8090/) · [ReleaseHarbor CI/CD job](http://127.0.0.1:8090/job/ReleaseHarbor-CICD/) |
-| Follow the latest passing pipeline | [Latest successful build](http://127.0.0.1:8090/job/ReleaseHarbor-CICD/lastSuccessfulBuild/) · [Test results](http://127.0.0.1:8090/job/ReleaseHarbor-CICD/lastSuccessfulBuild/testReport/) · [Console log](http://127.0.0.1:8090/job/ReleaseHarbor-CICD/lastSuccessfulBuild/console) |
-| Open the recorded experiment build | [Successful build #7](http://127.0.0.1:8090/job/ReleaseHarbor-CICD/7/) |
+| Open private browser Jenkins | [Jenkins dashboard](https://miserable-cobweb-4j9pjv79r7w7fjrqw-8090.app.github.dev/) · [ReleaseHarbor CI/CD job](https://miserable-cobweb-4j9pjv79r7w7fjrqw-8090.app.github.dev/job/ReleaseHarbor-CICD/) |
+| Follow the latest passing pipeline | [Latest successful build](https://miserable-cobweb-4j9pjv79r7w7fjrqw-8090.app.github.dev/job/ReleaseHarbor-CICD/lastSuccessfulBuild/) · [Test results](https://miserable-cobweb-4j9pjv79r7w7fjrqw-8090.app.github.dev/job/ReleaseHarbor-CICD/lastSuccessfulBuild/testReport/) · [Console log](https://miserable-cobweb-4j9pjv79r7w7fjrqw-8090.app.github.dev/job/ReleaseHarbor-CICD/lastSuccessfulBuild/console) |
+| Open the recorded experiment build | [Successful build #7](https://miserable-cobweb-4j9pjv79r7w7fjrqw-8090.app.github.dev/job/ReleaseHarbor-CICD/7/) |
 | Manage the deployed service | [Render dashboard - sign-in required](https://dashboard.render.com/web/srv-dbflq8vb9u1s73de444g) |
 | Find the published images | [Docker Hub image and tags](https://hub.docker.com/r/coastrider7/csa1020-exp13-releaseharbor/tags) |
 | Source and pipeline configuration | [Experiment folder](https://github.com/Emadfar007/CSA1020---Software-Engineering/tree/main/experiments/experiment-13-jenkins-cicd) · [Jenkinsfile](https://github.com/Emadfar007/CSA1020---Software-Engineering/blob/main/experiments/experiment-13-jenkins-cicd/Jenkinsfile) · [Local Jenkins Compose setup](https://github.com/Emadfar007/CSA1020---Software-Engineering/blob/main/experiments/experiment-13-jenkins-cicd/compose.yaml) |
 | View the output | [All nine screenshots](https://github.com/Emadfar007/CSA1020---Software-Engineering/tree/main/experiments/experiment-13-jenkins-cicd/screenshots) · [Build and deployment evidence](https://github.com/Emadfar007/CSA1020---Software-Engineering/tree/main/experiments/experiment-13-jenkins-cicd/evidence) |
 | Open the experiment collection | [All experiments](https://github.com/Emadfar007/CSA1020---Software-Engineering) |
 
-The cloud app opens from any device. The Jenkins links require this laptop, Docker Desktop and both Jenkins lab containers. Viewing the recorded results is available without login; managing Jenkins or triggering builds uses the existing Jenkins login. If stopped, run `docker start releaseharbor-exp13-docker-1 releaseharbor-exp13-jenkins-1`. Render management requires sign-in. A sleeping Render Free app can take time to wake.
+The Render app opens independently of Codespaces. Jenkins requires the Experiment 13 profile and the private GitHub port to be open while signed in as Emadfar007; Jenkins management also uses the existing Jenkins account. Restored jobs and results remain readable while builds start paused for migration review. Run `bash browser-lab/bin/lab resume-ci` only when ready to enable builds, publication and any configured deployment. Render management requires sign-in, and a sleeping Free app can take time to wake.
+
+
+Private app links require both a running profile and GitHub sign-in as Emadfar007. This Codespace uses a 30-minute idle timeout and 30-day inactive retention; free usage remains subject to its monthly quota, with paid usage blocked.
 
 ## Algorithm
 

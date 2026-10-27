@@ -6,7 +6,7 @@ To demonstrate continuous deployment of **FocusLane**, a Dockerized study-sprint
 
 ## Tools Required
 
-**Browser Docker lab:** [Open your Codespaces](https://github.com/codespaces) · [Setup and start commands](https://github.com/Emadfar007/CSA1020---Software-Engineering/tree/main/browser-lab). Its Docker build, test, registry publication and deployment already run on GitHub Actions and Render, independently of Docker Desktop. `bash browser-lab/bin/lab start 14` opens the recorded platform links. The original local commands and screenshots below remain the experiment record.
+**Browser access:** [Codespaces IDE](https://miserable-cobweb-4j9pjv79r7w7fjrqw.github.dev/) · [Manage or restart the lab](https://github.com/codespaces) · [Browser lab guide](https://github.com/Emadfar007/CSA1020---Software-Engineering/tree/main/browser-lab). Experiment 14 already builds and deploys on hosted GitHub Actions and Render, independently of Docker Desktop. Its app and workflow links below can be used without starting this Codespace; `bash browser-lab/bin/lab start 14` only prints the existing hosted links. The original local commands, screenshots and test evidence below remain the historical experiment record.
 
 | Tool | Purpose |
 |---|---|
@@ -27,6 +27,7 @@ The service uses Render's **Free** plan without a database, persistent disk or p
 
 | What to open | Link |
 | --- | --- |
+| Open or manage the browser lab | [Codespaces IDE](https://miserable-cobweb-4j9pjv79r7w7fjrqw.github.dev/) · [Start or stop Codespaces](https://github.com/codespaces) · [Lab guide](https://github.com/Emadfar007/CSA1020---Software-Engineering/tree/main/browser-lab) |
 | Open the deployed application | [FocusLane - cloud app](https://focuslane-exp14.onrender.com/) |
 | Check the deployed build | [Version and source JSON](https://focuslane-exp14.onrender.com/api/version) · [Health check](https://focuslane-exp14.onrender.com/healthz) |
 | Follow the automatic pipeline | [GitHub Actions workflow](https://github.com/Emadfar007/CSA1020---Software-Engineering/actions/workflows/experiment-14-cd.yml) · [Recorded successful deployment run #3](https://github.com/Emadfar007/CSA1020---Software-Engineering/actions/runs/40353497794) |

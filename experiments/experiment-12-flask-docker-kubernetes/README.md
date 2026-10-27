@@ -6,7 +6,7 @@ To develop a distinctive Python Flask delivery-estimate API, package it using Do
 
 ## Tools Required
 
-**Browser Docker lab:** [Open your Codespaces](https://github.com/codespaces) · [Setup and start commands](https://github.com/Emadfar007/CSA1020---Software-Engineering/tree/main/browser-lab). Run `bash browser-lab/bin/lab start 12` in the Codespaces terminal, then use `bash browser-lab/bin/lab urls` for its private browser address. Add `--kubernetes` to start the real kind cluster and NodePort exercise. The original local commands and screenshots below remain the experiment record.
+**Browser Docker lab:** [Open the Codespaces IDE](https://miserable-cobweb-4j9pjv79r7w7fjrqw.github.dev/) · [Manage or restart the lab](https://github.com/codespaces) · [Browser lab guide](https://github.com/Emadfar007/CSA1020---Software-Engineering/tree/main/browser-lab). Sign in as **Emadfar007**, resume the Codespace if stopped, and run `bash browser-lab/bin/lab start 12 --kubernetes` from the repository root before opening this experiment's private app links. Starting a profile stops the other lab profiles while preserving their data. The original local commands, screenshots and test evidence below remain the historical experiment record.
 
 | Tool | Purpose |
 |---|---|
@@ -19,22 +19,26 @@ To develop a distinctive Python Flask delivery-estimate API, package it using Do
 
 Docker Hub image: [coastrider7/csa1020-exp12-parcelpilot-api:1.0.0](https://hub.docker.com/r/coastrider7/csa1020-exp12-parcelpilot-api/tags).
 
-Local Kubernetes app: [http://127.0.0.1:30088/](http://127.0.0.1:30088/). Standalone Docker preview: [http://127.0.0.1:8088/](http://127.0.0.1:8088/). These addresses work on the computer running the lab while Docker and the cluster are running.
+Private Kubernetes app: [ParcelPilot NodePort](https://miserable-cobweb-4j9pjv79r7w7fjrqw-30088.app.github.dev/). Standalone Docker preview: [ParcelPilot Docker](https://miserable-cobweb-4j9pjv79r7w7fjrqw-8088.app.github.dev/). Start the Kubernetes profile with `bash browser-lab/bin/lab start 12 --kubernetes` before using both links.
 
 ### Quick access links
 
 | What to open | Link |
 | --- | --- |
-| Open the Kubernetes application | [ParcelPilot - NodePort app](http://127.0.0.1:30088/) |
-| Use the application sections | [Quote workbench](http://127.0.0.1:30088/#workbench) · [API explorer](http://127.0.0.1:30088/#explorer) · [Runtime details](http://127.0.0.1:30088/#runtime) |
-| Open the standalone Docker application | [ParcelPilot - Docker preview](http://127.0.0.1:8088/) |
-| Inspect the API | [OpenAPI specification](http://127.0.0.1:30088/openapi.json) · [Runtime status JSON](http://127.0.0.1:30088/api/v1/status) · [Health check](http://127.0.0.1:30088/healthz) |
+| Open or manage the browser lab | [Codespaces IDE](https://miserable-cobweb-4j9pjv79r7w7fjrqw.github.dev/) · [Start or stop Codespaces](https://github.com/codespaces) · [Lab guide](https://github.com/Emadfar007/CSA1020---Software-Engineering/tree/main/browser-lab) |
+| Open the Kubernetes application | [ParcelPilot - NodePort app](https://miserable-cobweb-4j9pjv79r7w7fjrqw-30088.app.github.dev/) |
+| Use the application sections | [Quote workbench](https://miserable-cobweb-4j9pjv79r7w7fjrqw-30088.app.github.dev/#workbench) · [API explorer](https://miserable-cobweb-4j9pjv79r7w7fjrqw-30088.app.github.dev/#explorer) · [Runtime details](https://miserable-cobweb-4j9pjv79r7w7fjrqw-30088.app.github.dev/#runtime) |
+| Open the standalone Docker application | [ParcelPilot - Docker preview](https://miserable-cobweb-4j9pjv79r7w7fjrqw-8088.app.github.dev/) |
+| Inspect the API | [OpenAPI specification](https://miserable-cobweb-4j9pjv79r7w7fjrqw-30088.app.github.dev/openapi.json) · [Runtime status JSON](https://miserable-cobweb-4j9pjv79r7w7fjrqw-30088.app.github.dev/api/v1/status) · [Health check](https://miserable-cobweb-4j9pjv79r7w7fjrqw-30088.app.github.dev/healthz) |
 | Find the published image | [Docker Hub image and tags](https://hub.docker.com/r/coastrider7/csa1020-exp12-parcelpilot-api/tags) |
 | Source and deployment files | [Experiment folder](https://github.com/Emadfar007/CSA1020---Software-Engineering/tree/main/experiments/experiment-12-flask-docker-kubernetes) · [Dockerfile](https://github.com/Emadfar007/CSA1020---Software-Engineering/blob/main/experiments/experiment-12-flask-docker-kubernetes/Dockerfile) · [Kubernetes manifests](https://github.com/Emadfar007/CSA1020---Software-Engineering/tree/main/experiments/experiment-12-flask-docker-kubernetes/k8s) |
 | View the output | [All nine screenshots](https://github.com/Emadfar007/CSA1020---Software-Engineering/tree/main/experiments/experiment-12-flask-docker-kubernetes/screenshots) · [Verification evidence](https://github.com/Emadfar007/CSA1020---Software-Engineering/tree/main/experiments/experiment-12-flask-docker-kubernetes/evidence) |
 | Open the experiment collection | [All experiments](https://github.com/Emadfar007/CSA1020---Software-Engineering) |
 
-The application links are local to the computer running Docker Desktop. Start the existing demos with `docker start parcelpilot-lab-control-plane parcelpilot-api-exp12` if needed. Port 30088 opens the Kubernetes deployment; port 8088 opens the standalone Docker container.
+These links open the signed-in user's private Codespaces ports. The NodePort app requires `bash browser-lab/bin/lab start 12 --kubernetes`; `bash browser-lab/bin/lab start 12` starts only the standalone Docker API. Port 30088 serves Kubernetes and port 8088 serves the standalone container.
+
+
+Private app links require both a running profile and GitHub sign-in as Emadfar007. This Codespace uses a 30-minute idle timeout and 30-day inactive retention; free usage remains subject to its monthly quota, with paid usage blocked.
 
 ## Algorithm
 

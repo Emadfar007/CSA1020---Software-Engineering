@@ -8,7 +8,7 @@ The user approved an **isolated Docker engine on the same laptop** as the sample
 
 ## Tools Required
 
-**Browser Docker lab:** [Open your Codespaces](https://github.com/codespaces) · [Setup and start commands](https://github.com/Emadfar007/CSA1020---Software-Engineering/tree/main/browser-lab). Run `bash browser-lab/bin/lab start 17` in the Codespaces terminal, then use `bash browser-lab/bin/lab urls` for its private browser address. The original local commands and screenshots below remain the experiment record.
+**Browser Docker lab:** [Open the Codespaces IDE](https://miserable-cobweb-4j9pjv79r7w7fjrqw.github.dev/) · [Manage or restart the lab](https://github.com/codespaces) · [Browser lab guide](https://github.com/Emadfar007/CSA1020---Software-Engineering/tree/main/browser-lab). Sign in as **Emadfar007**, resume the Codespace if stopped, and run `bash browser-lab/bin/lab start 17` from the repository root before opening this experiment's private app links. Starting a profile stops the other lab profiles while preserving their data. The original local commands, screenshots and test evidence below remain the historical experiment record.
 
 | Tool | Purpose |
 |---|---|
@@ -24,8 +24,9 @@ The user approved an **isolated Docker engine on the same laptop** as the sample
 
 | What to open | Link |
 |---|---|
-| Open Builder A | [Meridian Atlas on port 8097](http://127.0.0.1:8097/) · [Health](http://127.0.0.1:8097/healthz) |
-| Open Receiver B | [Pulled image on port 8098](http://127.0.0.1:8098/) · [Health](http://127.0.0.1:8098/healthz) |
+| Open or manage the browser lab | [Codespaces IDE](https://miserable-cobweb-4j9pjv79r7w7fjrqw.github.dev/) · [Start or stop Codespaces](https://github.com/codespaces) · [Lab guide](https://github.com/Emadfar007/CSA1020---Software-Engineering/tree/main/browser-lab) |
+| Open Builder A | [Meridian Atlas on port 8097](https://miserable-cobweb-4j9pjv79r7w7fjrqw-8097.app.github.dev/) · [Health](https://miserable-cobweb-4j9pjv79r7w7fjrqw-8097.app.github.dev/healthz) |
+| Open Receiver B | [Pulled image on port 8098](https://miserable-cobweb-4j9pjv79r7w7fjrqw-8098.app.github.dev/) · [Health](https://miserable-cobweb-4j9pjv79r7w7fjrqw-8098.app.github.dev/healthz) |
 | View the published image | [Docker Hub tags](https://hub.docker.com/r/coastrider7/csa1020-exp17-meridian-atlas/tags) |
 | Read the build and runtime files | [Dockerfile](Dockerfile) · [Nginx configuration](nginx.conf) · [Compose](compose.yaml) |
 | Inspect the website source | [HTML](site/index.html) · [Styles](site/styles.css) · [Interactions](site/app.js) · [Version metadata](site/build-info.json) |
@@ -38,7 +39,10 @@ The user approved an **isolated Docker engine on the same laptop** as the sample
 | Open verification evidence online | [Delivery receipt](https://github.com/Emadfar007/CSA1020---Software-Engineering/blob/main/experiments/experiment-17-dockerhub-push-pull/evidence/delivery-receipt.json) · [Browser checks](https://github.com/Emadfar007/CSA1020---Software-Engineering/blob/main/experiments/experiment-17-dockerhub-push-pull/evidence/browser-tests.json) · [Summary screenshot](https://github.com/Emadfar007/CSA1020---Software-Engineering/blob/main/experiments/experiment-17-dockerhub-push-pull/screenshots/12-verification-summary.jpg) |
 | Return to the collection | [CSA1020 Software Engineering](https://github.com/Emadfar007/CSA1020---Software-Engineering) |
 
-The application addresses are local testing links and work while the corresponding Docker containers are running. Docker Hub is accessible online. Start Docker Desktop first. The website makes no bookings; its city routes and USD budgets are illustrative. Saved collections are browser data tied to each website address, rather than data stored in the Docker image.
+The application links above now use the private Codespaces builder and receiver ports. Run `bash browser-lab/bin/lab start 17` to start both environments on the cloud lab; Docker Desktop is not needed. The original same-laptop demonstration remains documented below. The website makes no bookings, its routes and budgets are illustrative, and saved collections remain browser data tied to each website address.
+
+
+Private app links require both a running profile and GitHub sign-in as Emadfar007. This Codespace uses a 30-minute idle timeout and 30-day inactive retention; free usage remains subject to its monthly quota, with paid usage blocked.
 
 ## Algorithm
 
