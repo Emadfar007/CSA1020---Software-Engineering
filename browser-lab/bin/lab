@@ -17,10 +17,11 @@ usage() {
   cat <<'HELP'
 CSA1020 Browser Docker Lab
   lab status                    Show managed cloud containers
-  lab start 11|12|13|16|17       Start one experiment and stop other lab profiles
+  lab start 11|12|13|16|17|18    Start one experiment and stop other lab profiles
   lab start 12 --kubernetes     Also create/resume the real kind NodePort cluster
+  lab start 18 --build          Build and deploy the three-tier Kubernetes project
   lab start 14                  Show the existing hosted Actions and Render links
-  lab stop all|11|12|13|16|17    Stop containers without deleting images or data
+  lab stop all|11|12|13|16|17|18 Stop containers without deleting images or data
   lab urls                      Print private browser addresses
   lab resume-ci                 Explicitly enable Jenkins builds after migration review
   lab pause-ci                  Pause Jenkins builds and preserve the pause on restart
@@ -45,6 +46,7 @@ exp_dir() {
     13) folder=experiment-13-jenkins-cicd;;
     16) folder=experiment-16-flask-todo-docker;;
     17) folder=experiment-17-dockerhub-push-pull;;
+    18) folder=experiment-18-sprouthouse-kubernetes;;
     *) die 'Unknown experiment.';;
   esac
   if [[ -d "$REPO_DIR/experiments/$folder" ]]; then printf '%s\n' "$REPO_DIR/experiments/$folder"
@@ -58,9 +60,13 @@ url() {
 }
 urls() {
   local p label
-  for p in 8087 8088 30088 8090 8096 8097 8098; do
-    case "$p" in 8087) label='11 website';;8088)label='12 Docker API';;30088)label='12 Kubernetes';;8090)label='13 Jenkins';;8096)label='16 Morrow';;8097)label='17 builder';;8098)label='17 receiver';;esac
-    printf '%-18s %s\n' "$label" "$(url "$p")"
+  for p in 8087 8088 30088 8090 8096 8097 8098 8180 8181; do
+    case "$p" in 8087) label='11 website';;8088)label='12 Docker API';;30088)label='12 Kubernetes';;8090)label='13 Jenkins';;8096)label='16 Morrow';;8097)label='17 builder';;8098)label='17 receiver';;8180)label='18 SproutHouse';;8181)label='18 Headlamp';;esac
+    if [[ "$p" == 8181 ]]; then
+      printf '%-18s %sc/SproutHouse-Lab/deployments?namespace=sprouthouse-exp18\n' "$label" "$(url "$p")"
+    else
+      printf '%-18s %s\n' "$label" "$(url "$p")"
+    fi
   done
   printf '\n14 Actions: https://github.com/Emadfar007/CSA1020---Software-Engineering/actions/workflows/experiment-14-cd.yml\n14 app: https://focuslane-exp14.onrender.com/\n'
   printf '\nForwarded ports must remain Private in the Codespaces Ports tab. URLs respond only while their profile runs.\n'
@@ -69,7 +75,7 @@ exists() { docker container inspect "$1" >/dev/null 2>&1; }
 stop_one() {
   if exists "$1"; then
     local grace=25
-    [[ "$1" != parcelpilot-lab-control-plane ]] || grace=60
+    case "$1" in parcelpilot-lab-control-plane|sprouthouse-exp18-control-plane) grace=60;; esac
     docker stop --timeout "$grace" "$1" >/dev/null
     printf 'Stopped %s\n' "$1"
   fi
@@ -81,10 +87,11 @@ stop_exp() {
     13) stop_one releaseharbor-exp13-jenkins-1; stop_one releaseharbor-exp13-docker-1;;
     16) stop_one morrow-tasks-exp16;;
     17) stop_one meridian-atlas-exp17-a; stop_one meridian-receiver-exp17-b;;
-    *) die 'Choose all, 11, 12, 13, 16 or 17.';;
+    18) stop_one sprouthouse-exp18-control-plane;;
+    *) die 'Choose all, 11, 12, 13, 16, 17 or 18.';;
   esac
 }
-stop_others() { local n; for n in 11 12 13 16 17; do [[ "$n" == "$1" ]] || stop_exp "$n"; done; }
+stop_others() { local n; for n in 11 12 13 16 17 18; do [[ "$n" == "$1" ]] || stop_exp "$n"; done; }
 ensure_image() {
   local image=$1 context=${2:-}
   if docker image inspect "$image" >/dev/null 2>&1; then return; fi
@@ -279,17 +286,24 @@ start_17() {
   wait_http 8097;wait_http 8098
   printf 'Experiment 17 builder: %s\nExperiment 17 receiver: %s\n' "$(url 8097)" "$(url 8098)"
 }
+start_18() {
+  local source; source=$(exp_dir 18)
+  install_kubernetes_tools
+  local -a arguments=(start)
+  [[ -z ${1:-} ]] || arguments+=("$1")
+  LAB_DATA_DIR="$DATA_ROOT" KIND_BIN="$DATA_ROOT/tools/kind" KUBECTL_BIN="$DATA_ROOT/tools/kubectl" bash "$source/scripts/lab.sh" "${arguments[@]}"
+}
 case "${1:-help}" in
   help|-h|--help) usage;;
   urls) urls;;
-  status) require_cloud; docker ps -a --format 'table {{.Names}}\t{{.Status}}\t{{.Image}}' | awk 'NR==1 || /orbital-fieldnotes-exp11|parcelpilot-api-exp12|parcelpilot-lab-control-plane|releaseharbor-exp13-|morrow-tasks-exp16|meridian-/';;
+  status) require_cloud; docker ps -a --format 'table {{.Names}}\t{{.Status}}\t{{.Image}}' | awk 'NR==1 || /orbital-fieldnotes-exp11|parcelpilot-api-exp12|parcelpilot-lab-control-plane|releaseharbor-exp13-|morrow-tasks-exp16|meridian-|sprouthouse-exp18-control-plane/';;
   start)
     [[ $# -ge 2 ]] || die 'Choose an experiment number.'
     if [[ $2 == 14 ]]; then urls;exit;fi
-    case "$2" in 11|12|13|16|17);;*)die 'Choose 11, 12, 13, 14, 16 or 17.';;esac
-    [[ $# -le 2 || ($2 == 12 && $3 == --kubernetes && $# == 3) ]] || die 'Only start 12 accepts --kubernetes.'
+    case "$2" in 11|12|13|16|17|18);;*)die 'Choose 11, 12, 13, 14, 16, 17 or 18.';;esac
+    [[ $# -le 2 || ($2 == 12 && $3 == --kubernetes && $# == 3) || ($2 == 18 && $3 == --build && $# == 3) ]] || die 'Supported options: start 12 --kubernetes or start 18 --build.'
     require_cloud;stop_others "$2";"start_$2" "${3:-}";;
-  stop) require_cloud; if [[ ${2:-all} == all ]];then for n in 11 12 13 16 17;do stop_exp "$n";done;else stop_exp "$2";fi;;
+  stop) require_cloud; if [[ ${2:-all} == all ]];then for n in 11 12 13 16 17 18;do stop_exp "$n";done;else stop_exp "$2";fi;;
   resume-ci) require_cloud;ci_control resume;;
   pause-ci) require_cloud;ci_control pause;;
   *) usage;exit 1;;

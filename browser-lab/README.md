@@ -16,6 +16,7 @@ Sign in as **Emadfar007**. The Codespace is named `miserable-cobweb-4j9pjv79r7w7
 | 14 | No cloud lab profile required | [FocusLane](https://focuslane-exp14.onrender.com/) · [Actions](https://github.com/Emadfar007/CSA1020---Software-Engineering/actions/workflows/experiment-14-cd.yml) |
 | 16 | `bash browser-lab/bin/lab start 16` | [Morrow Task Studio](https://miserable-cobweb-4j9pjv79r7w7fjrqw-8096.app.github.dev/) |
 | 17 | `bash browser-lab/bin/lab start 17` | [Builder A](https://miserable-cobweb-4j9pjv79r7w7fjrqw-8097.app.github.dev/) · [Receiver B](https://miserable-cobweb-4j9pjv79r7w7fjrqw-8098.app.github.dev/) |
+| 18 | `bash browser-lab/bin/lab start 18` | [SproutHouse](https://miserable-cobweb-4j9pjv79r7w7fjrqw-8180.app.github.dev/) · [Headlamp Kubernetes dashboard](https://miserable-cobweb-4j9pjv79r7w7fjrqw-8181.app.github.dev/c/SproutHouse-Lab/deployments?namespace=sprouthouse-exp18) |
 
 Use the browser terminal from the repository root:
 
@@ -27,15 +28,34 @@ bash browser-lab/bin/lab start 12 --kubernetes
 bash browser-lab/bin/lab start 13
 bash browser-lab/bin/lab start 16
 bash browser-lab/bin/lab start 17
+bash browser-lab/bin/lab start 18
+bash browser-lab/bin/lab start 18 --build
 bash browser-lab/bin/lab urls
 bash browser-lab/bin/lab stop all
 ```
 
-Start one experiment at a time. Starting a profile stops the other lab profiles without deleting their data or images. No application starts automatically when Codespaces opens. Experiment 12 starts the standalone API by default; `--kubernetes` also starts its real kind cluster and NodePort. Experiment 17 starts both its builder and isolated receiver. Experiment 14 already runs through hosted GitHub Actions and Render; `lab start 14` displays those existing links.
+Start one experiment at a time. Starting a profile stops the other lab profiles without deleting their data or images. No application starts automatically when Codespaces opens. Experiment 12 starts the standalone API by default; `--kubernetes` also starts its real kind cluster and NodePort. Experiment 17 starts both its builder and isolated receiver. Experiment 18 creates or resumes its own kind cluster, with a Nginx frontend, two Flask API replicas, a persistent PostgreSQL database and the real Headlamp dashboard. Use `start 18 --build` to rebuild its application images after source edits. Experiment 14 already runs through hosted GitHub Actions and Render; `lab start 14` displays those existing links.
 
 ## Private browser access
 
-The devcontainer forwards ports 8087, 8088, 30088, 8090, 8096, 8097 and 8098. GitHub forwards them privately by default. Confirm **Private** visibility in the Ports tab before testing. `lab urls` prints the actual `https://CODESPACENAME-PORT.app.github.dev/` addresses; a URL responds only when that profile is running. Do not make Jenkins or the other test ports public.
+The devcontainer forwards ports 8087, 8088, 30088, 8090, 8096, 8097, 8098, 8180 and 8181. GitHub forwards them privately by default. Confirm **Private** visibility in the Ports tab before testing. `lab urls` prints the actual `https://CODESPACENAME-PORT.app.github.dev/` addresses; a URL responds only when that profile is running. Do not make Jenkins, Headlamp or the other test ports public.
+
+## SproutHouse Kubernetes project
+
+[Experiment 18 report and YAML files](../experiments/experiment-18-sprouthouse-kubernetes/README.md) describe the frontend → backend → PostgreSQL workflow. The database uses a retained `512Mi` persistent-volume claim. Stopping the profile preserves the node and its database rather than deleting the cluster or volume.
+
+Headlamp uses the `SproutHouse-Lab` kubeconfig context and a rotating Kubernetes service-account token held server-side. Its role can read this project's workloads and limited cluster navigation metadata. It cannot read Secrets, modify workloads, execute into pods or access other namespaces' workloads. Access remains behind the private GitHub Codespaces port; no bearer token is included in the source or browser screenshots.
+
+From the experiment folder in the browser terminal:
+
+```bash
+cd experiments/experiment-18-sprouthouse-kubernetes
+bash scripts/lab.sh status
+bash scripts/lab.sh scale 3
+python3 scripts/load-check.py --expect-pods 3
+```
+
+Scaling changes only the frontend Deployment. The load check measures real HTTP responses and frontend pod identities; the dashboard displays actual Kubernetes pods, services, deployments, events and volumes.
 
 ## Saved data
 
@@ -50,9 +70,10 @@ Persistent data is outside the Git repository in `/workspaces/.lab-data`:
 | `meridian-receiver/` | Experiment 17 receiver image store |
 | `private/jenkins-secrets/` | Existing `jenkins_admin_password` and `seed_credentials.json` |
 | `private/parcelpilot-kubeconfig` | Private kind cluster access configuration |
+| `private/sprouthouse-exp18/` | Experiment 18 operator kubeconfig and privately generated database password |
 | `tools/` | Verified pinned kind and kubectl binaries |
 
-The Docker-in-Docker feature additionally supplies its own persistent Docker and containerd state volumes. Do not commit private backups, databases, certificates, passwords or tokens to the public experiment repository. The runner does not copy credentials automatically. Restore the private Jenkins files before `lab start 13`; it refuses to invent replacement credentials. Restore Morrow's task files with owner `10001:10001` and Jenkins home with owner `1000:1000` before starting those experiments.
+The Docker-in-Docker feature additionally supplies its own persistent Docker and containerd state volumes. SproutHouse's PostgreSQL PVC is stored inside its retained kind node volume. Do not commit private backups, databases, certificates, passwords or tokens to the public experiment repository. The runner does not copy credentials automatically. Restore the private Jenkins files before `lab start 13`; it refuses to invent replacement credentials. Restore Morrow's task files with owner `10001:10001` and Jenkins home with owner `1000:1000` before starting those experiments.
 
 Morrow's seven tasks and original activity history, plus Jenkins configuration and job history, were restored and verified. Browser-only preferences for the old localhost sites stay in that browser origin; they are not automatically copied to the new cloud URLs. The migration does not remove browser profiles or saved browser data.
 

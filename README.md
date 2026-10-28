@@ -4,7 +4,7 @@ Software engineering experiments by **Emadfar007**.
 
 ## Browser Docker lab
 
-Docker Experiments **11, 12, 13, 16 and 17** now have an on-demand private GitHub Codespaces runtime. Docker images, build cache and application data run on the cloud machine rather than the laptop's Docker Desktop engine. Experiment **14** already uses hosted GitHub Actions and Render.
+Docker Experiments **11, 12, 13, 16, 17 and 18** have an on-demand private GitHub Codespaces runtime. Docker images, build cache and application data run on the cloud machine rather than the laptop's Docker Desktop engine. Experiment **14** already uses hosted GitHub Actions and Render.
 
 [Open the browser IDE](https://miserable-cobweb-4j9pjv79r7w7fjrqw.github.dev/) · [Manage or restart the Codespace](https://github.com/codespaces) · [Browser lab guide](browser-lab/README.md)
 
@@ -18,6 +18,7 @@ Sign in as **Emadfar007**, resume the Codespace if stopped, and run the command 
 | 14 FocusLane | No Codespace needed | [Hosted app](https://focuslane-exp14.onrender.com/) · [GitHub Actions](https://github.com/Emadfar007/CSA1020---Software-Engineering/actions/workflows/experiment-14-cd.yml) |
 | 16 Morrow | `bash browser-lab/bin/lab start 16` | [Task studio](https://miserable-cobweb-4j9pjv79r7w7fjrqw-8096.app.github.dev/) |
 | 17 Meridian Atlas | `bash browser-lab/bin/lab start 17` | [Builder A](https://miserable-cobweb-4j9pjv79r7w7fjrqw-8097.app.github.dev/) · [Receiver B](https://miserable-cobweb-4j9pjv79r7w7fjrqw-8098.app.github.dev/) |
+| 18 SproutHouse | `bash browser-lab/bin/lab start 18` | [Seed library](https://miserable-cobweb-4j9pjv79r7w7fjrqw-8180.app.github.dev/) · [Headlamp dashboard](https://miserable-cobweb-4j9pjv79r7w7fjrqw-8181.app.github.dev/c/SproutHouse-Lab/deployments?namespace=sprouthouse-exp18) |
 
 Starting a profile stops the other lab profiles while keeping their data. Use `bash browser-lab/bin/lab stop all` and stop the Codespace when finished. Jenkins builds start paused for migration review; the lab guide explains explicit resumption. Ports remain private and require the existing GitHub login. The Codespace has a **30-minute idle timeout** and **30-day inactive retention**. Paid usage is blocked; monthly free compute and storage limits still apply. Original Docker Desktop commands and screenshots remain the historical experiment record. Private Jenkins credentials and task databases stay outside this public repository.
 
@@ -40,6 +41,7 @@ Starting a profile stops the other lab profiles while keeping their data. Use `b
 | 15 | Team project with module branches, reviewed pull requests, follow-up commits, genuine conflict resolution and a verified KitCrew application | [Team Version Control](experiments/experiment-15-team-version-control/README.md) |
 | 16 | Persistent Flask to-do app containerized with Docker, verified task workflows and restart recovery, and published Docker Hub image | [Morrow Flask To Do App](experiments/experiment-16-flask-todo-docker/README.md) |
 | 17 | Original static website built, tagged and pushed to Docker Hub, then pulled and verified on an isolated receiving Docker engine | [Docker Hub Push and Pull](experiments/experiment-17-dockerhub-push-pull/README.md) |
+| 18 | Three-tier seed library on Kubernetes with Nginx, Flask, persistent PostgreSQL, real Headlamp monitoring and frontend scaling | [Multi-Container Kubernetes Application](experiments/experiment-18-sprouthouse-kubernetes/README.md) |
 
 Each experiment includes only Aim, Tools Required, Algorithm, Output Screenshots, and Result.
 
