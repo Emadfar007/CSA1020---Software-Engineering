@@ -34,6 +34,7 @@ CSA1020 Browser Docker Lab
   lab urls                      Print private browser addresses
   lab resume-ci                 Explicitly enable Jenkins builds after migration review
   lab pause-ci                  Pause Jenkins builds and preserve the pause on restart
+  lab deploy-status             Show the private Actions deployment agent
 
 Run as: bash browser-lab/bin/lab <command>
 No experiment starts automatically. Data is private under /workspaces/.lab-data.
@@ -217,12 +218,25 @@ if (cloudUrl && cloudUrl.startsWith('https://') && cloudUrl.contains('.app.githu
 }
 GROOVY
   [[ -f "$PRIVATE_DIR/ci-enabled" ]] || write_ci_pause
-  export JENKINS_SECRETS_DIR="$secrets" LAB_DATA_DIR="$DATA_ROOT" LAB_JENKINS_IMAGE="$image" LAB_JENKINS_URL
+  # Preserve the former stateless runtime as an offline migration fallback.
+  if exists releaseharbor-app-exp13; then
+    python3 - <<'PY'
+import json,subprocess
+info=json.loads(subprocess.check_output(['docker','inspect','releaseharbor-app-exp13']))[0]
+if not info['Config']['Image'].startswith('coastrider7/csa1020-exp13-releaseharbor@sha256:') or any(m.get('Type') != 'tmpfs' for m in info.get('Mounts',[])):
+    raise SystemExit('The old app container has unexpected data or image; it was preserved.')
+subprocess.run(['docker','stop','--timeout','20','releaseharbor-app-exp13'],check=True,stdout=subprocess.DEVNULL)
+PY
+  fi
+  export JENKINS_SECRETS_DIR="$secrets" LAB_DATA_DIR="$DATA_ROOT" LAB_JENKINS_IMAGE="$image" LAB_JENKINS_URL LAB_EXP13_APP_URL
   LAB_JENKINS_URL=$(url 8090)
+  LAB_EXP13_APP_URL=$(url 8091)
   cat > "$PRIVATE_DIR/jenkins-cloud-override.yaml" <<'YAML'
 services:
   docker:
     restart: "no"
+    ports:
+      - "127.0.0.1:8091:8000"
     volumes:
       - type: bind
         source: ${LAB_DATA_DIR}/jenkins-docker
@@ -235,6 +249,7 @@ services:
     restart: "no"
     environment:
       JENKINS_URL: ${LAB_JENKINS_URL}
+      BROWSER_APP_URL: ${LAB_EXP13_APP_URL}
     volumes:
       - type: bind
         source: ${LAB_DATA_DIR}/jenkins-home
@@ -247,7 +262,9 @@ YAML
   ensure_image "$image" "$source/ci/jenkins"
   docker compose --project-directory "$source" -f "$source/compose.yaml" -f "$PRIVATE_DIR/jenkins-cloud-override.yaml" up -d --no-build
   wait_http 8090 /login 180
-  start_web_app releaseharbor-app-exp13 "$RELEASE_IMAGE" 8091
+  docker cp "$source/ci/deploy-browser.py" releaseharbor-exp13-jenkins-1:/tmp/csa1020-deploy-browser.py >/dev/null
+  docker exec -i -e BOOTSTRAP_IMAGE="$RELEASE_IMAGE" releaseharbor-exp13-jenkins-1 python3 - < "$REPO_DIR/browser-lab/ci/bootstrap_jenkins.py"
+  wait_http 8091
   printf 'Experiment 13 Jenkins: %s\n' "$(url 8090)"
   printf 'Experiment 13 ReleaseHarbor: %s\n' "$(url 8091)"
   [[ -f "$PRIVATE_DIR/ci-enabled" ]] || printf 'Builds are paused for migration review. Existing jobs/results remain readable. Use lab resume-ci only when ready to publish/deploy.\n'
@@ -259,12 +276,27 @@ start_web_app() {
   wait_http "$port"
 }
 start_14() {
-  start_web_app focuslane-app-exp14 "$FOCUS_IMAGE" 8094
+  start_web_app focuslane-app-exp14 "$(deployed_image 14 "$FOCUS_IMAGE")" 8094
   printf 'Experiment 14 FocusLane: %s\n' "$(url 8094)"
 }
 start_19() {
-  start_web_app packlight-app-exp19 "$PACKLIGHT_IMAGE" 8099
+  start_web_app packlight-app-exp19 "$(deployed_image 19 "$PACKLIGHT_IMAGE")" 8099
   printf 'Experiment 19 Packlight: %s\n' "$(url 8099)"
+}
+deployed_image() {
+  LAB_DATA_DIR="$DATA_ROOT" python3 - "$1" "$2" <<'PY'
+import json,os,pathlib,re,sys
+number,fallback=sys.argv[1:]
+path=pathlib.Path(os.environ['LAB_DATA_DIR'])/'deployments'/number/'current.json'
+image=json.loads(path.read_text())['image'] if path.exists() else fallback
+repository={'14':'coastrider7/csa1020-exp14-focuslane','19':'coastrider7/csa1020-exp19-packlight'}[number]
+if not isinstance(image,str) or not re.fullmatch(re.escape(repository)+r'@sha256:[0-9a-f]{64}',image):
+    raise SystemExit('The saved deployment image is invalid; existing containers were preserved.')
+print(image)
+PY
+}
+deployer() {
+  python3 "$REPO_DIR/browser-lab/ci/manage_agent.py" "$1" --repo "$REPO_DIR" --data-root "$DATA_ROOT"
 }
 ci_control() {
   local action=$1
@@ -330,16 +362,22 @@ case "${1:-help}" in
     [[ $# -ge 2 ]] || die 'Choose an experiment number.'
     case "$2" in 11|12|13|14|16|17|18|19|cicd);;*)die 'Choose 11, 12, 13, 14, 16, 17, 18, 19 or cicd.';;esac
     [[ $# -le 2 || ($2 == 12 && $3 == --kubernetes && $# == 3) || ($2 == 18 && $3 == --build && $# == 3) ]] || die 'Supported options: start 12 --kubernetes or start 18 --build.'
-    require_cloud
+    require_cloud;deployer stop
     if [[ $2 == cicd ]]; then
       for n in 11 12 16 17 18; do stop_exp "$n"; done
-      start_13; start_14; start_19
-    else stop_others "$2";"start_$2" "${3:-}";fi;;
-  stop) require_cloud
+      start_13; start_14; start_19;deployer start
+    else stop_others "$2";"start_$2" "${3:-}"
+      case "$2" in 14|19) deployer start;;esac
+    fi;;
+  stop) require_cloud;deployer stop
     if [[ ${2:-all} == all ]];then for n in 11 12 13 14 16 17 18 19;do stop_exp "$n";done
     elif [[ $2 == cicd ]];then for n in 13 14 19;do stop_exp "$n";done
-    else stop_exp "$2";fi;;
+    else
+      stop_exp "$2"
+      if [[ $(docker inspect --format '{{.State.Running}}' focuslane-app-exp14 2>/dev/null || true) == true || $(docker inspect --format '{{.State.Running}}' packlight-app-exp19 2>/dev/null || true) == true ]]; then deployer start;fi
+    fi;;
   resume-ci) require_cloud;ci_control resume;;
   pause-ci) require_cloud;ci_control pause;;
+  deploy-status) require_cloud;deployer status;;
   *) usage;exit 1;;
 esac

@@ -10,6 +10,9 @@ on:
       - 'experiments/experiment-14-github-actions-cd/Dockerfile'
       - 'experiments/experiment-14-github-actions-cd/.dockerignore'
       - '.github/workflows/experiment-14-cd.yml'
+      - 'browser-lab/ci/request_deployment.py'
+      - 'browser-lab/ci/test_request_deployment.py'
+      - 'browser-lab/ci/deployment-public.pem'
   pull_request:
     branches: [main]
     paths:
@@ -18,13 +21,10 @@ on:
       - 'experiments/experiment-14-github-actions-cd/Dockerfile'
       - 'experiments/experiment-14-github-actions-cd/.dockerignore'
       - '.github/workflows/experiment-14-cd.yml'
+      - 'browser-lab/ci/request_deployment.py'
+      - 'browser-lab/ci/test_request_deployment.py'
+      - 'browser-lab/ci/deployment-public.pem'
   workflow_dispatch:
-    inputs:
-      deploy_cloud:
-        description: Deploy after tests and image publication (requires configured cloud target)
-        required: true
-        default: true
-        type: boolean
 
 permissions:
   contents: read
@@ -39,15 +39,15 @@ env:
   RELEASE_IMAGE: coastrider7/csa1020-exp14-focuslane:run-${{ github.run_number }}-attempt-${{ github.run_attempt }}-${{ github.sha }}
   SOURCE_SHA: ${{ github.sha }}
   BUILD_NUMBER: ${{ github.run_number }}.${{ github.run_attempt }}
-  CLOUD_URL: https://focuslane-exp14.onrender.com
-  RENDER_SERVICE_ID: ${{ vars.EXP14_RENDER_SERVICE_ID }}
   DOCKER_BUILD_RECORD_UPLOAD: 'false'
 
 jobs:
   delivery:
-    name: Test, publish and deploy FocusLane
+    name: Test and publish FocusLane
     runs-on: ubuntu-latest
     timeout-minutes: 25
+    outputs:
+      image: ${{ steps.publish.outputs.image }}
     defaults:
       run:
         shell: bash
@@ -57,6 +57,9 @@ jobs:
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
+
+      - name: Check deployment request protocol
+        run: python3 -B -m unittest discover -s "$GITHUB_WORKSPACE/browser-lab/ci" -p test_request_deployment.py -v
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@f87e5991a6d7451dcb8d9637bfbc97413f497069 # v4.4.1
@@ -112,24 +115,27 @@ jobs:
           password: ${{ secrets.EXP14_DOCKERHUB_TOKEN }}
 
       - name: Push the same tested runtime image and record its digest
+        id: publish
         if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
         run: |
           docker push "$RELEASE_IMAGE"
           docker image inspect "$RELEASE_IMAGE" --format '{{json .RepoDigests}}' > reports/image-digests.json
           printf '%s\n' "$RELEASE_IMAGE" > reports/published-image.txt
+          image="$(docker image inspect "$RELEASE_IMAGE" --format '{{index .RepoDigests 0}}')"
+          printf 'image=%s\n' "$image" >> "$GITHUB_OUTPUT"
 
-      - name: Deploy the immutable image and verify the live cloud application
-        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main' && vars.EXP14_CLOUD_READY == 'true' && (github.event_name != 'workflow_dispatch' || inputs.deploy_cloud)
-        env:
-          RENDER_DEPLOY_HOOK: ${{ secrets.EXP14_RENDER_DEPLOY_HOOK }}
-        run: python3 ci/deploy.py
-
-      - name: Write a delivery summary
+      - name: Summarize build and publication
         if: always()
         env:
           JOB_STATUS: ${{ job.status }}
-          CLOUD_READY: ${{ vars.EXP14_CLOUD_READY }}
-        run: python3 ci/summary.py
+        run: |
+          {
+            printf '## FocusLane build and publication\n\n'
+            printf -- '- Result: **%s**\n' "$JOB_STATUS"
+            printf -- '- Commit: `%s`\n' "$SOURCE_SHA"
+            printf -- '- Build: `%s`\n' "$BUILD_NUMBER"
+            printf '\nThe separate browser deployment job waits for the running Codespaces lab to verify the published image. Pull requests validate only.\n'
+          } >> "$GITHUB_STEP_SUMMARY"
 
       - name: Preserve test results and deployment receipts
         if: always()
@@ -137,5 +143,40 @@ jobs:
         with:
           name: focuslane-receipts-${{ github.run_number }}-${{ github.run_attempt }}
           path: experiments/experiment-14-github-actions-cd/reports/
+          if-no-files-found: warn
+          retention-days: 7
+
+  browser-deploy:
+    name: Deploy FocusLane to the private browser lab
+    needs: delivery
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    permissions:
+      contents: read
+      deployments: write
+    env:
+      GITHUB_TOKEN: ${{ github.token }}
+      TESTED_IMAGE: ${{ needs.delivery.outputs.image }}
+      BROWSER_APP_URL: https://miserable-cobweb-4j9pjv79r7w7fjrqw-8094.app.github.dev/
+    steps:
+      - name: Check out deployment protocol
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Request the tested image and wait for verified deployment
+        run: |
+          python3 browser-lab/ci/request_deployment.py \
+            --experiment 14 --image "$TESTED_IMAGE" --sha "$SOURCE_SHA" \
+            --run-id "$GITHUB_RUN_ID" --build "$BUILD_NUMBER" --url "$BROWSER_APP_URL" \
+            --output browser-deployment/receipt.json
+
+      - name: Preserve browser deployment receipt
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: focuslane-browser-deployment-${{ github.run_number }}-${{ github.run_attempt }}
+          path: browser-deployment/receipt.json
           if-no-files-found: warn
           retention-days: 7

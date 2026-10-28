@@ -10,13 +10,13 @@ pipeline {
     triggers { pollSCM('* * * * *') }
     parameters {
         booleanParam(name: 'PUBLISH_IMAGE', defaultValue: true, description: 'Publish the tested image to Docker Hub on main.')
-        booleanParam(name: 'DEPLOY_CLOUD', defaultValue: true, description: 'Deploy the tested image digest to the configured free Render service.')
+        booleanParam(name: 'DEPLOY_CLOUD', defaultValue: true, description: 'Deploy the tested image digest to the private Codespaces browser app.')
         booleanParam(name: 'DEMONSTRATE_TEST_GATE', defaultValue: false, description: 'Deliberately fail a gate test to prove publish/deploy are skipped.')
     }
     environment {
         APP_DIR = 'experiments/experiment-13-jenkins-cicd'
         IMAGE_REPOSITORY = 'coastrider7/csa1020-exp13-releaseharbor'
-        CLOUD_URL = 'https://releaseharbor-exp13.onrender.com'
+        CLOUD_URL = 'http://docker:8000'
     }
     stages {
         stage('Checkout') {
@@ -44,6 +44,7 @@ pipeline {
                 dir("${APP_DIR}") {
                     sh '''
                         mkdir -p reports
+                        python3 -m unittest discover -s ci/tests -v
                         docker run --rm --network none --read-only --tmpfs /tmp:rw,noexec,nosuid,size=16m \
                           --cap-drop ALL --security-opt no-new-privileges:true "$TEST_IMAGE" \
                           node --test --test-reporter=junit \
@@ -79,13 +80,11 @@ pipeline {
                 }
             }
         }
-        stage('Deploy to Render') {
+        stage('Deploy to browser lab') {
             when { expression { params.PUBLISH_IMAGE && params.DEPLOY_CLOUD && env.SOURCE_BRANCH == 'origin/main' } }
             steps {
                 dir("${APP_DIR}") {
-                    withCredentials([string(credentialsId: 'render-deploy-hook', variable: 'RENDER_DEPLOY_HOOK')]) {
-                        sh 'python3 ci/deploy.py'
-                    }
+                    sh 'python3 ci/deploy-browser.py'
                 }
             }
         }
