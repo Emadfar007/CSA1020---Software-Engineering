@@ -44,6 +44,7 @@ Starting a profile stops the other lab profiles while keeping their data. Use `b
 | 18 | Three-tier seed library on Kubernetes with Nginx, Flask, persistent PostgreSQL, real Headlamp monitoring and frontend scaling | [Multi-Container Kubernetes Application](experiments/experiment-18-sprouthouse-kubernetes/README.md) |
 | 19 | Flask application tested in Docker, published to Docker Hub and deployed automatically to Render Free through GitHub Actions | [Flask CI/CD with GitHub Actions](experiments/experiment-19-github-actions-flask/README.md) |
 | 20 | Private personal repository initialized with a README, cloned locally, updated, staged, committed and pushed with verified Git history | [GitHub Repository Setup](experiments/experiment-20-github-repository-setup/README.md) |
+| 21 | Existing public repository cloned locally and a one-line README clarification saved, with the original edit left uncommitted | [Clone and Edit a Repository](experiments/experiment-21-clone-and-edit/README.md) |
 
 Each experiment includes only Aim, Tools Required, Algorithm, Output Screenshots, and Result.
 
