@@ -6,9 +6,11 @@ To demonstrate continuous deployment of **FocusLane**, a Dockerized study-sprint
 
 ## Tools Required
 
-**Access status - checked 28 October 2026:** The Render deployment is currently suspended and returns HTTP 503. Render records **Free Tier Usage Exceeded** as the reason. The source, published image, recorded pipeline results and screenshots remain accessible in this submission. This is separate from normal idle sleep; refreshing the app cannot remove the quota restriction.
+**Browser runtime - updated 28 October 2026:** Sign in as **Emadfar007**, resume the [existing Codespace](https://miserable-cobweb-4j9pjv79r7w7fjrqw.github.dev/) and run `bash browser-lab/bin/lab start cicd` from the repository root to start Experiments **13, 14 and 19 together**. The app links require the Codespace and containers to be running. Use `bash browser-lab/bin/lab stop cicd` and stop the Codespace when finished. The existing 2-core lab has a **$0 spending budget with paid usage blocked**, a 30-minute idle timeout and 30-day inactive retention; monthly free compute and storage quotas still apply.
 
-**Browser access:** [Codespaces IDE](https://miserable-cobweb-4j9pjv79r7w7fjrqw.github.dev/) · [Manage or restart the lab](https://github.com/codespaces) · [Browser lab guide](https://github.com/Emadfar007/CSA1020---Software-Engineering/tree/main/browser-lab). Experiment 14 already builds and deploys on hosted GitHub Actions and Render, independently of Docker Desktop. Its app and workflow links below can be used without starting this Codespace; `bash browser-lab/bin/lab start 14` only prints the existing hosted links. The original local commands, screenshots and test evidence below remain the historical experiment record.
+**Current runtime verification:** [Health, API, image identity and container checks](evidence/browser-runtime-2026-10-28.json).
+
+**Pipeline distinction:** This browser profile runs the recorded immutable Docker image. The original Jenkins/GitHub Actions deployment stages still target Render and remain blocked by **Free Tier Usage Exceeded**. Their saved successful runs and original deployment evidence are retained; starting this profile does not move or rerun the original cloud deployment pipeline.
 
 | Tool | Purpose |
 |---|---|
@@ -18,29 +20,31 @@ To demonstrate continuous deployment of **FocusLane**, a Dockerized study-sprint
 | Docker Hub | Versioned image publication and immutable registry digests |
 | Node.js 24 | Dependency-free HTTP application and application tests |
 | Python standard library | Test-report gate, HTTP verification and delivery receipts |
-| Render Free web service | Cloud deployment of the published Docker image |
-| Web browser | Functional testing and screenshots of actual results |
+| Render Free web service (original demonstration) | Recorded deployment target; currently quota-suspended |
+| GitHub Codespaces and web browser | Run the recorded image privately and test the interface |
 
-**Project:** [CSA1020 Software Engineering](https://github.com/Emadfar007/CSA1020---Software-Engineering/tree/main/experiments/experiment-14-github-actions-cd) · **Live application:** [FocusLane](https://focuslane-exp14.onrender.com) · **Images:** [Docker Hub](https://hub.docker.com/r/coastrider7/csa1020-exp14-focuslane/tags)
+**Project:** [CSA1020 Software Engineering](https://github.com/Emadfar007/CSA1020---Software-Engineering/tree/main/experiments/experiment-14-github-actions-cd) · **Browser application:** [FocusLane](https://miserable-cobweb-4j9pjv79r7w7fjrqw-8094.app.github.dev) · **Images:** [Docker Hub](https://hub.docker.com/r/coastrider7/csa1020-exp14-focuslane/tags)
 
-The service uses Render's **Free** plan without a database, persistent disk or paid add-on. The current Free web-service offering has no fixed trial-expiry date, but sleeps after 15 minutes without inbound traffic and uses the workspace's shared allowance of 750 instance hours each month. Usage limits and service policies apply; unlimited permanent hosting is not guaranteed. A sleeping service can take time to respond on its next visit. See [Render Free services](https://render.com/docs/free).
+The original service used [Render Free](https://render.com/docs/free); that deployment remains quota-suspended. The current app link uses the existing private Codespaces lab.
 
 ### Quick access links
 
 | What to open | Link |
 | --- | --- |
 | Open or manage the browser lab | [Codespaces IDE](https://miserable-cobweb-4j9pjv79r7w7fjrqw.github.dev/) · [Start or stop Codespaces](https://github.com/codespaces) · [Lab guide](https://github.com/Emadfar007/CSA1020---Software-Engineering/tree/main/browser-lab) |
-| Open the deployed application | [FocusLane - cloud app](https://focuslane-exp14.onrender.com/) |
-| Check the deployed build | [Version and source JSON](https://focuslane-exp14.onrender.com/api/version) · [Health check](https://focuslane-exp14.onrender.com/healthz) |
+| Open the browser application | [FocusLane - browser app](https://miserable-cobweb-4j9pjv79r7w7fjrqw-8094.app.github.dev/) |
+| Check the browser build | [Version and source JSON](https://miserable-cobweb-4j9pjv79r7w7fjrqw-8094.app.github.dev/api/version) · [Health check](https://miserable-cobweb-4j9pjv79r7w7fjrqw-8094.app.github.dev/healthz) |
 | Follow the automatic pipeline | [GitHub Actions workflow](https://github.com/Emadfar007/CSA1020---Software-Engineering/actions/workflows/experiment-14-cd.yml) · [Recorded successful deployment run #3](https://github.com/Emadfar007/CSA1020---Software-Engineering/actions/runs/40353497794) |
 | Review the code change that triggered deployment | [Merged feature pull request #2](https://github.com/Emadfar007/CSA1020---Software-Engineering/pull/2) |
 | Find the published images | [Docker Hub image and tags](https://hub.docker.com/r/coastrider7/csa1020-exp14-focuslane/tags) |
-| Manage the deployed service | [Render dashboard - sign-in required](https://dashboard.render.com/web/srv-dbfnbggm7kps739nrok0) |
+| Manage the original Render service | [Render dashboard - sign-in required](https://dashboard.render.com/web/srv-dbfnbggm7kps739nrok0) |
 | Source and pipeline configuration | [Experiment folder](https://github.com/Emadfar007/CSA1020---Software-Engineering/tree/main/experiments/experiment-14-github-actions-cd) · [Dockerfile](https://github.com/Emadfar007/CSA1020---Software-Engineering/blob/main/experiments/experiment-14-github-actions-cd/Dockerfile) · [Active workflow YAML](https://github.com/Emadfar007/CSA1020---Software-Engineering/blob/main/.github/workflows/experiment-14-cd.yml) |
-| View the output | [All ten screenshots](https://github.com/Emadfar007/CSA1020---Software-Engineering/tree/main/experiments/experiment-14-github-actions-cd/screenshots) · [Automatic deployment evidence](https://github.com/Emadfar007/CSA1020---Software-Engineering/tree/main/experiments/experiment-14-github-actions-cd/evidence/automatic-deployment) |
+| View the output | [All screenshots](https://github.com/Emadfar007/CSA1020---Software-Engineering/tree/main/experiments/experiment-14-github-actions-cd/screenshots) · [Automatic deployment evidence](https://github.com/Emadfar007/CSA1020---Software-Engineering/tree/main/experiments/experiment-14-github-actions-cd/evidence/automatic-deployment) |
 | Open the experiment collection | [All experiments](https://github.com/Emadfar007/CSA1020---Software-Engineering) |
 
-When active, the cloud app opens from any device; see the current access status above. GitHub Actions runs on hosted runners. Render management requires sign-in. A sleeping Render Free app can take time to wake. The run #3 link preserves the successful experiment demonstration; the workflow link shows newer runs when present.
+The browser app requires the running Codespaces profile and GitHub sign-in. GitHub Actions checks remain on hosted runners; Render management requires its existing sign-in. The run #3 link preserves the successful experiment demonstration; the workflow link shows newer runs when present.
+
+Original deployment URL (quota-suspended): [FocusLane on Render](https://focuslane-exp14.onrender.com/).
 
 ## Algorithm
 
@@ -75,7 +79,13 @@ When active, the cloud app opens from any device; see the current access status 
 
 The workflow uses commit-pinned actions, read-only repository permissions, caching, a bounded timeout and serialized `main` deliveries. It publishes a delivery summary and retains verification artifacts for seven days; submitted evidence copies remain in this repository. The standard GitHub-hosted runner works independently of the local computer or Jenkins. Runner, artifact and cache allowances remain subject to [GitHub Actions billing rules](https://docs.github.com/en/billing/concepts/product-billing/github-actions).
 
+**Current browser access:** The steps above record the original CI/CD experiment. To run its saved application now, resume the existing Codespace and execute `bash browser-lab/bin/lab start 14` for this experiment alone, or `bash browser-lab/bin/lab start cicd` for all three. Open [FocusLane](https://miserable-cobweb-4j9pjv79r7w7fjrqw-8094.app.github.dev/) and use its normal form workflow. The profile pulls the recorded immutable image, keeps the original build identity and requires no local Docker Desktop. Individual profile startup stops other profiles while retaining their data; `stop cicd` stops the three restored profiles without deleting their images or data.
+
 ## Output Screenshots
+
+**Current private browser runtime, 28 October 2026.** FocusLane running from its recorded Docker image in Codespaces.
+
+![FocusLane restored in the private browser lab](screenshots/browser-restore-2026-10-28.jpg)
 
 **1. Original cloud version.** Version 1.0.0, run 1.1, was recorded before the feature merge.
 

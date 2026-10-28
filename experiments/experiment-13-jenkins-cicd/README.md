@@ -8,43 +8,47 @@ The sample application, **ReleaseHarbor**, helps a team prepare a release throug
 
 ## Tools Required
 
-**Access status - checked 28 October 2026:** The Render deployment is currently suspended and returns HTTP 503. Render records **Free Tier Usage Exceeded** as the reason. The source, published image, recorded pipeline results and screenshots remain accessible in this submission. This is separate from normal idle sleep; refreshing the app cannot remove the quota restriction.
+**Browser runtime - updated 28 October 2026:** Sign in as **Emadfar007**, resume the [existing Codespace](https://miserable-cobweb-4j9pjv79r7w7fjrqw.github.dev/) and run `bash browser-lab/bin/lab start cicd` from the repository root to start Experiments **13, 14 and 19 together**. The app links require the Codespace and containers to be running. Use `bash browser-lab/bin/lab stop cicd` and stop the Codespace when finished. The existing 2-core lab has a **$0 spending budget with paid usage blocked**, a 30-minute idle timeout and 30-day inactive retention; monthly free compute and storage quotas still apply.
 
-**Browser Docker lab:** [Open the Codespaces IDE](https://miserable-cobweb-4j9pjv79r7w7fjrqw.github.dev/) · [Manage or restart the lab](https://github.com/codespaces) · [Browser lab guide](https://github.com/Emadfar007/CSA1020---Software-Engineering/tree/main/browser-lab). Sign in as **Emadfar007**, resume the Codespace if stopped, and run `bash browser-lab/bin/lab start 13` from the repository root before opening this experiment's private app links. Starting a profile stops the other lab profiles while preserving their data. The original local commands, screenshots and test evidence below remain the historical experiment record.
+**Current runtime verification:** [Health, API, image identity and container checks](evidence/browser-runtime-2026-10-28.json).
+
+**Pipeline distinction:** This browser profile runs the recorded immutable Docker image. The original Jenkins/GitHub Actions deployment stages still target Render and remain blocked by **Free Tier Usage Exceeded**. Their saved successful runs and original deployment evidence are retained; starting this profile does not move or rerun the original cloud deployment pipeline.
 
 | Tool | Use in this experiment |
 |---|---|
-| Docker Desktop and Docker Compose | Run Jenkins and its separate Docker build daemon |
+| Docker in GitHub Codespaces and Docker Compose | Run the browser app, Jenkins and its separate Docker build daemon |
 | Jenkins LTS 2.580.1 with Pipeline, Git, JUnit and credentials plugins | Orchestrate stages, detect commits, report tests and protect credentials |
 | Node.js 24 and its built-in test runner | Run the dependency-free app and 21 domain/HTTP tests |
 | Git and GitHub | Store source code, Dockerfile and Jenkinsfile |
 | Docker Hub | Store build-specific images and digests |
-| Render Free web service | Run the tested container in the cloud |
+| Render Free web service (original demonstration) | Recorded deployment target; currently quota-suspended |
 | PowerShell and Chrome | Start the local lab and verify the interface |
 
-Application: [ReleaseHarbor](https://releaseharbor-exp13.onrender.com/). Browser Jenkins job: [ReleaseHarbor-CICD](https://miserable-cobweb-4j9pjv79r7w7fjrqw-8090.app.github.dev/job/ReleaseHarbor-CICD/). Images: [Docker Hub](https://hub.docker.com/r/coastrider7/csa1020-exp13-releaseharbor/tags). Source: [CSA1020 Software Engineering](https://github.com/Emadfar007/CSA1020---Software-Engineering).
+Application: [ReleaseHarbor](https://miserable-cobweb-4j9pjv79r7w7fjrqw-8091.app.github.dev/). Browser Jenkins job: [ReleaseHarbor-CICD](https://miserable-cobweb-4j9pjv79r7w7fjrqw-8090.app.github.dev/job/ReleaseHarbor-CICD/). Images: [Docker Hub](https://hub.docker.com/r/coastrider7/csa1020-exp13-releaseharbor/tags). Source: [CSA1020 Software Engineering](https://github.com/Emadfar007/CSA1020---Software-Engineering).
 
 ### Quick access links
 
 | What to open | Link |
 | --- | --- |
 | Open or manage the browser lab | [Codespaces IDE](https://miserable-cobweb-4j9pjv79r7w7fjrqw.github.dev/) · [Start or stop Codespaces](https://github.com/codespaces) · [Lab guide](https://github.com/Emadfar007/CSA1020---Software-Engineering/tree/main/browser-lab) |
-| Open the deployed application | [ReleaseHarbor - cloud app](https://releaseharbor-exp13.onrender.com/) |
-| Use the application sections | [Release workspace](https://releaseharbor-exp13.onrender.com/#workspace) · [Release timeline](https://releaseharbor-exp13.onrender.com/#timeline) · [Build details](https://releaseharbor-exp13.onrender.com/#build) |
-| Check the deployed build | [Version and source JSON](https://releaseharbor-exp13.onrender.com/api/version) · [Health check](https://releaseharbor-exp13.onrender.com/healthz) |
+| Open the browser application | [ReleaseHarbor - browser app](https://miserable-cobweb-4j9pjv79r7w7fjrqw-8091.app.github.dev/) |
+| Use the application sections | [Release workspace](https://miserable-cobweb-4j9pjv79r7w7fjrqw-8091.app.github.dev/#workspace) · [Release timeline](https://miserable-cobweb-4j9pjv79r7w7fjrqw-8091.app.github.dev/#timeline) · [Build details](https://miserable-cobweb-4j9pjv79r7w7fjrqw-8091.app.github.dev/#build) |
+| Check the browser build | [Version and source JSON](https://miserable-cobweb-4j9pjv79r7w7fjrqw-8091.app.github.dev/api/version) · [Health check](https://miserable-cobweb-4j9pjv79r7w7fjrqw-8091.app.github.dev/healthz) |
 | Open private browser Jenkins | [Jenkins dashboard](https://miserable-cobweb-4j9pjv79r7w7fjrqw-8090.app.github.dev/) · [ReleaseHarbor CI/CD job](https://miserable-cobweb-4j9pjv79r7w7fjrqw-8090.app.github.dev/job/ReleaseHarbor-CICD/) |
 | Follow the latest passing pipeline | [Latest successful build](https://miserable-cobweb-4j9pjv79r7w7fjrqw-8090.app.github.dev/job/ReleaseHarbor-CICD/lastSuccessfulBuild/) · [Test results](https://miserable-cobweb-4j9pjv79r7w7fjrqw-8090.app.github.dev/job/ReleaseHarbor-CICD/lastSuccessfulBuild/testReport/) · [Console log](https://miserable-cobweb-4j9pjv79r7w7fjrqw-8090.app.github.dev/job/ReleaseHarbor-CICD/lastSuccessfulBuild/console) |
 | Open the recorded experiment build | [Successful build #7](https://miserable-cobweb-4j9pjv79r7w7fjrqw-8090.app.github.dev/job/ReleaseHarbor-CICD/7/) |
-| Manage the deployed service | [Render dashboard - sign-in required](https://dashboard.render.com/web/srv-dbflq8vb9u1s73de444g) |
+| Manage the original Render service | [Render dashboard - sign-in required](https://dashboard.render.com/web/srv-dbflq8vb9u1s73de444g) |
 | Find the published images | [Docker Hub image and tags](https://hub.docker.com/r/coastrider7/csa1020-exp13-releaseharbor/tags) |
 | Source and pipeline configuration | [Experiment folder](https://github.com/Emadfar007/CSA1020---Software-Engineering/tree/main/experiments/experiment-13-jenkins-cicd) · [Jenkinsfile](https://github.com/Emadfar007/CSA1020---Software-Engineering/blob/main/experiments/experiment-13-jenkins-cicd/Jenkinsfile) · [Local Jenkins Compose setup](https://github.com/Emadfar007/CSA1020---Software-Engineering/blob/main/experiments/experiment-13-jenkins-cicd/compose.yaml) |
-| View the output | [All nine screenshots](https://github.com/Emadfar007/CSA1020---Software-Engineering/tree/main/experiments/experiment-13-jenkins-cicd/screenshots) · [Build and deployment evidence](https://github.com/Emadfar007/CSA1020---Software-Engineering/tree/main/experiments/experiment-13-jenkins-cicd/evidence) |
+| View the output | [All screenshots](https://github.com/Emadfar007/CSA1020---Software-Engineering/tree/main/experiments/experiment-13-jenkins-cicd/screenshots) · [Build and deployment evidence](https://github.com/Emadfar007/CSA1020---Software-Engineering/tree/main/experiments/experiment-13-jenkins-cicd/evidence) |
 | Open the experiment collection | [All experiments](https://github.com/Emadfar007/CSA1020---Software-Engineering) |
 
-When active, the Render app opens independently of Codespaces; see the current access status above. Jenkins requires the Experiment 13 profile and the private GitHub port to be open while signed in as Emadfar007; Jenkins management also uses the existing Jenkins account. Restored jobs and results remain readable while builds start paused for migration review. Run `bash browser-lab/bin/lab resume-ci` only when ready to enable builds, publication and any configured deployment. Render management requires sign-in, and a sleeping Free app can take time to wake.
+ReleaseHarbor and Jenkins now run inside the Codespace. Jenkins requires the Experiment 13 profile and the private GitHub port to be open while signed in as Emadfar007; Jenkins management also uses the existing Jenkins account. Restored jobs and results remain readable while builds start paused for migration review. Run `bash browser-lab/bin/lab resume-ci` only when ready to enable builds, publication and any configured deployment. The original Render service remains quota-suspended; its dashboard requires sign-in.
 
 
 Private app links require both a running profile and GitHub sign-in as Emadfar007. This Codespace uses a 30-minute idle timeout and 30-day inactive retention; free usage remains subject to its monthly quota, with paid usage blocked.
+
+Original deployment URL (quota-suspended): [ReleaseHarbor on Render](https://releaseharbor-exp13.onrender.com/).
 
 ## Algorithm
 
@@ -113,7 +117,13 @@ Private app links require both a running profile and GitHub sign-in as Emadfar00
 
 References: [Jenkins with Docker](https://www.jenkins.io/doc/book/installing/docker/), [Pipeline syntax](https://www.jenkins.io/doc/book/pipeline/syntax/), [Render image deployment](https://render.com/docs/deploying-an-image), and [deploy hooks](https://render.com/docs/deploy-hooks).
 
+**Current browser access:** The steps above record the original CI/CD experiment. To run its saved application now, resume the existing Codespace and execute `bash browser-lab/bin/lab start 13` for this experiment alone, or `bash browser-lab/bin/lab start cicd` for all three. Open [ReleaseHarbor](https://miserable-cobweb-4j9pjv79r7w7fjrqw-8091.app.github.dev/) and use its normal form workflow. The profile pulls the recorded immutable image, keeps the original build identity and requires no local Docker Desktop. Individual profile startup stops other profiles while retaining their data; `stop cicd` stops the three restored profiles without deleting their images or data.
+
 ## Output Screenshots
+
+**Current private browser runtime, 28 October 2026.** ReleaseHarbor running from its recorded Docker image in Codespaces.
+
+![ReleaseHarbor restored in the private browser lab](screenshots/browser-restore-2026-10-28.jpg)
 
 **1. Cloud application workspace.** ReleaseHarbor running from the deployed container.
 
@@ -143,7 +153,7 @@ References: [Jenkins with Docker](https://www.jenkins.io/doc/book/installing/doc
 
 ![Intentional deployment gate failure](screenshots/07-test-gate.jpg)
 
-**8. Render deployment.** The separate Free image-backed service is live.
+**8. Original Render deployment.** The recorded Free image-backed service was live during the original demonstration.
 
 ![Live Render container deployment](screenshots/08-render-live.jpg)
 
@@ -155,4 +165,4 @@ References: [Jenkins with Docker](https://www.jenkins.io/doc/book/installing/doc
 
 A working Docker-based CI/CD pipeline was implemented with local Jenkins and a separate Free Render service. A Git commit automatically triggered build **#7**, which passed **21 tests** and HTTP checks, published a versioned image, and deployed its exact digest. The cloud application's source SHA, build number and health matched the Jenkins release. An intentional failure also demonstrated that later publishing and deployment stages are blocked.
 
-The submission includes the application, Dockerfile, Jenkinsfile, local setup, deployment helpers, screenshots and actual verification records. Jenkins remains local; Render hosts the app under its free-service limits. ReleaseHarbor's checklist is an educational planning tool and does not itself approve or deploy software.
+The submission includes the application, Dockerfile, Jenkinsfile, local setup, deployment helpers, screenshots and actual verification records. The original demonstration used local Jenkins and Render Free. The current browser profile runs Jenkins and the recorded ReleaseHarbor image in Codespaces; the original Render deployment remains quota-suspended. ReleaseHarbor's checklist is an educational planning tool and does not itself approve or deploy software.

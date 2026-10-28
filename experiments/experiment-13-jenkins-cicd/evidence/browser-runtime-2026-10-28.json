@@ -1,0 +1,37 @@
+{
+  "verifiedAt": "2026-10-28T17:27:06.036220+00:00",
+  "runtime": "Existing private GitHub Codespaces Docker lab",
+  "checks": {
+    "experiment": 13,
+    "application": "ReleaseHarbor",
+    "port": 8091,
+    "version": {
+      "application": "ReleaseHarbor",
+      "version": "1.0.0",
+      "gitSha": "0772e7b013680b7ec975f5a6fb155a36eaae49d5",
+      "buildNumber": "7",
+      "mode": "browser-lab"
+    },
+    "readyScore": 100,
+    "blockerTogglePassed": true,
+    "invalidInputHttpStatus": 400,
+    "containerHealthy": true,
+    "nonRootUser": "node",
+    "publishedImage": "coastrider7/csa1020-exp13-releaseharbor@sha256:e8d0ca8279fcc546c168ea414d93a6278777c8ce980f8bbd289001ef840c1766",
+    "passed": true,
+    "browserUrl": "https://miserable-cobweb-4j9pjv79r7w7fjrqw-8091.app.github.dev/",
+    "browserInteractionVerified": {
+      "blockerToggleChangedScoreTo": 67,
+      "completedChecklistScore": 100,
+      "allChecksCompleted": 12
+    }
+  },
+  "jenkins": {
+    "administratorAccessPassed": true,
+    "buildsPaused": true,
+    "savedSuccessfulBuild": 7
+  },
+  "paidUsageBudgetUSD": 0,
+  "privatePort": true,
+  "originalRenderDeployStages": "Retained; still quota-blocked"
+}

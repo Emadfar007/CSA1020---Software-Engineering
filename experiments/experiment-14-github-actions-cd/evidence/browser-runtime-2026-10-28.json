@@ -1,0 +1,39 @@
+{
+  "verifiedAt": "2026-10-28T17:27:06.036220+00:00",
+  "runtime": "Existing private GitHub Codespaces Docker lab",
+  "checks": {
+    "experiment": 14,
+    "application": "FocusLane",
+    "port": 8094,
+    "version": {
+      "application": "FocusLane",
+      "version": "1.1.0",
+      "gitSha": "940b7c84efef6e4a8b3e0dd6c1de77bba08705b8",
+      "buildNumber": "3.1",
+      "mode": "browser-lab"
+    },
+    "plannedMinutes": 255,
+    "dailyMinutes": [
+      90,
+      90,
+      75
+    ],
+    "highPriorityFirst": true,
+    "invalidInputHttpStatus": 400,
+    "containerHealthy": true,
+    "nonRootUser": "node",
+    "publishedImage": "coastrider7/csa1020-exp14-focuslane@sha256:971284d9f9d5dd9503d70181e739c8aad5c2eec1b15fa3d89c177825e2f84e19",
+    "passed": true,
+    "browserUrl": "https://miserable-cobweb-4j9pjv79r7w7fjrqw-8094.app.github.dev/",
+    "browserInteractionVerified": {
+      "editedPlanLengthDays": 3,
+      "editedTargetMinutes": 45,
+      "plannedMinutes": 255,
+      "utilizationPercent": 94
+    }
+  },
+  "jenkins": null,
+  "paidUsageBudgetUSD": 0,
+  "privatePort": true,
+  "originalRenderDeployStages": "Retained; still quota-blocked"
+}

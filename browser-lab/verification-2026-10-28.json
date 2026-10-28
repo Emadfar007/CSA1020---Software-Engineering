@@ -1,0 +1,139 @@
+{
+  "verifiedAt": "2026-10-28T17:27:06.036220+00:00",
+  "runtime": "Existing private GitHub Codespaces Docker lab",
+  "results": [
+    {
+      "experiment": 13,
+      "application": "ReleaseHarbor",
+      "port": 8091,
+      "version": {
+        "application": "ReleaseHarbor",
+        "version": "1.0.0",
+        "gitSha": "0772e7b013680b7ec975f5a6fb155a36eaae49d5",
+        "buildNumber": "7",
+        "mode": "browser-lab"
+      },
+      "readyScore": 100,
+      "blockerTogglePassed": true,
+      "invalidInputHttpStatus": 400,
+      "containerHealthy": true,
+      "nonRootUser": "node",
+      "publishedImage": "coastrider7/csa1020-exp13-releaseharbor@sha256:e8d0ca8279fcc546c168ea414d93a6278777c8ce980f8bbd289001ef840c1766",
+      "passed": true,
+      "browserUrl": "https://miserable-cobweb-4j9pjv79r7w7fjrqw-8091.app.github.dev/",
+      "browserInteractionVerified": {
+        "blockerToggleChangedScoreTo": 67,
+        "completedChecklistScore": 100,
+        "allChecksCompleted": 12
+      }
+    },
+    {
+      "experiment": 14,
+      "application": "FocusLane",
+      "port": 8094,
+      "version": {
+        "application": "FocusLane",
+        "version": "1.1.0",
+        "gitSha": "940b7c84efef6e4a8b3e0dd6c1de77bba08705b8",
+        "buildNumber": "3.1",
+        "mode": "browser-lab"
+      },
+      "plannedMinutes": 255,
+      "dailyMinutes": [
+        90,
+        90,
+        75
+      ],
+      "highPriorityFirst": true,
+      "invalidInputHttpStatus": 400,
+      "containerHealthy": true,
+      "nonRootUser": "node",
+      "publishedImage": "coastrider7/csa1020-exp14-focuslane@sha256:971284d9f9d5dd9503d70181e739c8aad5c2eec1b15fa3d89c177825e2f84e19",
+      "passed": true,
+      "browserUrl": "https://miserable-cobweb-4j9pjv79r7w7fjrqw-8094.app.github.dev/",
+      "browserInteractionVerified": {
+        "editedPlanLengthDays": 3,
+        "editedTargetMinutes": 45,
+        "plannedMinutes": 255,
+        "utilizationPercent": 94
+      }
+    },
+    {
+      "experiment": 19,
+      "application": "Packlight",
+      "port": 8099,
+      "version": {
+        "application": "Packlight",
+        "build_number": "2.1",
+        "git_sha": "dd4d44cdf641f6c3883a5df0dc8f60526ab40d84",
+        "version": "1.0.0"
+      },
+      "contract": {
+        "application_url": "http://127.0.0.1:8099",
+        "version": {
+          "application": "Packlight",
+          "build_number": "2.1",
+          "git_sha": "dd4d44cdf641f6c3883a5df0dc8f60526ab40d84",
+          "version": "1.0.0"
+        },
+        "health_http_status": 200,
+        "packing_http_status": 200,
+        "invalid_input_http_status": 400,
+        "example_trip": {
+          "days": 4,
+          "travelers": 2,
+          "climate": "rainy",
+          "activity": "trail",
+          "laundry": false
+        },
+        "example_total_items": 47,
+        "expected_item_quantities_verified": {
+          "Tops": 8,
+          "Underwear": 10,
+          "Socks": 8,
+          "Bottoms": 4,
+          "Rain jacket": 2,
+          "Waterproof bag": 2,
+          "Trail shoes": 2,
+          "Headlamp": 2,
+          "First aid kit": 1
+        },
+        "passed": true
+      },
+      "containerHealthy": true,
+      "nonRootUser": "10001:10001",
+      "publishedImage": "coastrider7/csa1020-exp19-packlight@sha256:c1e3e15a0f50371c964e875fb1524e15a578dd4ce9a3eb352360bd88a6cbaf67",
+      "passed": true,
+      "browserUrl": "https://miserable-cobweb-4j9pjv79r7w7fjrqw-8099.app.github.dev/",
+      "browserInteractionVerified": {
+        "selectedClimate": "rainy",
+        "selectedActivity": "trail",
+        "days": 4,
+        "travelers": 2,
+        "generatedItems": 47
+      }
+    }
+  ],
+  "jenkins": {
+    "administratorAccessPassed": true,
+    "buildsPaused": true,
+    "savedSuccessfulBuild": 7
+  },
+  "paidResourcesCreated": false,
+  "originalRenderDeployStages": "Retained; still quota-blocked",
+  "passed": true,
+  "codespace": "miserable-cobweb-4j9pjv79r7w7fjrqw",
+  "startupCommand": "bash browser-lab/bin/lab start cicd",
+  "shutdownCommand": "bash browser-lab/bin/lab stop cicd",
+  "paidUsageBudgetUSD": 0,
+  "paidUsageBlockedVerifiedInGitHubUI": true,
+  "privateAppPortsVerified": [
+    8090,
+    8091,
+    8094,
+    8099
+  ],
+  "freeUsageLimitsApply": true,
+  "idleTimeoutMinutes": 30,
+  "inactiveRetentionDays": 30
+}

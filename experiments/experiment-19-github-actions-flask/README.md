@@ -8,7 +8,11 @@ To automate testing, Docker image building, Docker Hub publication and cloud dep
 
 ## Tools Required
 
-**Access status - checked 28 October 2026:** The Render deployment is currently suspended and returns HTTP 503. Render records **Free Tier Usage Exceeded** as the reason. The source, published image, recorded pipeline results and screenshots remain accessible in this submission. This is separate from normal idle sleep; refreshing the app cannot remove the quota restriction.
+**Browser runtime - updated 28 October 2026:** Sign in as **Emadfar007**, resume the [existing Codespace](https://miserable-cobweb-4j9pjv79r7w7fjrqw.github.dev/) and run `bash browser-lab/bin/lab start cicd` from the repository root to start Experiments **13, 14 and 19 together**. The app links require the Codespace and containers to be running. Use `bash browser-lab/bin/lab stop cicd` and stop the Codespace when finished. The existing 2-core lab has a **$0 spending budget with paid usage blocked**, a 30-minute idle timeout and 30-day inactive retention; monthly free compute and storage quotas still apply.
+
+**Current runtime verification:** [Health, API, image identity and container checks](evidence/browser-runtime-2026-10-28.json).
+
+**Pipeline distinction:** This browser profile runs the recorded immutable Docker image. The original Jenkins/GitHub Actions deployment stages still target Render and remain blocked by **Free Tier Usage Exceeded**. Their saved successful runs and original deployment evidence are retained; starting this profile does not move or rerun the original cloud deployment pipeline.
 
 | Tool | Purpose |
 |---|---|
@@ -16,13 +20,14 @@ To automate testing, Docker image building, Docker Hub publication and cloud dep
 | Python 3.12, Flask 3.1.3 and Gunicorn 26.2.0 | Application, API and production HTTP server |
 | Docker and Buildx | Separate test/runtime images and container execution |
 | Docker Hub | Store the tested, versioned image and its immutable digest |
-| Render Free | Host the deployed container |
+| GitHub Codespaces | Run the recorded image through a private browser port |
+| Render Free (original demonstration) | Recorded deployment target; currently quota-suspended |
 
-**Deployment:** [Open Packlight](https://packlight-exp19.onrender.com/) · [Health](https://packlight-exp19.onrender.com/healthz) · [Deployed build identity](https://packlight-exp19.onrender.com/api/version)
+**Browser application:** [Open Packlight](https://miserable-cobweb-4j9pjv79r7w7fjrqw-8099.app.github.dev/) · [Health](https://miserable-cobweb-4j9pjv79r7w7fjrqw-8099.app.github.dev/healthz) · [Browser build identity](https://miserable-cobweb-4j9pjv79r7w7fjrqw-8099.app.github.dev/api/version)
 
 **Submission:** [Experiment source](https://github.com/Emadfar007/CSA1020---Software-Engineering/tree/main/experiments/experiment-19-github-actions-flask) · [Active workflow YAML](https://github.com/Emadfar007/CSA1020---Software-Engineering/blob/main/.github/workflows/experiment-19-cicd.yml) · [Workflow file copy](workflow/experiment-19-cicd.yml) · [Actions runs](https://github.com/Emadfar007/CSA1020---Software-Engineering/actions/workflows/experiment-19-cicd.yml) · [Docker Hub tags](https://hub.docker.com/r/coastrider7/csa1020-exp19-packlight/tags)
 
-Render Free can sleep after inactivity and has shared usage limits; see [Render Free service limits](https://render.com/docs/free).
+The original [Render Free deployment](https://packlight-exp19.onrender.com/) remains quota-suspended under its [shared service limits](https://render.com/docs/free). The current app link uses the private Codespaces runtime.
 
 ## Algorithm
 
@@ -46,7 +51,13 @@ docker run --rm -p 127.0.0.1:8000:8000 packlight
 
 The example of four days, two travelers, rainy weather and a trail activity produces **47 items**, including one shared first aid kit. The deployed `/api/version` endpoint identifies the source commit and pipeline build.
 
+**Current browser access:** The steps above record the original CI/CD experiment. To run its saved application now, resume the existing Codespace and execute `bash browser-lab/bin/lab start 19` for this experiment alone, or `bash browser-lab/bin/lab start cicd` for all three. Open [Packlight](https://miserable-cobweb-4j9pjv79r7w7fjrqw-8099.app.github.dev/) and use its normal form workflow. The profile pulls the recorded immutable image, keeps the original build identity and requires no local Docker Desktop. Individual profile startup stops other profiles while retaining their data; `stop cicd` stops the three restored profiles without deleting their images or data.
+
 ## Output Screenshots
+
+**Current private browser runtime, 28 October 2026.** Packlight running from its recorded Docker image in Codespaces.
+
+![Packlight restored in the private browser lab](screenshots/browser-restore-2026-10-28.jpg)
 
 **1. Deployed Packlight application.** The working Flask interface and generated packing list.
 
@@ -62,4 +73,4 @@ The push-triggered [run 2](https://github.com/Emadfar007/CSA1020---Software-Engi
 
 Recorded evidence: [20 test results](evidence/unit-tests.txt) · [Container HTTP checks](evidence/container-smoke.json) · [Image and verified cloud deployment](evidence/cloud-deployment.json) · [Actions run and step results](evidence/github-actions-run.json).
 
-The cloud application is live at [packlight-exp19.onrender.com](https://packlight-exp19.onrender.com/). The 47-item API fixture passed, and the browser workflow generated 59 items for a six-day rainy trail trip for two travelers, then reduced the list to 47 with laundry enabled. The submitted YAML and deployment link demonstrate the complete automated pipeline.
+The application was verified at [the original Render deployment](https://packlight-exp19.onrender.com/) during the recorded run. Its current browser runtime is [Packlight in Codespaces](https://miserable-cobweb-4j9pjv79r7w7fjrqw-8099.app.github.dev/), available after starting the profile; the Render service remains quota-suspended. The 47-item API fixture passed, and the browser workflow generated 59 items for a six-day rainy trail trip for two travelers, then reduced the list to 47 with laundry enabled. The submitted YAML and original deployment evidence record the complete automated pipeline; the current app link uses the separate Codespaces runtime.

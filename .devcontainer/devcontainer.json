@@ -10,17 +10,20 @@
     }
   },
   "hostRequirements": { "cpus": 2, "memory": "8gb", "storage": "32gb" },
-  "forwardPorts": [8087, 8088, 30088, 8090, 8096, 8097, 8098, 8180, 8181],
+  "forwardPorts": [8087, 8088, 30088, 8090, 8091, 8094, 8096, 8097, 8098, 8180, 8181, 8099],
   "portsAttributes": {
     "8087": { "label": "Experiment 11 Orbital Fieldnotes", "onAutoForward": "silent" },
     "8088": { "label": "Experiment 12 ParcelPilot Docker", "onAutoForward": "silent" },
     "30088": { "label": "Experiment 12 Kubernetes NodePort", "onAutoForward": "silent" },
     "8090": { "label": "Experiment 13 Jenkins", "onAutoForward": "silent" },
+    "8091": { "label": "Experiment 13 ReleaseHarbor", "onAutoForward": "silent" },
+    "8094": { "label": "Experiment 14 FocusLane", "onAutoForward": "silent" },
     "8096": { "label": "Experiment 16 Morrow", "onAutoForward": "silent" },
     "8097": { "label": "Experiment 17 Builder A", "onAutoForward": "silent" },
     "8098": { "label": "Experiment 17 Receiver B", "onAutoForward": "silent" },
     "8180": { "label": "Experiment 18 SproutHouse", "onAutoForward": "silent" },
-    "8181": { "label": "Experiment 18 Headlamp Dashboard", "onAutoForward": "silent" }
+    "8181": { "label": "Experiment 18 Headlamp Dashboard", "onAutoForward": "silent" },
+    "8099": { "label": "Experiment 19 Packlight", "onAutoForward": "silent" }
   },
   "customizations": {
     "vscode": { "extensions": ["ms-azuretools.vscode-containers"] }

@@ -11,17 +11,26 @@ DIN_IMAGE=docker@sha256:9e79b879b177fbd72c34376a3dd3d91747da5db49e1f560f76aea595
 ATLAS_IMAGE=coastrider7/csa1020-exp17-meridian-atlas@sha256:b594c04908b603a2ffecc602434826d5b1797a3ae7614ca652fc9f9c710c44ab
 MORROW_IMAGE=coastrider7/csa1020-exp16-morrow@sha256:8ea76f00fc6add13f0e283da863a5d9d8187d4afd97653787bee2d8975090671
 PARCEL_IMAGE=coastrider7/csa1020-exp12-parcelpilot-api@sha256:b8446abac9502577a9cb146729ce8df7c90866a1b3fd3cdccde7d80b48126a81
+RELEASE_IMAGE=coastrider7/csa1020-exp13-releaseharbor@sha256:e8d0ca8279fcc546c168ea414d93a6278777c8ce980f8bbd289001ef840c1766
+FOCUS_IMAGE=coastrider7/csa1020-exp14-focuslane@sha256:971284d9f9d5dd9503d70181e739c8aad5c2eec1b15fa3d89c177825e2f84e19
+PACKLIGHT_IMAGE=coastrider7/csa1020-exp19-packlight@sha256:c1e3e15a0f50371c964e875fb1524e15a578dd4ce9a3eb352360bd88a6cbaf67
 
 die() { printf 'Error: %s\n' "$*" >&2; exit 1; }
 usage() {
   cat <<'HELP'
 CSA1020 Browser Docker Lab
   lab status                    Show managed cloud containers
-  lab start 11|12|13|16|17|18    Start one experiment and stop other lab profiles
+  lab start 11|12|13|14|16|17|18|19
+                               Start one experiment and stop other lab profiles
   lab start 12 --kubernetes     Also create/resume the real kind NodePort cluster
   lab start 18 --build          Build and deploy the three-tier Kubernetes project
-  lab start 14                  Show the existing hosted Actions and Render links
-  lab stop all|11|12|13|16|17|18 Stop containers without deleting images or data
+  lab start 13                  Start Jenkins and the ReleaseHarbor app
+  lab start 14                  Run the published FocusLane image in the browser lab
+  lab start 19                  Run the published Packlight image in the browser lab
+  lab start cicd                Run Experiments 13, 14 and 19 together
+  lab stop all|11|12|13|14|16|17|18|19
+                               Stop containers without deleting images or data
+  lab stop cicd                 Stop Experiments 13, 14 and 19; retain their data
   lab urls                      Print private browser addresses
   lab resume-ci                 Explicitly enable Jenkins builds after migration review
   lab pause-ci                  Pause Jenkins builds and preserve the pause on restart
@@ -44,9 +53,11 @@ exp_dir() {
     11) folder=experiment-11-docker-static-website;;
     12) folder=experiment-12-flask-docker-kubernetes;;
     13) folder=experiment-13-jenkins-cicd;;
+    14) folder=experiment-14-github-actions-cd;;
     16) folder=experiment-16-flask-todo-docker;;
     17) folder=experiment-17-dockerhub-push-pull;;
     18) folder=experiment-18-sprouthouse-kubernetes;;
+    19) folder=experiment-19-github-actions-flask;;
     *) die 'Unknown experiment.';;
   esac
   if [[ -d "$REPO_DIR/experiments/$folder" ]]; then printf '%s\n' "$REPO_DIR/experiments/$folder"
@@ -60,15 +71,15 @@ url() {
 }
 urls() {
   local p label
-  for p in 8087 8088 30088 8090 8096 8097 8098 8180 8181; do
-    case "$p" in 8087) label='11 website';;8088)label='12 Docker API';;30088)label='12 Kubernetes';;8090)label='13 Jenkins';;8096)label='16 Morrow';;8097)label='17 builder';;8098)label='17 receiver';;8180)label='18 SproutHouse';;8181)label='18 Headlamp';;esac
+  for p in 8087 8088 30088 8090 8091 8094 8096 8097 8098 8180 8181 8099; do
+    case "$p" in 8087) label='11 website';;8088)label='12 Docker API';;30088)label='12 Kubernetes';;8090)label='13 Jenkins';;8091)label='13 ReleaseHarbor';;8094)label='14 FocusLane';;8096)label='16 Morrow';;8097)label='17 builder';;8098)label='17 receiver';;8180)label='18 SproutHouse';;8181)label='18 Headlamp';;8099)label='19 Packlight';;esac
     if [[ "$p" == 8181 ]]; then
       printf '%-18s %sc/SproutHouse-Lab/deployments?namespace=sprouthouse-exp18\n' "$label" "$(url "$p")"
     else
       printf '%-18s %s\n' "$label" "$(url "$p")"
     fi
   done
-  printf '\n14 Actions: https://github.com/Emadfar007/CSA1020---Software-Engineering/actions/workflows/experiment-14-cd.yml\n14 app: https://focuslane-exp14.onrender.com/\n'
+  printf '\n14 Actions: https://github.com/Emadfar007/CSA1020---Software-Engineering/actions/workflows/experiment-14-cd.yml\n19 Actions: https://github.com/Emadfar007/CSA1020---Software-Engineering/actions/workflows/experiment-19-cicd.yml\n'
   printf '\nForwarded ports must remain Private in the Codespaces Ports tab. URLs respond only while their profile runs.\n'
 }
 exists() { docker container inspect "$1" >/dev/null 2>&1; }
@@ -84,14 +95,16 @@ stop_exp() {
   case "$1" in
     11) stop_one orbital-fieldnotes-exp11;;
     12) stop_one parcelpilot-api-exp12; stop_one parcelpilot-lab-control-plane;;
-    13) stop_one releaseharbor-exp13-jenkins-1; stop_one releaseharbor-exp13-docker-1;;
+    13) stop_one releaseharbor-exp13-jenkins-1; stop_one releaseharbor-exp13-docker-1; stop_one releaseharbor-app-exp13;;
+    14) stop_one focuslane-app-exp14;;
     16) stop_one morrow-tasks-exp16;;
     17) stop_one meridian-atlas-exp17-a; stop_one meridian-receiver-exp17-b;;
     18) stop_one sprouthouse-exp18-control-plane;;
-    *) die 'Choose all, 11, 12, 13, 16, 17 or 18.';;
+    19) stop_one packlight-app-exp19;;
+    *) die 'Choose all, 11, 12, 13, 14, 16, 17, 18 or 19.';;
   esac
 }
-stop_others() { local n; for n in 11 12 13 16 17 18; do [[ "$n" == "$1" ]] || stop_exp "$n"; done; }
+stop_others() { local n; for n in 11 12 13 14 16 17 18 19; do [[ "$n" == "$1" ]] || stop_exp "$n"; done; }
 ensure_image() {
   local image=$1 context=${2:-}
   if docker image inspect "$image" >/dev/null 2>&1; then return; fi
@@ -234,8 +247,24 @@ YAML
   ensure_image "$image" "$source/ci/jenkins"
   docker compose --project-directory "$source" -f "$source/compose.yaml" -f "$PRIVATE_DIR/jenkins-cloud-override.yaml" up -d --no-build
   wait_http 8090 /login 180
+  start_web_app releaseharbor-app-exp13 "$RELEASE_IMAGE" 8091
   printf 'Experiment 13 Jenkins: %s\n' "$(url 8090)"
+  printf 'Experiment 13 ReleaseHarbor: %s\n' "$(url 8091)"
   [[ -f "$PRIVATE_DIR/ci-enabled" ]] || printf 'Builds are paused for migration review. Existing jobs/results remain readable. Use lab resume-ci only when ready to publish/deploy.\n'
+}
+start_web_app() {
+  local name=$1 image=$2 port=$3
+  ensure_image "$image"
+  start_or_create "$name" "$image" --read-only --tmpfs /tmp:rw,noexec,nosuid,size=32m --cap-drop ALL --security-opt no-new-privileges:true --memory 256m --cpus 1 --pids-limit 256 -e PORT=8000 -e APP_MODE=browser-lab -p "127.0.0.1:$port:8000"
+  wait_http "$port"
+}
+start_14() {
+  start_web_app focuslane-app-exp14 "$FOCUS_IMAGE" 8094
+  printf 'Experiment 14 FocusLane: %s\n' "$(url 8094)"
+}
+start_19() {
+  start_web_app packlight-app-exp19 "$PACKLIGHT_IMAGE" 8099
+  printf 'Experiment 19 Packlight: %s\n' "$(url 8099)"
 }
 ci_control() {
   local action=$1
@@ -296,14 +325,20 @@ start_18() {
 case "${1:-help}" in
   help|-h|--help) usage;;
   urls) urls;;
-  status) require_cloud; docker ps -a --format 'table {{.Names}}\t{{.Status}}\t{{.Image}}' | awk 'NR==1 || /orbital-fieldnotes-exp11|parcelpilot-api-exp12|parcelpilot-lab-control-plane|releaseharbor-exp13-|morrow-tasks-exp16|meridian-|sprouthouse-exp18-control-plane/';;
+  status) require_cloud; docker ps -a --format 'table {{.Names}}\t{{.Status}}\t{{.Image}}' | awk 'NR==1 || /orbital-fieldnotes-exp11|parcelpilot-api-exp12|parcelpilot-lab-control-plane|releaseharbor-exp13-|releaseharbor-app-exp13|focuslane-app-exp14|packlight-app-exp19|morrow-tasks-exp16|meridian-|sprouthouse-exp18-control-plane/';;
   start)
     [[ $# -ge 2 ]] || die 'Choose an experiment number.'
-    if [[ $2 == 14 ]]; then urls;exit;fi
-    case "$2" in 11|12|13|16|17|18);;*)die 'Choose 11, 12, 13, 14, 16, 17 or 18.';;esac
+    case "$2" in 11|12|13|14|16|17|18|19|cicd);;*)die 'Choose 11, 12, 13, 14, 16, 17, 18, 19 or cicd.';;esac
     [[ $# -le 2 || ($2 == 12 && $3 == --kubernetes && $# == 3) || ($2 == 18 && $3 == --build && $# == 3) ]] || die 'Supported options: start 12 --kubernetes or start 18 --build.'
-    require_cloud;stop_others "$2";"start_$2" "${3:-}";;
-  stop) require_cloud; if [[ ${2:-all} == all ]];then for n in 11 12 13 16 17 18;do stop_exp "$n";done;else stop_exp "$2";fi;;
+    require_cloud
+    if [[ $2 == cicd ]]; then
+      for n in 11 12 16 17 18; do stop_exp "$n"; done
+      start_13; start_14; start_19
+    else stop_others "$2";"start_$2" "${3:-}";fi;;
+  stop) require_cloud
+    if [[ ${2:-all} == all ]];then for n in 11 12 13 14 16 17 18 19;do stop_exp "$n";done
+    elif [[ $2 == cicd ]];then for n in 13 14 19;do stop_exp "$n";done
+    else stop_exp "$2";fi;;
   resume-ci) require_cloud;ci_control resume;;
   pause-ci) require_cloud;ci_control pause;;
   *) usage;exit 1;;

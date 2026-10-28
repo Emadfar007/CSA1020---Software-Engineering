@@ -1,6 +1,6 @@
 # CSA1020 Browser Docker Lab
 
-**Hosted deployment status - checked 28 October 2026:** Render reports **Free Tier Usage Exceeded** for the Experiment 13, 14 and 19 cloud services. Their Render URLs currently return HTTP 503. The Codespaces lab is separate: resume it and start a profile below for the supported lab experiments. The source, Docker Hub images and recorded delivery evidence remain in the experiment reports.
+**Browser runtime update - 28 October 2026:** Experiments **13, 14 and 19** run in this existing Codespace through private browser ports. Use `bash browser-lab/bin/lab start cicd` to start all three apps and Jenkins together. Their profiles run the recorded immutable Docker images. Original Render services and CI/CD deployment stages remain quota-blocked by **Free Tier Usage Exceeded**; the successful historical delivery evidence is retained.
 
 Run the Docker experiments in the private GitHub Codespaces browser environment. Images, build cache, containers and persistent task data live on the cloud machine, so Docker Desktop is not required on the laptop after migration is verified.
 
@@ -8,17 +8,18 @@ Run the Docker experiments in the private GitHub Codespaces browser environment.
 
 Sign in as **Emadfar007**. The Codespace is named `miserable-cobweb-4j9pjv79r7w7fjrqw`. Resume it if stopped; app links work only after their experiment profile is started. Keep all forwarded ports **Private**.
 
-[Cloud migration verification, 27 October 2026](verification-2026-10-27.json) records the restored data, application tests, Kubernetes resume check and independent receiver engine.
+[Cloud migration verification, 27 October 2026](verification-2026-10-27.json) records the restored data, application tests, Kubernetes resume check and independent receiver engine. [Browser restoration verification, 28 October 2026](verification-2026-10-28.json) records the restored CI/CD app runtimes, image identities, API checks and preserved Jenkins state.
 
 | Experiment | Start command from the repository root | Private browser app |
 |---|---|---|
 | 11 | `bash browser-lab/bin/lab start 11` | [Orbital Fieldnotes](https://miserable-cobweb-4j9pjv79r7w7fjrqw-8087.app.github.dev/) |
 | 12 | `bash browser-lab/bin/lab start 12 --kubernetes` | [Docker API](https://miserable-cobweb-4j9pjv79r7w7fjrqw-8088.app.github.dev/) · [Kubernetes NodePort](https://miserable-cobweb-4j9pjv79r7w7fjrqw-30088.app.github.dev/) |
-| 13 | `bash browser-lab/bin/lab start 13` | [Jenkins](https://miserable-cobweb-4j9pjv79r7w7fjrqw-8090.app.github.dev/) · [Job and saved results](https://miserable-cobweb-4j9pjv79r7w7fjrqw-8090.app.github.dev/job/ReleaseHarbor-CICD/) |
-| 14 | No cloud lab profile required | [FocusLane](https://focuslane-exp14.onrender.com/) · [Actions](https://github.com/Emadfar007/CSA1020---Software-Engineering/actions/workflows/experiment-14-cd.yml) |
+| 13 | `bash browser-lab/bin/lab start 13` | [ReleaseHarbor](https://miserable-cobweb-4j9pjv79r7w7fjrqw-8091.app.github.dev/) · [Jenkins](https://miserable-cobweb-4j9pjv79r7w7fjrqw-8090.app.github.dev/) · [Job and saved results](https://miserable-cobweb-4j9pjv79r7w7fjrqw-8090.app.github.dev/job/ReleaseHarbor-CICD/) |
+| 14 | `bash browser-lab/bin/lab start 14` | [FocusLane](https://miserable-cobweb-4j9pjv79r7w7fjrqw-8094.app.github.dev/) · [Actions](https://github.com/Emadfar007/CSA1020---Software-Engineering/actions/workflows/experiment-14-cd.yml) |
 | 16 | `bash browser-lab/bin/lab start 16` | [Morrow Task Studio](https://miserable-cobweb-4j9pjv79r7w7fjrqw-8096.app.github.dev/) |
 | 17 | `bash browser-lab/bin/lab start 17` | [Builder A](https://miserable-cobweb-4j9pjv79r7w7fjrqw-8097.app.github.dev/) · [Receiver B](https://miserable-cobweb-4j9pjv79r7w7fjrqw-8098.app.github.dev/) |
 | 18 | `bash browser-lab/bin/lab start 18` | [SproutHouse](https://miserable-cobweb-4j9pjv79r7w7fjrqw-8180.app.github.dev/) · [Headlamp Kubernetes dashboard](https://miserable-cobweb-4j9pjv79r7w7fjrqw-8181.app.github.dev/c/SproutHouse-Lab/deployments?namespace=sprouthouse-exp18) |
+| 19 | `bash browser-lab/bin/lab start 19` | [Packlight](https://miserable-cobweb-4j9pjv79r7w7fjrqw-8099.app.github.dev/) · [Actions](https://github.com/Emadfar007/CSA1020---Software-Engineering/actions/workflows/experiment-19-cicd.yml) |
 
 Use the browser terminal from the repository root:
 
@@ -28,6 +29,10 @@ bash browser-lab/bin/lab start 11
 bash browser-lab/bin/lab start 12
 bash browser-lab/bin/lab start 12 --kubernetes
 bash browser-lab/bin/lab start 13
+bash browser-lab/bin/lab start 14
+bash browser-lab/bin/lab start 19
+bash browser-lab/bin/lab start cicd
+bash browser-lab/bin/lab stop cicd
 bash browser-lab/bin/lab start 16
 bash browser-lab/bin/lab start 17
 bash browser-lab/bin/lab start 18
@@ -36,11 +41,11 @@ bash browser-lab/bin/lab urls
 bash browser-lab/bin/lab stop all
 ```
 
-Start one experiment at a time. Starting a profile stops the other lab profiles without deleting their data or images. No application starts automatically when Codespaces opens. Experiment 12 starts the standalone API by default; `--kubernetes` also starts its real kind cluster and NodePort. Experiment 17 starts both its builder and isolated receiver. Experiment 18 creates or resumes its own kind cluster, with a Nginx frontend, two Flask API replicas, a persistent PostgreSQL database and the real Headlamp dashboard. Use `start 18 --build` to rebuild its application images after source edits. Experiment 14 already runs through hosted GitHub Actions and Render; `lab start 14` displays those existing links.
+Individual startup runs one experiment at a time and stops the other profiles without deleting their data or images. `lab start cicd` runs Experiments 13, 14 and 19 together and stops only the other profiles; `lab stop cicd` stops this group while retaining images and data. No application starts automatically when Codespaces opens. Experiment 12 starts the standalone API by default; `--kubernetes` also starts its real kind cluster and NodePort. Experiment 17 starts both its builder and isolated receiver. Experiment 18 creates or resumes its own kind cluster, with a Nginx frontend, two Flask API replicas, a persistent PostgreSQL database and the real Headlamp dashboard. Use `start 18 --build` to rebuild its application images after source edits. Experiments 13, 14 and 19 now start their recorded application images at ports 8091, 8094 and 8099. Experiment 13 also starts Jenkins on 8090 with its saved jobs and results. The runner does not change original pipeline deployment targets or automatically deploy new CI builds to these app containers; Render deployment stages remain quota-blocked.
 
 ## Private browser access
 
-The devcontainer forwards ports 8087, 8088, 30088, 8090, 8096, 8097, 8098, 8180 and 8181. GitHub forwards them privately by default. Confirm **Private** visibility in the Ports tab before testing. `lab urls` prints the actual `https://CODESPACENAME-PORT.app.github.dev/` addresses; a URL responds only when that profile is running. Do not make Jenkins, Headlamp or the other test ports public.
+The devcontainer forwards twelve ports: 8087, 8088, 30088, 8090, 8091, 8094, 8096, 8097, 8098, 8099, 8180 and 8181. GitHub forwards them privately by default. Confirm **Private** visibility in the Ports tab before testing. `lab urls` prints the actual `https://CODESPACENAME-PORT.app.github.dev/` addresses; a URL responds only when that profile is running. Do not make Jenkins, Headlamp or the other test ports public.
 
 ## SproutHouse Kubernetes project
 
@@ -79,7 +84,7 @@ The Docker-in-Docker feature additionally supplies its own persistent Docker and
 
 Morrow's seven tasks and original activity history, plus Jenkins configuration and job history, were restored and verified. Browser-only preferences for the old localhost sites stay in that browser origin; they are not automatically copied to the new cloud URLs. The migration does not remove browser profiles or saved browser data.
 
-`LAB_DATA_DIR` can override the data directory when needed. `LAB_EXP11_IMAGE` and `LAB_EXP13_IMAGE` can select migrated registry images; without these, the runner builds their existing Dockerfiles in the cloud when the original local image names are unavailable. Published Experiments 12, 16 and 17 use verified immutable image digests.
+`LAB_DATA_DIR` can override the data directory when needed. `LAB_EXP11_IMAGE` and `LAB_EXP13_IMAGE` can select migrated registry images; without these, the runner builds their existing Dockerfiles in the cloud when the original local image names are unavailable. Published Experiments 12, 13 (app), 14, 16, 17 and 19 use recorded immutable image digests. Application build/source identity remains baked into each restored image.
 
 ## Jenkins migration control
 
@@ -97,7 +102,7 @@ This uses the restored administrator password privately, obtains Jenkins' CSRF c
 bash browser-lab/bin/lab pause-ci
 ```
 
-Neither command changes job configuration or credentials. Build and deployment permissions still belong to the existing Jenkins account and pipeline.
+Neither command changes job configuration or credentials. Build and deployment permissions still belong to the existing Jenkins account and pipeline. The current browser restoration keeps Jenkins paused: its original Render deployment stage remains quota-blocked, and the separate browser app is a recorded-image runtime.
 
 ## Cost and retention
 
