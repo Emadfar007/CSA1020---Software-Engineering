@@ -4,7 +4,7 @@ Software engineering experiments by **Emadfar007**.
 
 ## Browser Docker lab
 
-Docker Experiments **11, 12, 13, 16, 17 and 18** have an on-demand private GitHub Codespaces runtime. Docker images, build cache and application data run on the cloud machine rather than the laptop's Docker Desktop engine. Experiment **14** already uses hosted GitHub Actions and Render.
+Docker Experiments **11, 12, 13, 16, 17 and 18** have an on-demand private GitHub Codespaces runtime. Docker images, build cache and application data run on the cloud machine rather than the laptop's Docker Desktop engine. Experiments **14 and 19** use hosted GitHub Actions and Render.
 
 [Open the browser IDE](https://miserable-cobweb-4j9pjv79r7w7fjrqw.github.dev/) · [Manage or restart the Codespace](https://github.com/codespaces) · [Browser lab guide](browser-lab/README.md)
 
@@ -45,8 +45,25 @@ Starting a profile stops the other lab profiles while keeping their data. Use `b
 | 19 | Flask application tested in Docker, published to Docker Hub and deployed automatically to Render Free through GitHub Actions | [Flask CI/CD with GitHub Actions](experiments/experiment-19-github-actions-flask/README.md) |
 | 20 | Private personal repository initialized with a README, cloned locally, updated, staged, committed and pushed with verified Git history | [GitHub Repository Setup](experiments/experiment-20-github-repository-setup/README.md) |
 | 21 | Existing public repository cloned locally and a one-line README clarification saved, with the original edit left uncommitted | [Clone and Edit a Repository](experiments/experiment-21-clone-and-edit/README.md) |
+| 22 | Saved README change staged, committed with the exact message Updated README, and pushed with matching local and remote commits | [Commit and Push Changes](experiments/experiment-22-commit-and-push/README.md) |
+| 23 | Approved same-account collaborator simulation in a second clone, followed by git pull origin main and verification of the update | [Pull Collaborator Updates](experiments/experiment-23-pull-collaborator-updates/README.md) |
+| 24 | feature-login branch, standalone Python login function, pushed feature commit and a merged pull request into main | [Feature Branch and Login Pull Request](experiments/experiment-24-feature-login-pull-request/README.md) |
 
 Each experiment includes only Aim, Tools Required, Algorithm, Output Screenshots, and Result.
+
+## Experiments completed on 28 October 2026
+
+| Experiment | Open the work or verification | Report and screenshots |
+| --- | --- | --- |
+| 18 - Multi-container Kubernetes | [SproutHouse app](https://miserable-cobweb-4j9pjv79r7w7fjrqw-8180.app.github.dev/) · [Kubernetes dashboard](https://miserable-cobweb-4j9pjv79r7w7fjrqw-8181.app.github.dev/c/SproutHouse-Lab/deployments?namespace=sprouthouse-exp18) | [Experiment 18](experiments/experiment-18-sprouthouse-kubernetes/README.md) |
+| 19 - Flask CI/CD | [Packlight app](https://packlight-exp19.onrender.com/) · [Successful Actions run](https://github.com/Emadfar007/CSA1020---Software-Engineering/actions/runs/40714300739) | [Experiment 19](experiments/experiment-19-github-actions-flask/README.md) |
+| 20 - Repository setup | [Original private project](https://github.com/Emadfar007/little-milestones-journal) · [README snapshot](experiments/experiment-20-github-repository-setup/project/README.md) | [Experiment 20](experiments/experiment-20-github-repository-setup/README.md) |
+| 21 - Clone and save an edit | [Saved README](experiments/experiment-21-clone-and-edit/project/README.md) · [Change patch](experiments/experiment-21-clone-and-edit/evidence/README-change.patch) | [Experiment 21](experiments/experiment-21-clone-and-edit/README.md) |
+| 22 - Commit and push | [Updated README commit](https://github.com/Emadfar007/learnloop-collaboration-demo/commit/e711339b1c18a6258cbf7de1973ab0e9bbe23217) | [Experiment 22](experiments/experiment-22-commit-and-push/README.md) |
+| 23 - Pull updates (simulation) | [Update pulled from GitHub](https://github.com/Emadfar007/learnloop-collaboration-demo/commit/8d9569910648791e4a0531233889c0ab402e1217) | [Experiment 23](experiments/experiment-23-pull-collaborator-updates/README.md) |
+| 24 - Login feature branch | [Merged pull request #3](https://github.com/Emadfar007/learnloop-collaboration-demo/pull/3) · [Login function](https://github.com/Emadfar007/learnloop-collaboration-demo/blob/main/login.py) | [Experiment 24](experiments/experiment-24-feature-login-pull-request/README.md) |
+
+Experiment 18 requires the private Codespace to be running. Experiment 19 uses Render Free and can wake after inactivity. The original Experiment 20 project remains private; its submitted README snapshot is included here. Experiment 23 explicitly records a two-clone simulation under Emadfar007.
 
 ## Quick access - experiments completed on 26 October 2026
 
