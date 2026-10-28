@@ -1,6 +1,9 @@
 """Deployment protocol checks: no network or credentials are used."""
 from argparse import Namespace
 import base64
+import hashlib
+import hmac
+import json
 from pathlib import Path
 import subprocess
 import unittest
@@ -100,16 +103,32 @@ class DeploymentProtocolTests(unittest.TestCase):
 
 
 class CallbackEncryptionTests(unittest.TestCase):
-    def test_seals_job_token_on_stdin_with_oaep_sha256(self):
-        with patch.object(protocol.subprocess, "run", return_value=
-                          subprocess.CompletedProcess([], 0, b"x" * 384, b"")) as run:
-            result = protocol.encrypt_callback_token("fixture-job-token", Path("public.pem"))
-        self.assertEqual(base64.b64decode(result), b"x" * 384)
-        argv = run.call_args.args[0]
-        self.assertNotIn("fixture-job-token", argv)
-        self.assertIn("rsa_padding_mode:oaep", argv)
-        self.assertIn("rsa_oaep_md:sha256", argv)
-        self.assertEqual(run.call_args.kwargs["input"], b"fixture-job-token")
+    def test_seals_large_job_token_using_authenticated_hybrid_envelope(self):
+        token = "x" * 1000
+        keys, iv, cipher, wrapped = bytes(range(64)), bytes(range(16)), b"c" * 1008, b"w" * 384
+        with patch.object(protocol.secrets, "token_bytes", side_effect=[keys, iv]), \
+                patch.object(protocol.subprocess, "run", side_effect=[
+                    subprocess.CompletedProcess([], 0, cipher, b""),
+                    subprocess.CompletedProcess([], 0, wrapped, b"")]) as run:
+            result = protocol.encrypt_callback_token(token, Path("public.pem"))
+        packet = json.loads(base64.b64decode(result))
+        self.assertEqual(set(packet), {"v", "key", "iv", "ciphertext", "tag"})
+        self.assertEqual(packet["v"], 1)
+        self.assertEqual(base64.b64decode(packet["key"]), wrapped)
+        self.assertEqual(base64.b64decode(packet["iv"]), iv)
+        self.assertEqual(base64.b64decode(packet["ciphertext"]), cipher)
+        expected_tag = hmac.new(keys[32:], b"CSA1020-CD-v1\0" + wrapped + iv + cipher,
+                                hashlib.sha256).digest()
+        self.assertEqual(base64.b64decode(packet["tag"]), expected_tag)
+        aes_call, rsa_call = run.call_args_list
+        self.assertEqual(aes_call.kwargs["input"], token.encode())
+        self.assertIn("-aes-256-cbc", aes_call.args[0])
+        self.assertIn(keys[:32].hex(), aes_call.args[0])
+        self.assertIn(iv.hex(), aes_call.args[0])
+        self.assertEqual(rsa_call.kwargs["input"], keys)
+        self.assertNotIn(token, rsa_call.args[0])
+        self.assertIn("rsa_padding_mode:oaep", rsa_call.args[0])
+        self.assertIn("rsa_oaep_md:sha256", rsa_call.args[0])
 
     def test_invalid_key_cannot_send_a_deployment_request(self):
         with patch.object(protocol.subprocess, "run", return_value=
@@ -119,7 +138,7 @@ class CallbackEncryptionTests(unittest.TestCase):
 
     def test_rejects_empty_or_oversized_token_before_launching_openssl(self):
         with patch.object(protocol.subprocess, "run") as run:
-            for token in ("", "x" * 319):
+            for token in ("", "x" * 8193):
                 with self.assertRaises(protocol.DeploymentError):
                     protocol.encrypt_callback_token(token, Path("public.pem"))
         run.assert_not_called()

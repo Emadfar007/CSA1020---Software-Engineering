@@ -1,7 +1,10 @@
 """Boundaries for accepting trusted requests and restoring a failed deployment."""
 from copy import deepcopy
 import base64
+import hashlib
+import hmac
 import importlib.util
+import json
 from pathlib import Path
 import tempfile
 import unittest
@@ -14,8 +17,21 @@ spec.loader.exec_module(agent)
 
 SHA = "a" * 40
 IMAGE = "coastrider7/csa1020-exp14-focuslane@sha256:" + "b" * 64
+KEYS = b"k" * 32 + b"m" * 32
+WRAPPED = b"x" * 384
+IV = b"i" * 16
+CIPHERTEXT = b"c" * 32
+
+
+def envelope(ciphertext=CIPHERTEXT, tag=None):
+    tag = tag or hmac.new(KEYS[32:], b"CSA1020-CD-v1\0" + WRAPPED + IV + ciphertext, hashlib.sha256).digest()
+    packet = {"v": 1, "key": base64.b64encode(WRAPPED).decode(), "iv": base64.b64encode(IV).decode(),
+              "ciphertext": base64.b64encode(ciphertext).decode(), "tag": base64.b64encode(tag).decode()}
+    return base64.b64encode(json.dumps(packet, separators=(",", ":")).encode()).decode()
+
+
 PAYLOAD = {"protocol": 1, "experiment": 14, "image": IMAGE, "sourceSha": SHA, "runId": 123, "buildNumber": "8.1",
-           "encryptedCallbackToken": base64.b64encode(b"x" * 384).decode()}
+           "encryptedCallbackToken": envelope()}
 DEPLOYMENT = {"id": 42, "environment": "codespaces-exp14", "task": "deploy", "creator": {"login": "github-actions[bot]"},
               "sha": SHA, "ref": SHA, "payload": PAYLOAD}
 
@@ -84,15 +100,41 @@ class RequestTests(unittest.TestCase):
             key = Path(directory) / "private/browser-deployment-key.pem"
             key.parent.mkdir()
             key.write_text("private test key")
-            token = "ghs_" + "test_callback" * 4
-            with patch.object(agent.subprocess, "run", return_value=SimpleNamespace(returncode=0, stdout=token.encode(), stderr=b"")) as run:
+            token = "ghs_" + "t" * 996
+            with patch.object(agent.subprocess, "run", side_effect=[
+                    SimpleNamespace(returncode=0, stdout=KEYS, stderr=b""),
+                    SimpleNamespace(returncode=0, stdout=token.encode(), stderr=b"")]) as run:
                 callback = agent.callback_client(PAYLOAD, directory)
             self.assertEqual(callback.token, token)
-            args, kwargs = run.call_args
+            args, kwargs = run.call_args_list[0]
             self.assertIn("rsa_padding_mode:oaep", args[0])
             self.assertIn("rsa_oaep_md:sha256", args[0])
-            self.assertEqual(kwargs["input"], b"x" * 384)
-            self.assertNotIn(token, str(args))
+            self.assertEqual(kwargs["input"], WRAPPED)
+            decrypt_args, decrypt_kwargs = run.call_args_list[1]
+            self.assertIn("-aes-256-cbc", decrypt_args[0])
+            self.assertEqual(decrypt_kwargs["input"], CIPHERTEXT)
+            self.assertNotIn(token, str(run.call_args_list))
+
+    def test_tampered_callback_is_rejected_before_aes_decryption(self):
+        with tempfile.TemporaryDirectory() as directory:
+            key = Path(directory) / "private/browser-deployment-key.pem"
+            key.parent.mkdir()
+            key.touch()
+            tampered = {**PAYLOAD, "encryptedCallbackToken": envelope(tag=b"z" * 32)}
+            with patch.object(agent.subprocess, "run", return_value=SimpleNamespace(returncode=0, stdout=KEYS, stderr=b"")) as run:
+                with self.assertRaises(agent.DeploymentError):
+                    agent.callback_client(tampered, directory)
+                self.assertEqual(run.call_count, 1)
+
+    def test_hybrid_callback_bounds_and_exact_fields_are_enforced(self):
+        packet = json.loads(base64.b64decode(PAYLOAD["encryptedCallbackToken"]))
+        variants = [{**packet, "extra": "not accepted"}, {**packet, "v": True},
+                    {**packet, "iv": base64.b64encode(b"i" * 15).decode()},
+                    {**packet, "ciphertext": base64.b64encode(b"c" * 17).decode()},
+                    {**packet, "ciphertext": base64.b64encode(b"c" * 8224).decode()}]
+        for variant in variants:
+            with self.subTest(variant=variant), self.assertRaises(agent.DeploymentError):
+                agent.callback_ciphertext({"encryptedCallbackToken": base64.b64encode(json.dumps(variant).encode()).decode()})
 
     def test_callback_decryption_failure_does_not_expose_openssl_output(self):
         with tempfile.TemporaryDirectory() as directory:

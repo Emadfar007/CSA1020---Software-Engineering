@@ -7,10 +7,13 @@ in the workflow.
 import argparse
 import base64
 from datetime import datetime, timezone
+import hashlib
+import hmac
 import json
 import os
 from pathlib import Path
 import re
+import secrets
 import subprocess
 import time
 from urllib.error import HTTPError, URLError
@@ -57,20 +60,35 @@ class GitHubAPI:
 
 
 def encrypt_callback_token(token, public_key):
-    """Seal this job's short-lived status token to the lab's public key."""
-    if not token or len(token.encode("utf-8")) > 318:
+    """Seal any supported job-token length using encrypt-then-MAC hybrid encryption."""
+    if not token or len(token.encode("utf-8")) > 8192:
         raise DeploymentError("The temporary deployment token cannot be sealed for the lab.")
+    keys = secrets.token_bytes(64)
+    aes_key, mac_key = keys[:32], keys[32:]
+    iv = secrets.token_bytes(16)
     try:
-        result = subprocess.run(
+        encrypted = subprocess.run(
+            ["openssl", "enc", "-aes-256-cbc", "-K", aes_key.hex(), "-iv", iv.hex()],
+            input=token.encode("utf-8"), capture_output=True, timeout=15,
+        )
+        wrapped = subprocess.run(
             ["openssl", "pkeyutl", "-encrypt", "-pubin", "-inkey", str(public_key),
              "-pkeyopt", "rsa_padding_mode:oaep", "-pkeyopt", "rsa_oaep_md:sha256"],
-            input=token.encode("utf-8"), capture_output=True, timeout=15,
+            input=keys, capture_output=True, timeout=15,
         )
     except (OSError, subprocess.SubprocessError):
         raise DeploymentError("Could not seal the temporary deployment token with OpenSSL.") from None
-    if result.returncode or len(result.stdout) != 384:
+    if (encrypted.returncode or not encrypted.stdout or len(encrypted.stdout) % 16 or
+            len(encrypted.stdout) > 8208):
+        raise DeploymentError("Could not encrypt the temporary deployment token.")
+    if wrapped.returncode or len(wrapped.stdout) != 384:
         raise DeploymentError("The browser deployment public key must be a valid RSA-3072 key.")
-    return base64.b64encode(result.stdout).decode("ascii")
+    tag = hmac.new(mac_key, b"CSA1020-CD-v1\0" + wrapped.stdout + iv + encrypted.stdout,
+                   hashlib.sha256).digest()
+    encode = lambda data: base64.b64encode(data).decode("ascii")
+    envelope = {"v": 1, "key": encode(wrapped.stdout), "iv": encode(iv),
+                "ciphertext": encode(encrypted.stdout), "tag": encode(tag)}
+    return encode(json.dumps(envelope, separators=(",", ":")).encode("ascii"))
 
 
 def validate(args):

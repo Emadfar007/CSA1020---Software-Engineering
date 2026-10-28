@@ -8,6 +8,8 @@ from __future__ import annotations
 import argparse
 import base64
 import binascii
+import hashlib
+import hmac
 from contextlib import contextmanager
 from datetime import datetime, timezone
 import json
@@ -129,15 +131,27 @@ def validate_request(deployment, number, api):
 
 def callback_ciphertext(payload):
     encrypted = payload.get("encryptedCallbackToken")
-    if not isinstance(encrypted, str) or len(encrypted) > 1024:
+    if not isinstance(encrypted, str) or len(encrypted) > 20000:
         raise DeploymentError("Invalid encrypted deployment callback.")
     try:
-        ciphertext = base64.b64decode(encrypted, validate=True)
-    except (binascii.Error, ValueError):
+        envelope = json.loads(base64.b64decode(encrypted, validate=True))
+    except (binascii.Error, ValueError, UnicodeDecodeError):
         raise DeploymentError("Invalid encrypted deployment callback.") from None
-    if len(ciphertext) != 384:
-        raise DeploymentError("The callback must use the lab's RSA-3072 public key.")
-    return ciphertext
+    if (not isinstance(envelope, dict) or set(envelope) != {"v", "key", "iv", "ciphertext", "tag"} or
+            type(envelope.get("v")) is not int or envelope["v"] != 1):
+        raise DeploymentError("Invalid encrypted deployment callback envelope.")
+    decoded = {}
+    try:
+        for name in ("key", "iv", "ciphertext", "tag"):
+            if not isinstance(envelope[name], str):
+                raise ValueError("Invalid callback field")
+            decoded[name] = base64.b64decode(envelope[name], validate=True)
+    except (binascii.Error, ValueError):
+        raise DeploymentError("Invalid encrypted deployment callback fields.") from None
+    if (len(decoded["key"]) != 384 or len(decoded["iv"]) != 16 or len(decoded["tag"]) != 32 or
+            not 16 <= len(decoded["ciphertext"]) <= 8208 or len(decoded["ciphertext"]) % 16):
+        raise DeploymentError("Invalid encrypted deployment callback lengths.")
+    return decoded
 
 
 def callback_client(payload, data_root):
@@ -145,20 +159,36 @@ def callback_client(payload, data_root):
     key = Path(data_root) / "private/browser-deployment-key.pem"
     if not key.is_file():
         raise DeploymentError("The private browser deployment key is unavailable.")
+    envelope = callback_ciphertext(payload)
     try:
         result = subprocess.run([
             "openssl", "pkeyutl", "-decrypt", "-inkey", str(key),
             "-pkeyopt", "rsa_padding_mode:oaep", "-pkeyopt", "rsa_oaep_md:sha256",
-        ], input=callback_ciphertext(payload), capture_output=True, timeout=10)
+        ], input=envelope["key"], capture_output=True, timeout=10)
     except (OSError, subprocess.TimeoutExpired):
         raise DeploymentError("The encrypted callback could not be opened.") from None
-    if result.returncode:
+    if result.returncode or len(result.stdout) != 64:
         raise DeploymentError("The encrypted callback could not be opened.")
+    aes_key, mac_key = result.stdout[:32], result.stdout[32:]
+    signed = b"CSA1020-CD-v1\0" + envelope["key"] + envelope["iv"] + envelope["ciphertext"]
+    expected_tag = hmac.new(mac_key, signed, hashlib.sha256).digest()
+    if not hmac.compare_digest(expected_tag, envelope["tag"]):
+        raise DeploymentError("The encrypted callback authentication check failed.")
+    # Authenticate before asking OpenSSL to remove CBC padding; never expose an
+    # unauthenticated ciphertext to a decryption operation or an error oracle.
+    try:
+        result = subprocess.run([
+            "openssl", "enc", "-d", "-aes-256-cbc", "-K", aes_key.hex(), "-iv", envelope["iv"].hex(),
+        ], input=envelope["ciphertext"], capture_output=True, timeout=10)
+    except (OSError, subprocess.TimeoutExpired):
+        raise DeploymentError("The encrypted callback could not be opened.") from None
+    if result.returncode or not 20 <= len(result.stdout) <= 8192:
+        raise DeploymentError("The encrypted callback did not contain a valid job token.")
     try:
         token = result.stdout.decode("ascii")
     except UnicodeDecodeError:
         raise DeploymentError("The encrypted callback did not contain a valid job token.") from None
-    if not 20 <= len(token) <= 4096 or any(character.isspace() or ord(character) < 33 or ord(character) > 126 for character in token):
+    if any(character.isspace() or ord(character) < 33 or ord(character) > 126 for character in token):
         raise DeploymentError("The encrypted callback did not contain a valid job token.")
     return GitHub(token)
 
