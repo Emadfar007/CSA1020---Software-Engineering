@@ -8,6 +8,8 @@ To automate testing, Docker image building, Docker Hub publication and cloud dep
 
 ## Tools Required
 
+**Access status - checked 28 October 2026:** The Render deployment is currently suspended and returns HTTP 503. Render records **Free Tier Usage Exceeded** as the reason. The source, published image, recorded pipeline results and screenshots remain accessible in this submission. This is separate from normal idle sleep; refreshing the app cannot remove the quota restriction.
+
 | Tool | Purpose |
 |---|---|
 | GitHub repository and GitHub Actions | Source control and automated pipeline |

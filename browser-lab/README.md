@@ -1,5 +1,7 @@
 # CSA1020 Browser Docker Lab
 
+**Hosted deployment status - checked 28 October 2026:** Render reports **Free Tier Usage Exceeded** for the Experiment 13, 14 and 19 cloud services. Their Render URLs currently return HTTP 503. The Codespaces lab is separate: resume it and start a profile below for the supported lab experiments. The source, Docker Hub images and recorded delivery evidence remain in the experiment reports.
+
 Run the Docker experiments in the private GitHub Codespaces browser environment. Images, build cache, containers and persistent task data live on the cloud machine, so Docker Desktop is not required on the laptop after migration is verified.
 
 [Open the existing browser IDE](https://miserable-cobweb-4j9pjv79r7w7fjrqw.github.dev/) · [Manage, resume or stop the Codespace](https://github.com/codespaces)

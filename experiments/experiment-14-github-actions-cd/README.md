@@ -6,6 +6,8 @@ To demonstrate continuous deployment of **FocusLane**, a Dockerized study-sprint
 
 ## Tools Required
 
+**Access status - checked 28 October 2026:** The Render deployment is currently suspended and returns HTTP 503. Render records **Free Tier Usage Exceeded** as the reason. The source, published image, recorded pipeline results and screenshots remain accessible in this submission. This is separate from normal idle sleep; refreshing the app cannot remove the quota restriction.
+
 **Browser access:** [Codespaces IDE](https://miserable-cobweb-4j9pjv79r7w7fjrqw.github.dev/) · [Manage or restart the lab](https://github.com/codespaces) · [Browser lab guide](https://github.com/Emadfar007/CSA1020---Software-Engineering/tree/main/browser-lab). Experiment 14 already builds and deploys on hosted GitHub Actions and Render, independently of Docker Desktop. Its app and workflow links below can be used without starting this Codespace; `bash browser-lab/bin/lab start 14` only prints the existing hosted links. The original local commands, screenshots and test evidence below remain the historical experiment record.
 
 | Tool | Purpose |
@@ -38,7 +40,7 @@ The service uses Render's **Free** plan without a database, persistent disk or p
 | View the output | [All ten screenshots](https://github.com/Emadfar007/CSA1020---Software-Engineering/tree/main/experiments/experiment-14-github-actions-cd/screenshots) · [Automatic deployment evidence](https://github.com/Emadfar007/CSA1020---Software-Engineering/tree/main/experiments/experiment-14-github-actions-cd/evidence/automatic-deployment) |
 | Open the experiment collection | [All experiments](https://github.com/Emadfar007/CSA1020---Software-Engineering) |
 
-The cloud app opens from any device, and GitHub Actions runs on hosted runners. Render management requires sign-in. A sleeping Render Free app can take time to wake. The run #3 link preserves the successful experiment demonstration; the workflow link shows newer runs when present.
+When active, the cloud app opens from any device; see the current access status above. GitHub Actions runs on hosted runners. Render management requires sign-in. A sleeping Render Free app can take time to wake. The run #3 link preserves the successful experiment demonstration; the workflow link shows newer runs when present.
 
 ## Algorithm
 

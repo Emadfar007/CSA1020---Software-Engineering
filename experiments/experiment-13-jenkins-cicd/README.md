@@ -8,6 +8,8 @@ The sample application, **ReleaseHarbor**, helps a team prepare a release throug
 
 ## Tools Required
 
+**Access status - checked 28 October 2026:** The Render deployment is currently suspended and returns HTTP 503. Render records **Free Tier Usage Exceeded** as the reason. The source, published image, recorded pipeline results and screenshots remain accessible in this submission. This is separate from normal idle sleep; refreshing the app cannot remove the quota restriction.
+
 **Browser Docker lab:** [Open the Codespaces IDE](https://miserable-cobweb-4j9pjv79r7w7fjrqw.github.dev/) · [Manage or restart the lab](https://github.com/codespaces) · [Browser lab guide](https://github.com/Emadfar007/CSA1020---Software-Engineering/tree/main/browser-lab). Sign in as **Emadfar007**, resume the Codespace if stopped, and run `bash browser-lab/bin/lab start 13` from the repository root before opening this experiment's private app links. Starting a profile stops the other lab profiles while preserving their data. The original local commands, screenshots and test evidence below remain the historical experiment record.
 
 | Tool | Use in this experiment |
@@ -39,7 +41,7 @@ Application: [ReleaseHarbor](https://releaseharbor-exp13.onrender.com/). Browser
 | View the output | [All nine screenshots](https://github.com/Emadfar007/CSA1020---Software-Engineering/tree/main/experiments/experiment-13-jenkins-cicd/screenshots) · [Build and deployment evidence](https://github.com/Emadfar007/CSA1020---Software-Engineering/tree/main/experiments/experiment-13-jenkins-cicd/evidence) |
 | Open the experiment collection | [All experiments](https://github.com/Emadfar007/CSA1020---Software-Engineering) |
 
-The Render app opens independently of Codespaces. Jenkins requires the Experiment 13 profile and the private GitHub port to be open while signed in as Emadfar007; Jenkins management also uses the existing Jenkins account. Restored jobs and results remain readable while builds start paused for migration review. Run `bash browser-lab/bin/lab resume-ci` only when ready to enable builds, publication and any configured deployment. Render management requires sign-in, and a sleeping Free app can take time to wake.
+When active, the Render app opens independently of Codespaces; see the current access status above. Jenkins requires the Experiment 13 profile and the private GitHub port to be open while signed in as Emadfar007; Jenkins management also uses the existing Jenkins account. Restored jobs and results remain readable while builds start paused for migration review. Run `bash browser-lab/bin/lab resume-ci` only when ready to enable builds, publication and any configured deployment. Render management requires sign-in, and a sleeping Free app can take time to wake.
 
 
 Private app links require both a running profile and GitHub sign-in as Emadfar007. This Codespace uses a 30-minute idle timeout and 30-day inactive retention; free usage remains subject to its monthly quota, with paid usage blocked.
