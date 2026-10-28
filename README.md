@@ -42,6 +42,7 @@ Starting a profile stops the other lab profiles while keeping their data. Use `b
 | 16 | Persistent Flask to-do app containerized with Docker, verified task workflows and restart recovery, and published Docker Hub image | [Morrow Flask To Do App](experiments/experiment-16-flask-todo-docker/README.md) |
 | 17 | Original static website built, tagged and pushed to Docker Hub, then pulled and verified on an isolated receiving Docker engine | [Docker Hub Push and Pull](experiments/experiment-17-dockerhub-push-pull/README.md) |
 | 18 | Three-tier seed library on Kubernetes with Nginx, Flask, persistent PostgreSQL, real Headlamp monitoring and frontend scaling | [Multi-Container Kubernetes Application](experiments/experiment-18-sprouthouse-kubernetes/README.md) |
+| 19 | Flask application tested in Docker, published to Docker Hub and deployed automatically to Render Free through GitHub Actions | [Flask CI/CD with GitHub Actions](experiments/experiment-19-github-actions-flask/README.md) |
 
 Each experiment includes only Aim, Tools Required, Algorithm, Output Screenshots, and Result.
 
