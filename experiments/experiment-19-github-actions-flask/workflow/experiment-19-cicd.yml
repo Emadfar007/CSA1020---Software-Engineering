@@ -124,7 +124,7 @@ jobs:
           printf '%s\n' "$RELEASE_IMAGE" > reports/published-image.txt
 
       - name: Deploy the immutable image and verify the cloud application
-        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main' && vars.EXP19_CLOUD_READY == 'true'
+        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
         env:
           RENDER_DEPLOY_HOOK: ${{ secrets.EXP19_RENDER_DEPLOY_HOOK }}
         run: python3 ci/deploy.py
