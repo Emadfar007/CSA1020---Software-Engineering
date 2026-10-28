@@ -1,0 +1,94 @@
+{
+  "verifiedAt": "2026-10-28T18:04:55.056718+00:00",
+  "repository": "Emadfar007/CSA1020---Software-Engineering",
+  "runtime": "Existing 2-core private GitHub Codespace",
+  "automaticDeployments": [
+    {
+      "experiment": 13,
+      "passed": true,
+      "evidence": "../experiments/experiment-13-jenkins-cicd/evidence/automatic-browser-deployment-2026-10-28.json",
+      "browserUrl": "https://miserable-cobweb-4j9pjv79r7w7fjrqw-8091.app.github.dev/"
+    },
+    {
+      "experiment": 14,
+      "passed": true,
+      "evidence": "../experiments/experiment-14-github-actions-cd/evidence/automatic-browser-deployment-2026-10-28.json",
+      "browserUrl": "https://miserable-cobweb-4j9pjv79r7w7fjrqw-8094.app.github.dev/"
+    },
+    {
+      "experiment": 19,
+      "passed": true,
+      "evidence": "../experiments/experiment-19-github-actions-flask/evidence/automatic-browser-deployment-2026-10-28.json",
+      "browserUrl": "https://miserable-cobweb-4j9pjv79r7w7fjrqw-8099.app.github.dev/"
+    }
+  ],
+  "liveVersionsAfterStopAndResume": [
+    {
+      "experiment": 13,
+      "sourceSha": "d6c14fa3097202c932e0e947716b316cdfc9d313",
+      "buildNumber": "8",
+      "restartPreservedLatestDeployment": true,
+      "version": {
+        "application": "ReleaseHarbor",
+        "version": "1.0.0",
+        "gitSha": "d6c14fa3097202c932e0e947716b316cdfc9d313",
+        "buildNumber": "8",
+        "mode": "browser-lab"
+      }
+    },
+    {
+      "experiment": 14,
+      "sourceSha": "deb12224b0d0c2a7f8142899bb8aa0e805d18238",
+      "buildNumber": "6.1",
+      "restartPreservedLatestDeployment": true,
+      "version": {
+        "application": "FocusLane",
+        "version": "1.1.0",
+        "gitSha": "deb12224b0d0c2a7f8142899bb8aa0e805d18238",
+        "buildNumber": "6.1",
+        "mode": "browser-lab"
+      }
+    },
+    {
+      "experiment": 19,
+      "sourceSha": "deb12224b0d0c2a7f8142899bb8aa0e805d18238",
+      "buildNumber": "5.1",
+      "restartPreservedLatestDeployment": true,
+      "version": {
+        "application": "Packlight",
+        "build_number": "5.1",
+        "git_sha": "deb12224b0d0c2a7f8142899bb8aa0e805d18238",
+        "version": "1.0.0"
+      }
+    }
+  ],
+  "jenkinsAutomationEnabled": true,
+  "actionsDeploymentAgentEnabled": true,
+  "allForwardedPortsPrivate": true,
+  "appAndJenkinsPorts": [
+    8090,
+    8091,
+    8094,
+    8099
+  ],
+  "newPaidResourcesCreated": false,
+  "spendingBudgets": {
+    "codespaces": 0,
+    "actions": 0,
+    "paidUsageBlockedVerifiedInGitHubUI": true
+  },
+  "quotaNote": "Requires a running Codespace; monthly free compute/storage limits and idle timeout apply. Inactive-lab requests fail visibly after a bounded wait.",
+  "authentication": "Native Codespaces token for reads; hybrid-encrypted short-lived Actions job credentials for status callbacks. No permanent PAT added.",
+  "safetyChecks": {
+    "jenkinsDeploymentTests": 7,
+    "requestProtocolTests": 10,
+    "controllerTests": 14,
+    "agentLifecycleTests": 6,
+    "actualOpenSSL1024ByteCredentialRoundTrip": true,
+    "tamperedCredentialPacketRejected": true,
+    "canaryAndRollbackImplemented": true,
+    "noPrivateKeyOrCredentialCommitted": true
+  },
+  "passed": true,
+  "privateBrowserGatewayBuildIdentityVerified": true
+}

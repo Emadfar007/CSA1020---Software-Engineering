@@ -2,26 +2,27 @@
 
 ## Aim
 
-To demonstrate continuous deployment of **FocusLane**, a Dockerized study-sprint planner, using GitHub Actions to test the application, publish its tested image to Docker Hub, and automatically deploy the same image to Render after application code reaches `main`.
+To automate FocusLane testing, Docker image publication and verified deployment to the existing private Codespaces lab through GitHub Actions after application code reaches `main`.
 
 ## Tools Required
 
 **Browser runtime - updated 28 October 2026:** Sign in as **Emadfar007**, resume the [existing Codespace](https://miserable-cobweb-4j9pjv79r7w7fjrqw.github.dev/) and run `bash browser-lab/bin/lab start cicd` from the repository root to start Experiments **13, 14 and 19 together**. The app links require the Codespace and containers to be running. Use `bash browser-lab/bin/lab stop cicd` and stop the Codespace when finished. The existing 2-core lab has a **$0 spending budget with paid usage blocked**, a 30-minute idle timeout and 30-day inactive retention; monthly free compute and storage quotas still apply.
 
-**Current runtime verification:** [Health, API, image identity and container checks](evidence/browser-runtime-2026-10-28.json).
+**Verification:** [Automatic browser deployment records](evidence/automatic-browser-deployment-2026-10-28.json) · [Earlier browser runtime checks](evidence/browser-runtime-2026-10-28.json).
 
-**Pipeline distinction:** This browser profile runs the recorded immutable Docker image. The original Jenkins/GitHub Actions deployment stages still target Render and remain blocked by **Free Tier Usage Exceeded**. Their saved successful runs and original deployment evidence are retained; starting this profile does not move or rerun the original cloud deployment pipeline.
+**Automatic browser deployment:** The active pipeline now deploys verified new images into the running Codespaces lab. Jenkins handles Experiment 13; hosted Actions and the private outbound deployment agent handle Experiments 14 and 19. Original Render services remain quota-suspended and are retained only as historical deployment evidence.
 
 | Tool | Purpose |
 |---|---|
 | Git and GitHub | Source control, feature branch, pull request and merge history |
 | GitHub Actions | Hosted automation for application pushes and pull requests |
+| GitHub Deployments API, Python and OpenSSL | Request exact-image deployment, protect the temporary callback token and wait for verified completion |
 | Docker and Buildx | Separate test/runtime images, container execution and build caching |
 | Docker Hub | Versioned image publication and immutable registry digests |
 | Node.js 24 | Dependency-free HTTP application and application tests |
 | Python standard library | Test-report gate, HTTP verification and delivery receipts |
 | Render Free web service (original demonstration) | Recorded deployment target; currently quota-suspended |
-| GitHub Codespaces and web browser | Run the recorded image privately and test the interface |
+| GitHub Codespaces and web browser | Receive verified image updates through the private deployment agent |
 
 **Project:** [CSA1020 Software Engineering](https://github.com/Emadfar007/CSA1020---Software-Engineering/tree/main/experiments/experiment-14-github-actions-cd) · **Browser application:** [FocusLane](https://miserable-cobweb-4j9pjv79r7w7fjrqw-8094.app.github.dev) · **Images:** [Docker Hub](https://hub.docker.com/r/coastrider7/csa1020-exp14-focuslane/tags)
 
@@ -34,58 +35,54 @@ The original service used [Render Free](https://render.com/docs/free); that depl
 | Open or manage the browser lab | [Codespaces IDE](https://miserable-cobweb-4j9pjv79r7w7fjrqw.github.dev/) · [Start or stop Codespaces](https://github.com/codespaces) · [Lab guide](https://github.com/Emadfar007/CSA1020---Software-Engineering/tree/main/browser-lab) |
 | Open the browser application | [FocusLane - browser app](https://miserable-cobweb-4j9pjv79r7w7fjrqw-8094.app.github.dev/) |
 | Check the browser build | [Version and source JSON](https://miserable-cobweb-4j9pjv79r7w7fjrqw-8094.app.github.dev/api/version) · [Health check](https://miserable-cobweb-4j9pjv79r7w7fjrqw-8094.app.github.dev/healthz) |
-| Follow the automatic pipeline | [GitHub Actions workflow](https://github.com/Emadfar007/CSA1020---Software-Engineering/actions/workflows/experiment-14-cd.yml) · [Recorded successful deployment run #3](https://github.com/Emadfar007/CSA1020---Software-Engineering/actions/runs/40353497794) |
+| Follow the automatic pipeline | [GitHub Actions workflow](https://github.com/Emadfar007/CSA1020---Software-Engineering/actions/workflows/experiment-14-cd.yml) · [Verified browser deployment run 6.1](https://github.com/Emadfar007/CSA1020---Software-Engineering/actions/runs/40740905728) |
 | Review the code change that triggered deployment | [Merged feature pull request #2](https://github.com/Emadfar007/CSA1020---Software-Engineering/pull/2) |
 | Find the published images | [Docker Hub image and tags](https://hub.docker.com/r/coastrider7/csa1020-exp14-focuslane/tags) |
+| Open the historical Render demonstration | [Original successful run #3](https://github.com/Emadfar007/CSA1020---Software-Engineering/actions/runs/40353497794) |
 | Manage the original Render service | [Render dashboard - sign-in required](https://dashboard.render.com/web/srv-dbfnbggm7kps739nrok0) |
 | Source and pipeline configuration | [Experiment folder](https://github.com/Emadfar007/CSA1020---Software-Engineering/tree/main/experiments/experiment-14-github-actions-cd) · [Dockerfile](https://github.com/Emadfar007/CSA1020---Software-Engineering/blob/main/experiments/experiment-14-github-actions-cd/Dockerfile) · [Active workflow YAML](https://github.com/Emadfar007/CSA1020---Software-Engineering/blob/main/.github/workflows/experiment-14-cd.yml) |
 | View the output | [All screenshots](https://github.com/Emadfar007/CSA1020---Software-Engineering/tree/main/experiments/experiment-14-github-actions-cd/screenshots) · [Automatic deployment evidence](https://github.com/Emadfar007/CSA1020---Software-Engineering/tree/main/experiments/experiment-14-github-actions-cd/evidence/automatic-deployment) |
 | Open the experiment collection | [All experiments](https://github.com/Emadfar007/CSA1020---Software-Engineering) |
 
-The browser app requires the running Codespaces profile and GitHub sign-in. GitHub Actions checks remain on hosted runners; Render management requires its existing sign-in. The run #3 link preserves the successful experiment demonstration; the workflow link shows newer runs when present.
+The browser app requires the running Codespaces profile and GitHub sign-in. GitHub Actions checks remain on hosted runners; Render management requires its existing sign-in. The original run #3 link preserves the earlier Render demonstration; verified browser deployment run 6.1 records the new target, and the workflow link shows later runs.
 
 Original deployment URL (quota-suspended): [FocusLane on Render](https://focuslane-exp14.onrender.com/).
 
 ## Algorithm
 
-1. **Create FocusLane.** Provide editable plan names, start dates, daily time budgets, plan lengths and one to six subjects. Each subject has a name, target duration and priority. The API schedules higher-priority work first without exceeding daily capacity. Display schedules, remaining work and capacity warnings; support saving drafts, resetting and exporting JSON.
+1. **Prepare FocusLane.** Retain editable plan names, dates, time budgets and one to six subjects; priority-based scheduling, capacity warnings, draft saving and JSON export. The multi-stage [Dockerfile](Dockerfile) separates its 23 application tests from the non-root runtime and embeds the exact source SHA and Actions run/attempt.
 
-2. **Containerize the application.** Use the supplied [Dockerfile](Dockerfile) with a digest-pinned Node.js 24 Alpine base, separate `test` and `runtime` targets, a non-root user and an HTTP health check. Bind the server to `0.0.0.0` and read the cloud-provided `PORT`. From a folder without an existing checkout of this name, these PowerShell commands create a fresh clone and reproduce local testing and execution:
+2. **Start the deployment target.** Resume the existing Codespace as **Emadfar007** and run `bash browser-lab/bin/lab start cicd` before pushing a change. This starts the private applications and outbound deployment agent. The agent deploys only an active matching profile; a stopped Codespace cannot receive a deployment.
 
-   ```powershell
-   git clone https://github.com/Emadfar007/CSA1020---Software-Engineering.git
-   cd CSA1020---Software-Engineering/experiments/experiment-14-github-actions-cd
-   docker build --target test --tag focuslane-tests:local .
-   docker run --rm --network none --read-only --tmpfs /tmp focuslane-tests:local
-   docker build --target runtime --tag focuslane:local .
-   docker run --rm --publish 127.0.0.1:8000:8000 --env APP_MODE=local focuslane:local
-   ```
+3. **Install the workflow and credentials.** Use the supplied [workflow](workflow/experiment-14-cd.yml), installed as `.github/workflows/experiment-14-cd.yml`. Keep registry credentials in `EXP14_DOCKERHUB_USERNAME` and `EXP14_DOCKERHUB_TOKEN`. The current workflow needs no Render hook or Render service variable. Its deployment job receives only the short-lived Actions token with `contents: read` and `deployments: write`.
 
-   Visit [localhost:8000](http://127.0.0.1:8000). Docker assigns the container a name, avoiding a fixed-name collision. Use another host port if 8000 is occupied; press Ctrl+C to stop this temporary container.
+4. **Trigger and validate.** Push an application, CI-helper, Dockerfile, deployment-protocol or workflow change to `main`, or open a related pull request. The hosted **Test and publish FocusLane** job checks out the exact source, checks the deployment request protocol, builds the test image, runs application and CI guard tests, validates a nonempty passing suite and smoke-tests the versioned runtime. Pull requests stop at validation and receive no registry publication or deployment step.
 
-3. **Install the workflow.** Push the application under `experiments/experiment-14-github-actions-cd` and install the supplied [workflow](workflow/experiment-14-cd.yml) as `.github/workflows/experiment-14-cd.yml` at the repository root. Application, CI-helper, Dockerfile and workflow changes trigger it; report and screenshot changes do not redeploy the application.
+5. **Publish the exact tested image.** Trusted `main` runs log in temporarily to Docker Hub, publish the versioned image and expose its immutable digest as the successful build job's output. The separate browser deployment job depends on this successful job, so it cannot deploy an image from a failed build.
 
-4. **Configure deployment settings.** Store registry credentials in the GitHub Actions secrets `EXP14_DOCKERHUB_USERNAME` and `EXP14_DOCKERHUB_TOKEN`. Bootstrap a separate Render Free image-backed service, save its service-specific hook as `EXP14_RENDER_DEPLOY_HOOK`, and set the variables `EXP14_RENDER_SERVICE_ID` and `EXP14_CLOUD_READY=true`. Credential values are excluded from source, screenshots and receipts. See [GitHub Actions secrets](https://docs.github.com/en/actions/how-tos/write-workflows/choose-what-workflows-do/use-secrets).
+6. **Request automatic deployment.** The shared [deployment requester](../../browser-lab/ci/request_deployment.py) creates a GitHub Deployment for the exact commit and image digest in environment `codespaces-exp14`. It encrypts the job's temporary callback token to the lab's public key; no personal access token is added to the workflow or repository.
 
-5. **Validate pull requests.** Check out the exact source, build the test image and run **23 application tests** plus **four CI guard tests**. Reject empty, all-skipped, failing or malformed application reports. Build the versioned runtime image and test its actual HTTP API in a restricted container. Pull requests skip registry authentication, publication and cloud deployment.
+7. **Validate and activate in the private lab.** The outbound [deployment agent](../../browser-lab/ci/deployment_agent.py) checks the repository, trusted `main` event, workflow path, exact source SHA and successful **Test and publish FocusLane** job. It pulls only the expected experiment image, verifies its build identity and checks a restricted canary before replacing the named application container. Activation is verified through the real API; failure restores the previous working release.
 
-6. **Publish after a trusted `main` push.** Embed the commit SHA and `run_number.run_attempt` identity in the runtime. Smoke-test it, then push that same tested image under a unique tag and record its digest. See Docker's [test-before-push pattern](https://docs.docker.com/build/ci/github-actions/test-before-push/).
+8. **Wait for a verified deployment result.** The agent posts `in_progress` and then `success` or `failure` to the GitHub Deployment. Actions waits up to 600 seconds and records success only after the callback names the expected private app URL. An unavailable lab, failed activation or timeout fails the deployment job clearly. Open [FocusLane](https://miserable-cobweb-4j9pjv79r7w7fjrqw-8094.app.github.dev/) and compare `/api/version` with the source and build in the run.
 
-7. **Deploy and verify the exact image.** The workflow calls the Render hook with `imageRepository@sha256:digest`. Wait until the cloud API reports the expected commit and run identity, then check `/healthz`, `/api/version`, a valid study plan and HTTP 400 for invalid input. The fixed three-day example must allocate 255 minutes as `[90, 90, 75]`, with high-priority work first. See [Render deploy hooks](https://render.com/docs/deploy-hooks).
+9. **Preserve proof.** Verify the fixed scheduling example: 255 minutes allocated as `[90, 90, 75]`, high priority first, room left `[0, 0, 15]`, and HTTP 400 for a zero daily budget. Capture the Actions run, deployment status, live source/build identity and browser result. [Automatic browser deployment evidence](evidence/automatic-browser-deployment-2026-10-28.json) records the observed run; [current Actions runs](https://github.com/Emadfar007/CSA1020---Software-Engineering/actions/workflows/experiment-14-cd.yml) show subsequent runs.
 
-8. **Prove deployment through a real change.** Version 1.0.0 was bootstrapped from the first published image. Create `feature/focuslane-room-left`, add server-calculated `freeMinutes` and a **Room left** label on each schedule day, and update the app to 1.1.0. Push [pull request #2](https://github.com/Emadfar007/CSA1020---Software-Engineering/pull/2). Its [validation run](https://github.com/Emadfar007/CSA1020---Software-Engineering/actions/runs/40352441673) passed while publication and deployment were skipped. The repository owner merged the checked feature; a separate person's approval is not claimed.
+Hosted runners perform CI without a local computer. Deployment still requires the active Codespace and matching profile. The **$0 spending budget blocks paid usage**, while monthly Codespaces, Actions and storage allowances continue to apply. Stop the lab and Codespace when finished. Artifacts are retained for seven days; submitted evidence remains in the repository.
 
-9. **Confirm automatic delivery.** The merge's `main` push triggered [run 3](https://github.com/Emadfar007/CSA1020---Software-Engineering/actions/runs/40353497794), which tested, published and deployed version 1.1.0 automatically. Compare cloud identities before and after, exercise the interface, and preserve screenshots and machine-readable evidence. No manual workflow dispatch or manual cloud redeployment was used for this feature release.
-
-The workflow uses commit-pinned actions, read-only repository permissions, caching, a bounded timeout and serialized `main` deliveries. It publishes a delivery summary and retains verification artifacts for seven days; submitted evidence copies remain in this repository. The standard GitHub-hosted runner works independently of the local computer or Jenkins. Runner, artifact and cache allowances remain subject to [GitHub Actions billing rules](https://docs.github.com/en/billing/concepts/product-billing/github-actions).
-
-**Current browser access:** The steps above record the original CI/CD experiment. To run its saved application now, resume the existing Codespace and execute `bash browser-lab/bin/lab start 14` for this experiment alone, or `bash browser-lab/bin/lab start cicd` for all three. Open [FocusLane](https://miserable-cobweb-4j9pjv79r7w7fjrqw-8094.app.github.dev/) and use its normal form workflow. The profile pulls the recorded immutable image, keeps the original build identity and requires no local Docker Desktop. Individual profile startup stops other profiles while retaining their data; `stop cicd` stops the three restored profiles without deleting their images or data.
+The original 26 October 2026 Room left feature was delivered through [PR #2](https://github.com/Emadfar007/CSA1020---Software-Engineering/pull/2) and [Render deployment run #3](https://github.com/Emadfar007/CSA1020---Software-Engineering/actions/runs/40353497794). Its original screenshots and receipts below are historical evidence; Render is no longer the active workflow target.
 
 ## Output Screenshots
 
-**Current private browser runtime, 28 October 2026.** FocusLane running from its recorded Docker image in Codespaces.
+**Automatic browser deployment, 28 October 2026.** The current pipeline, deployment status or matching running build is recorded with the [automatic deployment receipt](evidence/automatic-browser-deployment-2026-10-28.json).
+
+![Experiment 14 automatic deployment to the private browser lab](screenshots/automatic-browser-deployment-2026-10-28.jpg)
+
+**Earlier browser runtime restoration, 28 October 2026.** FocusLane running from its recorded Docker image in Codespaces.
 
 ![FocusLane restored in the private browser lab](screenshots/browser-restore-2026-10-28.jpg)
+
+**Original Render demonstration — 26 October 2026.** The numbered screenshots below preserve that earlier deployment.
 
 **1. Original cloud version.** Version 1.0.0, run 1.1, was recorded before the feature merge.
 
@@ -132,6 +129,12 @@ Render's banner refers to its registry auto-deploy setting after selecting a spe
 The [delivery receipt](evidence/automatic-deployment/focuslane-receipts-3-1/delivery-receipt.json), [before](evidence/cloud-before.json) and [after](evidence/cloud-after.json) cloud responses, [browser export](evidence/browser-export.json), and [stale-plan export](evidence/browser-stale-export.json) provide the corresponding machine-readable evidence.
 
 ## Result
+
+**Current deployment path:** The active pipeline targets the private Codespaces lab and accepts deployment only after image identity, health and application checks. Use the [automatic browser deployment receipt](evidence/automatic-browser-deployment-2026-10-28.json) for the captured run, deployed digest and matching live build. This target requires the running Codespace; a failed or unavailable target is reported as a failed deployment.
+
+**Verified automatic deployment — 28 October 2026:** The push-triggered [FocusLane run 6.1](https://github.com/Emadfar007/CSA1020---Software-Engineering/actions/runs/40740905728) completed both the build/publication job and browser deployment job successfully. GitHub Deployment **7393329037** reached success, and the running API matched source `deb12224b0d0c2a7f8142899bb8aa0e805d18238` and build **6.1**. A real stop/start of the CI/CD group retained the new image and restarted the deployment agent.
+
+**Original Render demonstration:** The following results and original screenshots describe the earlier Render run.
 
 **Continuous deployment was demonstrated successfully on 26 October 2026.** Merging the Room left feature triggered GitHub Actions automatically. Run 3 passed, pushed the tested image and deployed it through Render's hook. The public application served the expected source commit and build identity, and its cloud HTTP checks passed.
 

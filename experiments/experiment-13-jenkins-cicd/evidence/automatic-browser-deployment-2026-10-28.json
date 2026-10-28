@@ -1,0 +1,113 @@
+{
+  "experiment": 13,
+  "verifiedAt": "2026-10-28T17:57:40.315937+00:00",
+  "automaticTrigger": "SCM change detected by Jenkins polling",
+  "build": {
+    "_class": "org.jenkinsci.plugins.workflow.job.WorkflowRun",
+    "actions": [
+      {
+        "_class": "hudson.model.CauseAction",
+        "causes": [
+          {
+            "_class": "hudson.triggers.SCMTrigger$SCMTriggerCause",
+            "shortDescription": "Started by an SCM change"
+          },
+          {
+            "_class": "hudson.triggers.SCMTrigger$SCMTriggerCause",
+            "shortDescription": "Started by an SCM change"
+          },
+          {
+            "_class": "hudson.triggers.SCMTrigger$SCMTriggerCause",
+            "shortDescription": "Started by an SCM change"
+          },
+          {
+            "_class": "hudson.triggers.SCMTrigger$SCMTriggerCause",
+            "shortDescription": "Started by an SCM change"
+          },
+          {
+            "_class": "hudson.triggers.SCMTrigger$SCMTriggerCause",
+            "shortDescription": "Started by an SCM change"
+          }
+        ]
+      },
+      {},
+      {
+        "_class": "hudson.model.ParametersAction"
+      },
+      {
+        "_class": "hudson.plugins.git.util.BuildData"
+      },
+      {},
+      {
+        "_class": "org.jenkinsci.plugins.workflow.libs.LibrariesAction"
+      },
+      {},
+      {
+        "_class": "org.jenkinsci.plugins.workflow.cps.EnvActionImpl"
+      },
+      {},
+      {
+        "_class": "hudson.tasks.junit.TestResultAction"
+      },
+      {},
+      {},
+      {},
+      {},
+      {
+        "_class": "org.jenkinsci.plugins.displayurlapi.actions.RunDisplayAction"
+      },
+      {
+        "_class": "org.jenkinsci.plugins.pipeline.modeldefinition.actions.RestartDeclarativePipelineAction"
+      },
+      {},
+      {
+        "_class": "org.jenkinsci.plugins.workflow.job.views.FlowGraphAction"
+      },
+      {},
+      {}
+    ],
+    "duration": 41949,
+    "number": 8,
+    "result": "SUCCESS",
+    "timestamp": 1793210073824,
+    "url": "https://miserable-cobweb-4j9pjv79r7w7fjrqw-8090.app.github.dev/job/ReleaseHarbor-CICD/8/"
+  },
+  "tests": {
+    "tests": 21,
+    "executed": 21,
+    "failures": 0,
+    "skipped": 0
+  },
+  "deployment": {
+    "cloud": "GitHub Codespaces",
+    "deploymentTarget": "private-browser-lab",
+    "url": "https://miserable-cobweb-4j9pjv79r7w7fjrqw-8091.app.github.dev",
+    "internalUrl": "http://docker:8000",
+    "image": "coastrider7/csa1020-exp13-releaseharbor@sha256:7eae11fefd969015187a6db63dc471c640bb2ec0965b8d2168cf7252f0364455",
+    "sourceSha": "d6c14fa3097202c932e0e947716b316cdfc9d313",
+    "buildNumber": "8",
+    "verifiedVersion": {
+      "data": {
+        "application": "ReleaseHarbor",
+        "version": "1.0.0",
+        "gitSha": "d6c14fa3097202c932e0e947716b316cdfc9d313",
+        "buildNumber": "8",
+        "mode": "browser-lab"
+      }
+    },
+    "healthHttpStatus": 200,
+    "functionalChecksPassed": true,
+    "previousImageRetained": "coastrider7/csa1020-exp13-releaseharbor@sha256:e8d0ca8279fcc546c168ea414d93a6278777c8ce980f8bbd289001ef840c1766",
+    "rollbackAvailable": true
+  },
+  "liveVersion": {
+    "application": "ReleaseHarbor",
+    "version": "1.0.0",
+    "gitSha": "d6c14fa3097202c932e0e947716b316cdfc9d313",
+    "buildNumber": "8",
+    "mode": "browser-lab"
+  },
+  "passed": true,
+  "stopAndResumePreservedLatestDeployment": true,
+  "privateBrowserGatewayBuildIdentityVerified": true
+}

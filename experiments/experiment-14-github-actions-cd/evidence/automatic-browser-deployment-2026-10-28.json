@@ -1,0 +1,77 @@
+{
+  "experiment": 14,
+  "receipt": {
+    "protocol": 1,
+    "experiment": 14,
+    "image": "coastrider7/csa1020-exp14-focuslane@sha256:30be85b95bbab8b7317ebcf115abc3daabfe61b16c0b8d949cdd7ba8659d6db7",
+    "sourceSha": "deb12224b0d0c2a7f8142899bb8aa0e805d18238",
+    "runId": 40740905728,
+    "buildNumber": "6.1",
+    "deploymentId": 7393329037,
+    "application": "FocusLane",
+    "container": "focuslane-app-exp14",
+    "port": 8094,
+    "previousImage": "coastrider7/csa1020-exp14-focuslane@sha256:971284d9f9d5dd9503d70181e739c8aad5c2eec1b15fa3d89c177825e2f84e19",
+    "checks": {
+      "version": {
+        "application": "FocusLane",
+        "version": "1.1.0",
+        "gitSha": "deb12224b0d0c2a7f8142899bb8aa0e805d18238",
+        "buildNumber": "6.1",
+        "mode": "browser-lab"
+      },
+      "plannedMinutes": 255,
+      "dailyMinutes": [
+        90,
+        90,
+        75
+      ],
+      "invalidInputHttpStatus": 400
+    },
+    "passed": true,
+    "deployedAt": "2026-10-28T18:00:53.814215+00:00"
+  },
+  "liveVersion": {
+    "application": "FocusLane",
+    "version": "1.1.0",
+    "gitSha": "deb12224b0d0c2a7f8142899bb8aa0e805d18238",
+    "buildNumber": "6.1",
+    "mode": "browser-lab"
+  },
+  "verifiedAt": "2026-10-28T18:02:33.668787+00:00",
+  "workflow": {
+    "id": 40740905728,
+    "html_url": "https://github.com/Emadfar007/CSA1020---Software-Engineering/actions/runs/40740905728",
+    "event": "push",
+    "head_sha": "deb12224b0d0c2a7f8142899bb8aa0e805d18238",
+    "run_number": 6,
+    "run_attempt": 1,
+    "conclusion": "success",
+    "created_at": "2026-10-28T17:59:34Z",
+    "updated_at": "2026-10-28T18:01:06Z"
+  },
+  "jobs": [
+    {
+      "id": 123001920203,
+      "name": "Test and publish FocusLane",
+      "conclusion": "success",
+      "html_url": "https://github.com/Emadfar007/CSA1020---Software-Engineering/actions/runs/40740905728/job/123001920203"
+    },
+    {
+      "id": 123002384762,
+      "name": "Deploy FocusLane to the private browser lab",
+      "conclusion": "success",
+      "html_url": "https://github.com/Emadfar007/CSA1020---Software-Engineering/actions/runs/40740905728/job/123002384762"
+    }
+  ],
+  "deploymentStatus": {
+    "id": 20843779226,
+    "state": "success",
+    "environment_url": "https://miserable-cobweb-4j9pjv79r7w7fjrqw-8094.app.github.dev/",
+    "log_url": "https://github.com/Emadfar007/CSA1020---Software-Engineering/actions/runs/40740905728",
+    "created_at": "2026-10-28T18:00:54Z"
+  },
+  "passed": true,
+  "stopAndResumePreservedLatestDeployment": true,
+  "privateBrowserGatewayBuildIdentityVerified": true
+}

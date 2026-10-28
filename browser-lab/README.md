@@ -1,6 +1,6 @@
 # CSA1020 Browser Docker Lab
 
-**Browser runtime update - 28 October 2026:** Experiments **13, 14 and 19** run in this existing Codespace through private browser ports. Use `bash browser-lab/bin/lab start cicd` to start all three apps and Jenkins together. Their profiles run the recorded immutable Docker images. Original Render services and CI/CD deployment stages remain quota-blocked by **Free Tier Usage Exceeded**; the successful historical delivery evidence is retained.
+**Automatic deployment update - 28 October 2026:** Experiments **13, 14 and 19** use this existing Codespace as their automatic deployment target. `bash browser-lab/bin/lab start cicd` starts all three apps, Jenkins and the outbound Actions deployment agent. Jenkins deploys Experiment 13 inside its dedicated TLS Docker daemon; Actions publishes Experiments 14 and 19 and waits for verified activation by the agent. The original Render services remain quota-suspended and are no longer active deployment targets. [Automatic deployment records](automatic-deployment-2026-10-28.json) retain the captured results.
 
 Run the Docker experiments in the private GitHub Codespaces browser environment. Images, build cache, containers and persistent task data live on the cloud machine, so Docker Desktop is not required on the laptop after migration is verified.
 
@@ -41,7 +41,9 @@ bash browser-lab/bin/lab urls
 bash browser-lab/bin/lab stop all
 ```
 
-Individual startup runs one experiment at a time and stops the other profiles without deleting their data or images. `lab start cicd` runs Experiments 13, 14 and 19 together and stops only the other profiles; `lab stop cicd` stops this group while retaining images and data. No application starts automatically when Codespaces opens. Experiment 12 starts the standalone API by default; `--kubernetes` also starts its real kind cluster and NodePort. Experiment 17 starts both its builder and isolated receiver. Experiment 18 creates or resumes its own kind cluster, with a Nginx frontend, two Flask API replicas, a persistent PostgreSQL database and the real Headlamp dashboard. Use `start 18 --build` to rebuild its application images after source edits. Experiments 13, 14 and 19 now start their recorded application images at ports 8091, 8094 and 8099. Experiment 13 also starts Jenkins on 8090 with its saved jobs and results. The runner does not change original pipeline deployment targets or automatically deploy new CI builds to these app containers; Render deployment stages remain quota-blocked.
+Individual startup runs one experiment at a time and stops the other profiles without deleting their data or images. `lab start cicd` runs Experiments 13, 14 and 19 together and stops only the other profiles; `lab stop cicd` stops this group while retaining images and data. No application starts automatically when Codespaces opens. Experiment 12 starts the standalone API by default; `--kubernetes` also starts its real kind cluster and NodePort. Experiment 17 starts both its builder and isolated receiver. Experiment 18 creates or resumes its own kind cluster, with a Nginx frontend, two Flask API replicas, a persistent PostgreSQL database and the real Headlamp dashboard. Use `start 18 --build` to rebuild its application images after source edits. Experiments 13, 14 and 19 use ports 8091, 8094 and 8099, bootstrapping from recorded images only when no newer deployment state exists. Experiment 13 also starts Jenkins on 8090 with its saved jobs and results. The current pipeline stages deploy new tested images to this lab. Experiment 13 publishes port 8091 through the dedicated Jenkins Docker daemon. Experiments 14 and 19 use the outbound deployment agent started with their profiles; `lab start cicd` starts the agent for both, and `lab stop cicd` stops it with the apps. Use `bash browser-lab/bin/lab deploy-status` to inspect the agent. Successful deployment state is retained so a lab restart uses the most recently deployed image rather than resetting to the bootstrap image.
+
+**Verified automatic deliveries — 28 October 2026:** [Jenkins build #8](https://miserable-cobweb-4j9pjv79r7w7fjrqw-8090.app.github.dev/job/ReleaseHarbor-CICD/8/), [FocusLane run 6.1](https://github.com/Emadfar007/CSA1020---Software-Engineering/actions/runs/40740905728) and [Packlight run 5.1](https://github.com/Emadfar007/CSA1020---Software-Engineering/actions/runs/40740904579) completed successfully. Live API identities matched, and a real `stop cicd` / `start cicd` preserved all three latest releases and restarted the agent. [Captured deployment evidence](automatic-deployment-2026-10-28.json).
 
 ## Private browser access
 
@@ -79,12 +81,14 @@ Persistent data is outside the Git repository in `/workspaces/.lab-data`:
 | `private/parcelpilot-kubeconfig` | Private kind cluster access configuration |
 | `private/sprouthouse-exp18/` | Experiment 18 operator kubeconfig and privately generated database password |
 | `tools/` | Verified pinned kind and kubectl binaries |
+| `deployments/` | Last successful image/build receipts and the Actions deployment agent state |
+| `private/browser-deployment-key.pem` | Lab-only RSA private key for temporary Actions callback tokens; never commit it |
 
 The Docker-in-Docker feature additionally supplies its own persistent Docker and containerd state volumes. SproutHouse's PostgreSQL PVC is stored inside its retained kind node volume. Do not commit private backups, databases, certificates, passwords or tokens to the public experiment repository. The runner does not copy credentials automatically. Restore the private Jenkins files before `lab start 13`; it refuses to invent replacement credentials. Restore Morrow's task files with owner `10001:10001` and Jenkins home with owner `1000:1000` before starting those experiments.
 
 Morrow's seven tasks and original activity history, plus Jenkins configuration and job history, were restored and verified. Browser-only preferences for the old localhost sites stay in that browser origin; they are not automatically copied to the new cloud URLs. The migration does not remove browser profiles or saved browser data.
 
-`LAB_DATA_DIR` can override the data directory when needed. `LAB_EXP11_IMAGE` and `LAB_EXP13_IMAGE` can select migrated registry images; without these, the runner builds their existing Dockerfiles in the cloud when the original local image names are unavailable. Published Experiments 12, 13 (app), 14, 16, 17 and 19 use recorded immutable image digests. Application build/source identity remains baked into each restored image.
+`LAB_DATA_DIR` can override the data directory when needed. `LAB_EXP11_IMAGE` and `LAB_EXP13_IMAGE` can select migrated registry images; without these, the runner builds their existing Dockerfiles in the cloud when the original local image names are unavailable. Published Experiments 12, 16 and 17 use recorded immutable digests. Experiments 13, 14 and 19 start from recorded digests only until a newer verified deployment is available; subsequent starts retain the latest deployment. Application source/build identity is baked into every image.
 
 ## Jenkins migration control
 
@@ -102,7 +106,15 @@ This uses the restored administrator password privately, obtains Jenkins' CSRF c
 bash browser-lab/bin/lab pause-ci
 ```
 
-Neither command changes job configuration or credentials. Build and deployment permissions still belong to the existing Jenkins account and pipeline. The current browser restoration keeps Jenkins paused: its original Render deployment stage remains quota-blocked, and the separate browser app is a recorded-image runtime.
+Neither command changes job configuration or credentials. Build and deployment permissions still belong to the existing Jenkins account and pipeline. Automatic deployment setup explicitly enables Jenkins through this command. The saved choice persists across lab restarts. Its current browser deployment stage uses the existing dedicated Docker daemon and no Render hook.
+
+## Automatic Actions deployment
+
+For Experiments 14 and 19, a trusted `main` build must pass tests, publish its exact runtime image and finish the build job before the deployment job creates a GitHub Deployment. The lab agent polls GitHub outbound and verifies the repository, workflow, commit, successful build and expected image repository. It checks a restricted canary before activation, verifies the actual running API and rolls back a failed activation. Actions waits up to **600 seconds** for success and fails when the lab is unavailable or verification fails. Pull requests validate only.
+
+The requester encrypts only its short-lived Actions callback token to the committed [public key](ci/deployment-public.pem). The private key stays in `private/browser-deployment-key.pem` with private permissions; the agent decrypts the callback token only in memory. No personal access token or public deployment endpoint is added. Preserve the private key and deployment state in private backups before deleting or rebuilding the Codespace. If the private key is lost, restore the matching backup or replace the key pair and committed public key before requesting further deployments.
+
+Keep the Codespace and matching profile running while a pipeline deploys. The free quota does not provide an always-on target. `lab stop cicd` stops the agent and three apps; `lab pause-ci` pauses new Jenkins builds without deleting its jobs or results.
 
 ## Cost and retention
 

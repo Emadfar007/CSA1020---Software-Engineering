@@ -2,7 +2,7 @@
 
 ## Aim
 
-To set up a local Jenkins pipeline that automatically checks out application commits, builds Docker images, runs automated tests, publishes a tested image to Docker Hub, and deploys that exact image to a free Render web service.
+To run Jenkins in the existing private Codespaces lab, automatically build and test ReleaseHarbor after source commits, publish the tested Docker image, deploy its immutable digest into the dedicated Docker daemon and verify the updated browser application.
 
 The sample application, **ReleaseHarbor**, helps a team prepare a release through editable release details, twelve readiness checks, critical blockers, a timeline, saved browser drafts and JSON export. The checklist is a planning aid; Jenkins performs the actual CI/CD work.
 
@@ -10,19 +10,19 @@ The sample application, **ReleaseHarbor**, helps a team prepare a release throug
 
 **Browser runtime - updated 28 October 2026:** Sign in as **Emadfar007**, resume the [existing Codespace](https://miserable-cobweb-4j9pjv79r7w7fjrqw.github.dev/) and run `bash browser-lab/bin/lab start cicd` from the repository root to start Experiments **13, 14 and 19 together**. The app links require the Codespace and containers to be running. Use `bash browser-lab/bin/lab stop cicd` and stop the Codespace when finished. The existing 2-core lab has a **$0 spending budget with paid usage blocked**, a 30-minute idle timeout and 30-day inactive retention; monthly free compute and storage quotas still apply.
 
-**Current runtime verification:** [Health, API, image identity and container checks](evidence/browser-runtime-2026-10-28.json).
+**Verification:** [Automatic browser deployment records](evidence/automatic-browser-deployment-2026-10-28.json) · [Earlier browser runtime checks](evidence/browser-runtime-2026-10-28.json).
 
-**Pipeline distinction:** This browser profile runs the recorded immutable Docker image. The original Jenkins/GitHub Actions deployment stages still target Render and remain blocked by **Free Tier Usage Exceeded**. Their saved successful runs and original deployment evidence are retained; starting this profile does not move or rerun the original cloud deployment pipeline.
+**Automatic browser deployment:** The active pipeline now deploys verified new images into the running Codespaces lab. Jenkins handles Experiment 13; hosted Actions and the private outbound deployment agent handle Experiments 14 and 19. Original Render services remain quota-suspended and are retained only as historical deployment evidence.
 
 | Tool | Use in this experiment |
 |---|---|
-| Docker in GitHub Codespaces and Docker Compose | Run the browser app, Jenkins and its separate Docker build daemon |
+| Docker in GitHub Codespaces and Docker Compose | Run Jenkins and deploy the browser app inside its dedicated TLS Docker daemon |
 | Jenkins LTS 2.580.1 with Pipeline, Git, JUnit and credentials plugins | Orchestrate stages, detect commits, report tests and protect credentials |
 | Node.js 24 and its built-in test runner | Run the dependency-free app and 21 domain/HTTP tests |
 | Git and GitHub | Store source code, Dockerfile and Jenkinsfile |
 | Docker Hub | Store build-specific images and digests |
 | Render Free web service (original demonstration) | Recorded deployment target; currently quota-suspended |
-| PowerShell and Chrome | Start the local lab and verify the interface |
+| Codespaces terminal and web browser | Start the cloud lab and verify the interface |
 
 Application: [ReleaseHarbor](https://miserable-cobweb-4j9pjv79r7w7fjrqw-8091.app.github.dev/). Browser Jenkins job: [ReleaseHarbor-CICD](https://miserable-cobweb-4j9pjv79r7w7fjrqw-8090.app.github.dev/job/ReleaseHarbor-CICD/). Images: [Docker Hub](https://hub.docker.com/r/coastrider7/csa1020-exp13-releaseharbor/tags). Source: [CSA1020 Software Engineering](https://github.com/Emadfar007/CSA1020---Software-Engineering).
 
@@ -36,14 +36,15 @@ Application: [ReleaseHarbor](https://miserable-cobweb-4j9pjv79r7w7fjrqw-8091.app
 | Check the browser build | [Version and source JSON](https://miserable-cobweb-4j9pjv79r7w7fjrqw-8091.app.github.dev/api/version) · [Health check](https://miserable-cobweb-4j9pjv79r7w7fjrqw-8091.app.github.dev/healthz) |
 | Open private browser Jenkins | [Jenkins dashboard](https://miserable-cobweb-4j9pjv79r7w7fjrqw-8090.app.github.dev/) · [ReleaseHarbor CI/CD job](https://miserable-cobweb-4j9pjv79r7w7fjrqw-8090.app.github.dev/job/ReleaseHarbor-CICD/) |
 | Follow the latest passing pipeline | [Latest successful build](https://miserable-cobweb-4j9pjv79r7w7fjrqw-8090.app.github.dev/job/ReleaseHarbor-CICD/lastSuccessfulBuild/) · [Test results](https://miserable-cobweb-4j9pjv79r7w7fjrqw-8090.app.github.dev/job/ReleaseHarbor-CICD/lastSuccessfulBuild/testReport/) · [Console log](https://miserable-cobweb-4j9pjv79r7w7fjrqw-8090.app.github.dev/job/ReleaseHarbor-CICD/lastSuccessfulBuild/console) |
-| Open the recorded experiment build | [Successful build #7](https://miserable-cobweb-4j9pjv79r7w7fjrqw-8090.app.github.dev/job/ReleaseHarbor-CICD/7/) |
+| Open the verified browser deployment | [Successful build #8](https://miserable-cobweb-4j9pjv79r7w7fjrqw-8090.app.github.dev/job/ReleaseHarbor-CICD/8/) |
+| Open the historical Render demonstration | [Original build #7](https://miserable-cobweb-4j9pjv79r7w7fjrqw-8090.app.github.dev/job/ReleaseHarbor-CICD/7/) |
 | Manage the original Render service | [Render dashboard - sign-in required](https://dashboard.render.com/web/srv-dbflq8vb9u1s73de444g) |
 | Find the published images | [Docker Hub image and tags](https://hub.docker.com/r/coastrider7/csa1020-exp13-releaseharbor/tags) |
 | Source and pipeline configuration | [Experiment folder](https://github.com/Emadfar007/CSA1020---Software-Engineering/tree/main/experiments/experiment-13-jenkins-cicd) · [Jenkinsfile](https://github.com/Emadfar007/CSA1020---Software-Engineering/blob/main/experiments/experiment-13-jenkins-cicd/Jenkinsfile) · [Local Jenkins Compose setup](https://github.com/Emadfar007/CSA1020---Software-Engineering/blob/main/experiments/experiment-13-jenkins-cicd/compose.yaml) |
 | View the output | [All screenshots](https://github.com/Emadfar007/CSA1020---Software-Engineering/tree/main/experiments/experiment-13-jenkins-cicd/screenshots) · [Build and deployment evidence](https://github.com/Emadfar007/CSA1020---Software-Engineering/tree/main/experiments/experiment-13-jenkins-cicd/evidence) |
 | Open the experiment collection | [All experiments](https://github.com/Emadfar007/CSA1020---Software-Engineering) |
 
-ReleaseHarbor and Jenkins now run inside the Codespace. Jenkins requires the Experiment 13 profile and the private GitHub port to be open while signed in as Emadfar007; Jenkins management also uses the existing Jenkins account. Restored jobs and results remain readable while builds start paused for migration review. Run `bash browser-lab/bin/lab resume-ci` only when ready to enable builds, publication and any configured deployment. The original Render service remains quota-suspended; its dashboard requires sign-in.
+ReleaseHarbor and Jenkins now run inside the Codespace. Jenkins requires the Experiment 13 profile and the private GitHub port to be open while signed in as Emadfar007; Jenkins management also uses the existing Jenkins account. Jenkins resumes automatic polling after the authorized `lab resume-ci` setup. The saved choice persists across restarts; `lab pause-ci` pauses builds while keeping jobs and results readable. The original Render service remains quota-suspended; its dashboard requires sign-in.
 
 
 Private app links require both a running profile and GitHub sign-in as Emadfar007. This Codespace uses a 30-minute idle timeout and 30-day inactive retention; free usage remains subject to its monthly quota, with paid usage blocked.
@@ -52,78 +53,39 @@ Original deployment URL (quota-suspended): [ReleaseHarbor on Render](https://rel
 
 ## Algorithm
 
-1. **Create the sample application.** Implement `GET /healthz`, `GET /api/version` and `POST /api/assess`. Validate release fields, semantic versions, dates and checkbox values. Calculate completion and missing critical checks. Serve the interface with bounded JSON requests and browser protection headers. Save drafts in the browser, without a database.
+1. **Start the existing browser lab.** Sign in as **Emadfar007**, resume the Codespace and run `bash browser-lab/bin/lab start cicd`. This starts Jenkins, its separate TLS Docker daemon, the three browser applications and the Actions deployment agent. Docker Desktop is not required.
 
-2. **Containerize it.** Use the multi-stage [Dockerfile](Dockerfile): `test` includes tests, while `runtime` contains only the application. Run as the non-root `node` user. Bake the source SHA and Jenkins build number into the runtime image; expose them through `/api/version` and Build details.
+2. **Prepare and containerize ReleaseHarbor.** Keep `GET /healthz`, `GET /api/version` and `POST /api/assess`, the twelve readiness checks, input validation, timeline, saved drafts and JSON export. The multi-stage [Dockerfile](Dockerfile) separates tests from the non-root runtime and embeds the source SHA and Jenkins build number.
 
-   For independent local testing, run from this experiment directory:
+3. **Configure the Jenkins job.** Use **Pipeline script from SCM**, repository `Emadfar007/CSA1020---Software-Engineering`, branch `main` and script path `experiments/experiment-13-jenkins-cicd/Jenkinsfile`. The existing `dockerhub` credential publishes the image; the current deployment stage does not need a Render hook. Credentials and retained Jenkins home remain private outside Git. Run `bash browser-lab/bin/lab resume-ci` to enable automatic builds; the saved choice persists across lab restarts. Use `lab pause-ci` when automatic builds should wait.
 
-   ```powershell
-   docker build --target test -t releaseharbor-tests:local .
-   docker run --rm --network none releaseharbor-tests:local node --test
-   docker build --target runtime -t releaseharbor:local .
-   docker run -d --name releaseharbor-local -p 127.0.0.1:8091:8000 releaseharbor:local
-   ```
+4. **Trigger through a commit.** Jenkins polls SCM once per minute while the lab is running. Application, CI-helper, Dockerfile, Jenkinsfile and Compose changes qualify; report-only changes, screenshots and other experiments are excluded. Stage a real application change, commit and push it to `main`. Keep the Codespace and Jenkins running during detection and execution.
 
-3. **Start Jenkins locally.** With Docker running, execute:
+5. **Build and enforce the gates.** The [Jenkinsfile](Jenkinsfile) checks out the exact commit, builds the isolated test image, runs the 21 application tests, validates a nonempty passing JUnit suite, builds the runtime with source/build identity and smoke-tests its actual HTTP behavior. A failed test or the optional `DEMONSTRATE_TEST_GATE` stops publication and deployment.
 
-   ```powershell
-   ./scripts/start-lab.ps1
-   ```
+6. **Publish the same tested image.** On trusted `origin/main`, authenticate temporarily to Docker Hub, publish a build-specific tag and record its immutable `sha256` digest. `PUBLISH_IMAGE` and `DEPLOY_CLOUD` select publication and browser deployment; the latter retains its parameter name for job compatibility and now means the free browser target.
 
-   The script creates an administrator password in a restricted directory outside the repository, builds Jenkins and starts the [Compose stack](compose.yaml). Open `http://127.0.0.1:8090/`. Administrator username: `emad`. The script prints the private password-file location, never its value. Jenkins binds only to loopback, retains CSRF protection, and permits anonymous access only for reading the demonstration job.
+7. **Deploy automatically into the dedicated daemon.** [deploy-browser.py](ci/deploy-browser.py) verifies the image digest, source SHA and build, starts a restricted canary and checks health and application behavior before replacing the named browser container. The application runs inside Jenkins' TLS Docker-in-Docker daemon. Its internal address is `http://docker:8000`, exposed through the private [ReleaseHarbor browser port](https://miserable-cobweb-4j9pjv79r7w7fjrqw-8091.app.github.dev/). The host Docker socket is not mounted. If activation verification fails, restore the previous working container.
 
-   When restarting an existing lab, reuse its original private directory with `./scripts/start-lab.ps1 -SecretsDirectory <original-private-directory>`. The script refuses to create a replacement password file for existing Jenkins data.
+8. **Verify the running release.** Compare `/api/version` with the Jenkins source/build identity. Check all twelve readiness items for score 100 and no blockers; uncheck the essential tests gate to produce a blocker; reject an invalid semantic version with HTTP 400. Preserve JUnit results, image digests, deployment receipts and screenshots. [Automatic browser deployment evidence](evidence/automatic-browser-deployment-2026-10-28.json) records the observed run; the [latest successful Jenkins build](https://miserable-cobweb-4j9pjv79r7w7fjrqw-8090.app.github.dev/job/ReleaseHarbor-CICD/lastSuccessfulBuild/) opens its logs and artifacts.
 
-4. **Connect the build environment.** Jenkins communicates over TLS with a dedicated Docker-in-Docker daemon and persistent image/cache volume. The host Docker socket is not mounted. This teaching setup uses a privileged DinD container and should run only trusted pipeline code. Existing experiment containers are outside this build daemon.
+9. **Retain the original demonstration separately.** The 26 October 2026 Render run remains archived as build #7: [SCM trigger](evidence/build-07-trigger.json), [test summary](evidence/build-07-test-summary.json), [container checks](evidence/build-07-container-smoke.json), [original Render verification](evidence/build-07-cloud-deployment.json) and [intentional failure gate](evidence/test-gate-console.txt). These historical records do not describe the current deployment target.
 
-5. **Configure credentials and source control.** In Jenkins' global credentials store, add username/password ID `dockerhub` and secret-text ID `render-deploy-hook`. Use the Docker Hub account owning the configured repository and the deploy hook for this demo service. Jenkins encrypts credentials and masks their values during use. Keep passwords, tokens, hook URLs and seed files out of Git and archived artifacts.
+The current target uses the existing 2-core Codespace and the verified **$0 budget with paid usage blocked**. It requires a running lab and remains subject to monthly compute/storage quotas, idle timeout and inactive retention. `lab stop cicd` stops the group without deleting its data; stop the Codespace when finished. No scheduled keep-alive is used.
 
-   The bootstrap creates `ReleaseHarbor-CICD` using **Pipeline script from SCM**, the Software Engineering repository, branch `main`, and script path `experiments/experiment-13-jenkins-cicd/Jenkinsfile`.
-
-6. **Bootstrap the cloud target once.** Run **Build with Parameters** with `PUBLISH_IMAGE=true`, `DEPLOY_CLOUD=false`, and `DEMONSTRATE_TEST_GATE=false`. After checks pass, create an **Existing Image** web service in Render using the published image. Select **Free — $0/month**, set `APP_MODE=cloud`, `PORT=10000`, and health-check path `/healthz`. Add no database, disk or paid resource. Store its deploy hook in Jenkins, then enable `DEPLOY_CLOUD` for normal builds. The supplied Jenkinsfile targets the verified service URL.
-
-7. **Run the pipeline.** The [Jenkinsfile](Jenkinsfile) executes these stages:
-
-   | Stage | Verification performed |
-   |---|---|
-   | Checkout | Read source SHA and branch; clear previous generated reports |
-   | Build test image | Build the Docker `test` target |
-   | Automated tests | Produce JUnit XML; reject empty, skipped-only or failing test runs |
-   | Build release image | Build the runtime target with expected SHA/build identity |
-   | Container smoke test | Check HTTP health, expected Jenkins identity, calculation, blockers and invalid input |
-   | Publish image | On `main`, authenticate temporarily, push a build-specific tag and record its digest |
-   | Deploy to Render | On `main`, deploy the exact digest and verify cloud health plus expected SHA/build number |
-
-   Concurrent builds are disabled, builds have a timeout, and JUnit results and fingerprinted verification artifacts are retained. Temporary registry configuration is removed after publishing. A failed stage prevents subsequent publication or deployment.
-
-8. **Trigger builds through commits.** `pollSCM('* * * * *')` checks Git once per minute. Application, CI, Dockerfile, Jenkinsfile and Compose changes are included; report-only updates, screenshots and other experiments are excluded. Commit and push a source change:
-
-   ```powershell
-   git add experiments/experiment-13-jenkins-cicd/app/
-   git commit -m "Update ReleaseHarbor application"
-   git push origin main
-   ```
-
-   The verified trigger is SCM polling. The computer, Docker and Jenkins must be running for detection and execution. The cloud application can remain hosted while the local controller is stopped.
-
-9. **Demonstrate failure prevention and delivery.** Build **#5** used `DEMONSTRATE_TEST_GATE=true`. Its deliberate gate failure stopped publishing and deployment. Build **#7** later started with **“Started by an SCM change”**, passed all stages and deployed the new image. Earlier setup runs remain in Jenkins history; not every historical run succeeded.
-
-10. **Verify and preserve evidence.** Build #7 executed **21 tests, zero failures and zero skipped tests**. Source SHA: `0772e7b013680b7ec975f5a6fb155a36eaae49d5`. Image: `coastrider7/csa1020-exp13-releaseharbor:build-7-0772e7b01368`. Digest: `sha256:e8d0ca8279fcc546c168ea414d93a6278777c8ce980f8bbd289001ef840c1766`. Render deploy `dep-dbflt8qjnfac73cs2evg` served the matching SHA/build with HTTP 200 health.
-
-    Evidence: [pipeline console](evidence/build-07-console.txt), [SCM trigger](evidence/build-07-trigger.json), [test summary](evidence/build-07-test-summary.json), [container checks](evidence/build-07-container-smoke.json), [cloud verification](evidence/build-07-cloud-deployment.json), and [gate failure](evidence/test-gate-console.txt).
-
-**Free hosting and duration:** the service uses Free compute with no database, disk, paid add-on or scheduled keep-alive. Render's current free web-service offering has no fixed trial-expiry date. It sleeps after 15 idle minutes and shares 750 free instance-hours per calendar month with the workspace. Bandwidth and other limits apply. This does not guarantee unlimited always-on availability or unchanged lifetime platform terms. See [Render's free-service documentation](https://render.com/docs/free).
-
-References: [Jenkins with Docker](https://www.jenkins.io/doc/book/installing/docker/), [Pipeline syntax](https://www.jenkins.io/doc/book/pipeline/syntax/), [Render image deployment](https://render.com/docs/deploying-an-image), and [deploy hooks](https://render.com/docs/deploy-hooks).
-
-**Current browser access:** The steps above record the original CI/CD experiment. To run its saved application now, resume the existing Codespace and execute `bash browser-lab/bin/lab start 13` for this experiment alone, or `bash browser-lab/bin/lab start cicd` for all three. Open [ReleaseHarbor](https://miserable-cobweb-4j9pjv79r7w7fjrqw-8091.app.github.dev/) and use its normal form workflow. The profile pulls the recorded immutable image, keeps the original build identity and requires no local Docker Desktop. Individual profile startup stops other profiles while retaining their data; `stop cicd` stops the three restored profiles without deleting their images or data.
+References: [Jenkins with Docker](https://www.jenkins.io/doc/book/installing/docker/) · [Pipeline syntax](https://www.jenkins.io/doc/book/pipeline/syntax/) · [Browser lab guide](../../browser-lab/README.md).
 
 ## Output Screenshots
 
-**Current private browser runtime, 28 October 2026.** ReleaseHarbor running from its recorded Docker image in Codespaces.
+**Automatic browser deployment, 28 October 2026.** The current pipeline, deployment status or matching running build is recorded with the [automatic deployment receipt](evidence/automatic-browser-deployment-2026-10-28.json).
+
+![Experiment 13 automatic deployment to the private browser lab](screenshots/automatic-browser-deployment-2026-10-28.jpg)
+
+**Earlier browser runtime restoration, 28 October 2026.** ReleaseHarbor running from its recorded Docker image in Codespaces.
 
 ![ReleaseHarbor restored in the private browser lab](screenshots/browser-restore-2026-10-28.jpg)
+
+**Original Render demonstration — 26 October 2026.** The numbered screenshots below preserve that earlier deployment.
 
 **1. Cloud application workspace.** ReleaseHarbor running from the deployed container.
 
@@ -163,6 +125,12 @@ References: [Jenkins with Docker](https://www.jenkins.io/doc/book/installing/doc
 
 ## Result
 
+**Current deployment path:** The active pipeline targets the private Codespaces lab and accepts deployment only after image identity, health and application checks. Use the [automatic browser deployment receipt](evidence/automatic-browser-deployment-2026-10-28.json) for the captured run, deployed digest and matching live build. This target requires the running Codespace; a failed or unavailable target is reported as a failed deployment.
+
+**Verified automatic deployment — 28 October 2026:** [SCM-triggered Jenkins build #8](https://miserable-cobweb-4j9pjv79r7w7fjrqw-8090.app.github.dev/job/ReleaseHarbor-CICD/8/) completed successfully, passing **21 application tests and 7 deployment-helper tests**. It published the tested image and deployed its exact digest inside the private TLS Docker daemon. The running ReleaseHarbor API reported build **8** and the matching source commit. A real stop/start of the CI/CD group retained this deployed release.
+
+**Original Render demonstration:** The following results and original screenshots describe the earlier Render run.
+
 A working Docker-based CI/CD pipeline was implemented with local Jenkins and a separate Free Render service. A Git commit automatically triggered build **#7**, which passed **21 tests** and HTTP checks, published a versioned image, and deployed its exact digest. The cloud application's source SHA, build number and health matched the Jenkins release. An intentional failure also demonstrated that later publishing and deployment stages are blocked.
 
-The submission includes the application, Dockerfile, Jenkinsfile, local setup, deployment helpers, screenshots and actual verification records. The original demonstration used local Jenkins and Render Free. The current browser profile runs Jenkins and the recorded ReleaseHarbor image in Codespaces; the original Render deployment remains quota-suspended. ReleaseHarbor's checklist is an educational planning tool and does not itself approve or deploy software.
+The submission includes the application, Dockerfile, Jenkinsfile, local setup, deployment helpers, screenshots and actual verification records. The original demonstration used local Jenkins and Render Free. The current Jenkins pipeline deploys ReleaseHarbor into its dedicated browser-lab daemon; the original Render service remains quota-suspended. ReleaseHarbor's checklist is an educational planning tool and does not itself approve or deploy software.
