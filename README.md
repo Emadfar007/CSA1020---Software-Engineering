@@ -48,6 +48,7 @@ Starting a profile stops the other lab profiles while keeping their data. Use `b
 | 22 | Saved README change staged, committed with the exact message Updated README, and pushed with matching local and remote commits | [Commit and Push Changes](experiments/experiment-22-commit-and-push/README.md) |
 | 23 | Approved same-account collaborator simulation in a second clone, followed by git pull origin main and verification of the update | [Pull Collaborator Updates](experiments/experiment-23-pull-collaborator-updates/README.md) |
 | 24 | feature-login branch, standalone Python login function, pushed feature commit and a merged pull request into main | [Feature Branch and Login Pull Request](experiments/experiment-24-feature-login-pull-request/README.md) |
+| 25 | Existing fork cloned and fetched, additive JSON progress export feature pushed on a new branch, and an open pull request into the user's fork | [Fork, Feature Branch and Pull Request](experiments/experiment-25-fork-feature-pull-request/README.md) |
 
 Each experiment includes only Aim, Tools Required, Algorithm, Output Screenshots, and Result.
 
@@ -62,6 +63,7 @@ Each experiment includes only Aim, Tools Required, Algorithm, Output Screenshots
 | 22 - Commit and push | [Updated README commit](https://github.com/Emadfar007/learnloop-collaboration-demo/commit/e711339b1c18a6258cbf7de1973ab0e9bbe23217) | [Experiment 22](experiments/experiment-22-commit-and-push/README.md) |
 | 23 - Pull updates (simulation) | [Update pulled from GitHub](https://github.com/Emadfar007/learnloop-collaboration-demo/commit/8d9569910648791e4a0531233889c0ab402e1217) | [Experiment 23](experiments/experiment-23-pull-collaborator-updates/README.md) |
 | 24 - Login feature branch | [Merged pull request #3](https://github.com/Emadfar007/learnloop-collaboration-demo/pull/3) · [Login function](https://github.com/Emadfar007/learnloop-collaboration-demo/blob/main/login.py) | [Experiment 24](experiments/experiment-24-feature-login-pull-request/README.md) |
+| 25 - Fork and feature PR | [Open pull request #4](https://github.com/Emadfar007/learnloop-collaboration-demo/pull/4) · [Feature branch](https://github.com/Emadfar007/learnloop-collaboration-demo/tree/feature/progress-export) | [Experiment 25](experiments/experiment-25-fork-feature-pull-request/README.md) |
 
 Experiment 18 requires the private Codespace to be running. Experiment 19 uses Render Free and can wake after inactivity. The original Experiment 20 project remains private; its submitted README snapshot is included here. Experiment 23 explicitly records a two-clone simulation under Emadfar007.
 
