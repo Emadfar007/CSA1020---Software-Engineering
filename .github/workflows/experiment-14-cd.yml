@@ -47,7 +47,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 25
     outputs:
-      image: ${{ steps.publish.outputs.image }}
+      digest: ${{ steps.publish.outputs.digest }}
     defaults:
       run:
         shell: bash
@@ -122,7 +122,7 @@ jobs:
           docker image inspect "$RELEASE_IMAGE" --format '{{json .RepoDigests}}' > reports/image-digests.json
           printf '%s\n' "$RELEASE_IMAGE" > reports/published-image.txt
           image="$(docker image inspect "$RELEASE_IMAGE" --format '{{index .RepoDigests 0}}')"
-          printf 'image=%s\n' "$image" >> "$GITHUB_OUTPUT"
+          printf 'digest=%s\n' "${image##*@}" >> "$GITHUB_OUTPUT"
 
       - name: Summarize build and publication
         if: always()
@@ -157,7 +157,7 @@ jobs:
       deployments: write
     env:
       GITHUB_TOKEN: ${{ github.token }}
-      TESTED_IMAGE: ${{ needs.delivery.outputs.image }}
+      TESTED_IMAGE: coastrider7/csa1020-exp14-focuslane@${{ needs.delivery.outputs.digest }}
       BROWSER_APP_URL: https://miserable-cobweb-4j9pjv79r7w7fjrqw-8094.app.github.dev/
     steps:
       - name: Check out deployment protocol
