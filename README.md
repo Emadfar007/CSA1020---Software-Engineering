@@ -2,7 +2,7 @@
 
 Software engineering experiments by **Emadfar007**.
 
-[Open all 25 experiments](#all-25-experiments) · [Browser Docker lab](browser-lab/README.md)
+[Open all 25 experiments](#all-25-experiments) · [Browser Docker lab](browser-lab/README.md) · [Docker troubleshooting guide](<reports/Docker Troubleshooting Guide Causes and Fixes.docx>)
 
 ## Browser Docker lab
 
